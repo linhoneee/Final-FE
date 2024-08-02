@@ -1,4 +1,3 @@
-// src/components/Warehouse/WarehouseList.js
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import WarehouseService from '../../services/WarehouseService';
@@ -49,6 +48,8 @@ const WarehouseList = () => {
               <td>
                 <button onClick={() => navigate(`/edit-warehouse/${warehouse.id}`)}>Edit</button>
                 <button onClick={() => deleteWarehouse(warehouse.id)}>Delete</button>
+                <button onClick={() => navigate(`/warehouse/${warehouse.id}/inventory`)}>View Inventory</button>
+                <button onClick={() => navigate(`/warehouse/${warehouse.id}/addProduct`)}>Add Product</button>
               </td>
             </tr>
           ))}

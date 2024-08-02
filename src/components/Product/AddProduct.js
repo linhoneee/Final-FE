@@ -91,7 +91,7 @@ const AddProduct = () => {
           <label>Images:</label>
           {imageUrls.map((image, index) => (
             <div key={index}>
-              <img src={image.url} alt={`Product image ${index + 1}`} width="50" />
+              <img src={image.url} alt={`Product ${index + 1}`} width="50" />
               <button type="button" onClick={() => handleRemoveImage(index)}>X</button>
             </div>
           ))}

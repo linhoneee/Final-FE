@@ -15,6 +15,7 @@ const ListProductByUser = () => {
     ProductService.GetAllProductByUser()
       .then(response => {
         setProducts(response.data);
+        console.log(response.data);
       })
       .catch(error => {
         console.error('Error fetching products:', error);

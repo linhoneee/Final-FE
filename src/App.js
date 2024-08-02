@@ -39,6 +39,8 @@ import AddAddressPlus from './components/Address/AddAddressPlus';
 import WarehouseList from './components/Warehouse/WarehouseList';
 import AddWarehouse from './components/Warehouse/AddWarehouse';
 import EditWarehouse from './components/Warehouse/EditWarehouse';
+import WarehouseInventory from './components/Warehouse/WarehouseInventory';
+import AddProductWarehouse from './components/Warehouse/AddProductWarehouse';
 
 import ProductDiscountList from './components/DiscountAndPromotion/ProductDiscountList';
 import AddProductDiscount from './components/DiscountAndPromotion/AddProductDiscount';
@@ -107,6 +109,9 @@ function App() {
           <Route path="/warehouses" element={<WarehouseList />} />
           <Route path="/add-warehouse" element={<AddWarehouse />} />
           <Route path="/edit-warehouse/:id" element={<EditWarehouse />} />
+          <Route path="/warehouse/:warehouseId/inventory" element={<WarehouseInventory />} />
+          <Route path="/warehouse/:warehouseId/addProduct" element={<AddProductWarehouse />} />
+
 
           {/* Discount and Promotion Routes */}
           <Route path="/product-discounts" element={<ProductDiscountList />} />

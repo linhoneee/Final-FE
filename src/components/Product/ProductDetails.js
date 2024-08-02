@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import ProductService from '../../services/ProductService';
 import CartService from '../../services/CartService';
 import Modal from 'react-modal';
+import '../../Css/ImageModal.css'; // Import file CSS
 
 Modal.setAppElement('#root'); // Đặt phần tử gốc cho react-modal
 
@@ -100,9 +101,9 @@ const ProductDetails = () => {
           <button onClick={() => navigate(-1)}>Back to Products</button>
 
           {selectedImage && (
-            <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
-              <img src={`http://localhost:6001${selectedImage.url}`} alt="Selected" style={{ width: '100%' }} />
-              <button onClick={closeModal}>Close</button>
+            <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal-content">
+              <img src={`http://localhost:6001${selectedImage.url}`} alt="Selected" />
+              <button onClick={closeModal} className="modal-close-button">Close</button>
             </Modal>
           )}
         </>

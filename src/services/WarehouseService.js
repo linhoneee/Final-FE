@@ -23,6 +23,8 @@ class WarehouseService {
   deleteWarehouse(warehouseId) {
     return axios.delete(`${BASE_URL}/${warehouseId}`);
   }
+
+
 }
 
 const instance = new WarehouseService();

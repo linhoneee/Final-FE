@@ -117,7 +117,8 @@ const Checkout = () => {
         price: item.price,
         quantity: item.quantity,
         weight: item.weight,
-        warehouseIds: item.warehouseIds
+        warehouseIds: item.warehouseIds,
+        primaryImageUrl: item.primaryImageUrl
       })),
       selectedShipping: {
         id: selectedShipping ? selectedShipping.id : null,
@@ -143,7 +144,7 @@ const Checkout = () => {
         destinationLatitude: distanceData.destinationLatitude,
         destinationLongitude: distanceData.destinationLongitude,
         distance: distanceData.distance,
-        route: distanceData.route,
+        // route: distanceData.route,
       },
       total: totalCost
     };

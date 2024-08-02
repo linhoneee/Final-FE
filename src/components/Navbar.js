@@ -26,13 +26,13 @@ const Navbar = () => {
           <>
             <li>Welcome, {username}!</li>
             <li>
+              <Link to="/">HOME</Link>
+            </li>
+            <li>
               <Link to="/brands">Brands</Link>
             </li>
             <li>
               <Link to="/categories">Categories</Link>
-            </li>
-            <li>
-              <Link to="/">HOME</Link>
             </li>
             <li>
               <Link to="/productsadmin">Products Admin</Link>
@@ -61,7 +61,6 @@ const Navbar = () => {
             <li>
               <Link to="/customer-coupons">customer-coupons List</Link>
             </li>
-            /product-discounts
             <li>
               <Link to={`/message/${userID}`}>message</Link>
             </li>
