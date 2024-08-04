@@ -1,4 +1,3 @@
-// LoginUser.js
 import React, { useState } from 'react';
 import UserService from '../../services/UserService';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +11,7 @@ const LoginUser = () => {
   const [password, setPassword] = useState('');
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
   const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
+  const [resetPasswordEmail, setResetPasswordEmail] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -20,26 +20,48 @@ const LoginUser = () => {
     try {
       const response = await UserService.loginUser({ email, password });
       const { token, email: userEmail, username, roles, UserID } = response.data;
+
+      // Store data in localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('username', username);
+      localStorage.setItem('email', userEmail);
+      localStorage.setItem('roles', roles);
+      localStorage.setItem('userID', UserID);
+
+      // Dispatch login action
       dispatch(login(token, userEmail, username, roles, UserID));
 
       alert('Đăng nhập thành công');
       navigate('/');
     } catch (error) {
-      if (error.response) {
-        if (error.response.status === 403 && error.response.data.error === "Tài khoản của bạn đã bị khóa") {
-          alert('Tài khoản của bạn đã bị khóa');
-        } else if (error.response.status === 401) {
-          alert('Sai mật khẩu');
-        } else if (error.response.status === 404) {
-          alert('Email không tồn tại');
-        } else {
-          alert('Đăng nhập thất bại');
-        }
+      handleLoginError(error);
+    }
+  };
+
+  const handleGoogleLogin = () => {
+    UserService.loginWithGoogle();
+  };
+
+  const handleLoginError = (error) => {
+    if (error.response) {
+      if (error.response.status === 403 && error.response.data.error === "Tài khoản của bạn đã bị khóa") {
+        alert('Tài khoản của bạn đã bị khóa');
+      } else if (error.response.status === 401) {
+        alert('Sai mật khẩu');
+      } else if (error.response.status === 404) {
+        alert('Email không tồn tại');
       } else {
-        console.error('Lỗi đăng nhập:', error);
         alert('Đăng nhập thất bại');
       }
+    } else {
+      console.error('Lỗi đăng nhập:', error);
+      alert('Đăng nhập thất bại');
     }
+  };
+
+  const handleOpenResetPassword = (email) => {
+    setResetPasswordEmail(email);
+    setResetPasswordOpen(true);
   };
 
   return (
@@ -67,9 +89,18 @@ const LoginUser = () => {
         <button type="submit">Đăng nhập</button>
       </form>
       <button onClick={() => setForgotPasswordOpen(true)}>Quên mật khẩu?</button>
+      <button onClick={handleGoogleLogin}>Đăng nhập với Google</button>
 
-      <ForgotPassword open={forgotPasswordOpen} handleClose={() => setForgotPasswordOpen(false)} />
-      <ResetPassword open={resetPasswordOpen} handleClose={() => setResetPasswordOpen(false)} />
+      <ForgotPassword 
+        open={forgotPasswordOpen} 
+        handleClose={() => setForgotPasswordOpen(false)} 
+        handleOpenResetPassword={handleOpenResetPassword} 
+      />
+      <ResetPassword 
+        open={resetPasswordOpen} 
+        handleClose={() => setResetPasswordOpen(false)} 
+        email={resetPasswordEmail} 
+      />
     </div>
   );
 };

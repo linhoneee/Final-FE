@@ -74,6 +74,51 @@ const Cart = () => {
       });
   };
 
+  const handleQuantityChange = (productId, newQuantity) => {
+    const quantity = parseInt(newQuantity, 10);
+    if (isNaN(quantity) || quantity <= 0) return;
+
+    const currentItem = cartItems.find(item => item.productId === productId);
+    if (!currentItem) return;
+
+    const difference = quantity - currentItem.quantity;
+    if (difference === 0) return;
+
+    const updatedItems = cartItems.map(item =>
+      item.productId === productId ? { ...item, quantity: quantity } : item
+    );
+    updateCartItems(updatedItems);
+
+    const cart = {
+      productId: currentItem.productId,
+      quantity: Math.abs(difference),
+      price: currentItem.price,
+      weight: currentItem.weight,
+      warehouseIds: currentItem.warehouseIds,
+      primaryImageUrl: currentItem.primaryImageUrl // Thêm primaryImageUrl vào mục giỏ hàng
+    };
+
+    if (difference > 0) {
+      // Nếu số lượng tăng
+      CartService.AddCart(id, cart)
+        .then(response => {
+          // Tùy chọn xử lý phản hồi nếu cần thiết
+        })
+        .catch(error => {
+          console.error('Error updating cart item quantity:', error);
+        });
+    } else {
+      // Nếu số lượng giảm
+      CartService.DecreaseCart(id, cart)
+        .then(response => {
+          // Tùy chọn xử lý phản hồi nếu cần thiết
+        })
+        .catch(error => {
+          console.error('Error updating cart item quantity:', error);
+        });
+    }
+  };
+
   const handleDecreaseItem = (productId) => {
     const item = cartItems.find(item => item.productId === productId);
     if (!item || item.quantity <= 1) return;
@@ -124,6 +169,14 @@ const Cart = () => {
     }
   };
 
+  const handleSelectAllItems = () => {
+    if (selectedItems.length === cartItems.length) {
+      setSelectedItems([]);
+    } else {
+      setSelectedItems(cartItems.map(item => item.productId));
+    }
+  };
+
   const handleProductClick = (productId) => {
     navigate(`/products/${productId}`);
   };
@@ -139,6 +192,11 @@ const Cart = () => {
       <div>
         {cartItems.length > 0 ? (
           <>
+            <input
+              type="checkbox"
+              checked={selectedItems.length === cartItems.length}
+              onChange={handleSelectAllItems}
+            /> Select All
             {cartItems.map(item => (
               <div key={item.productId}>
                 <input
@@ -149,13 +207,19 @@ const Cart = () => {
                 <h3 onClick={() => handleProductClick(item.productId)} style={{ cursor: 'pointer' }}>Product ID: {item.productId}</h3>
                 <p>Name: {item.name}</p>
                 <p>Price: ${item.price}</p>
-                <p>Quantity: {item.quantity}</p>
                 <p>Weight: {item.weight} g</p>
                 <p>Warehouse IDs: {item.warehouseIds}</p>
                 {item.primaryImageUrl && (
                   <img src={`http://localhost:6001${item.primaryImageUrl}`} alt="Primary" width="100" />
                 )}
                 <button onClick={() => handleDecreaseItem(item.productId)}>-</button>
+                <input
+                  type="number"
+                  value={item.quantity}
+                  onChange={(e) => handleQuantityChange(item.productId, e.target.value)}
+                  min="1"
+                  style={{ width: '50px', textAlign: 'center' }}
+                />
                 <button onClick={() => handleAddItem(item.productId)}>+</button>
                 <button onClick={() => handleRemoveItem(item.productId)}>Remove</button>
               </div>

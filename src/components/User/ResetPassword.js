@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
 import UserService from '../../services/UserService';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import '../../Css/ModalResetPass.css';
 
-const ResetPassword = ({ open, handleClose }) => {
+const ResetPassword = ({ open, handleClose, email }) => {
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [otpVerified, setOtpVerified] = useState(false);
-  const location = useLocation();
-  const { email } = location.state || {};
   const navigate = useNavigate();
 
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     try {
       const response = await UserService.verifyOtp(email, otp);
-      if (response.status === 200) {
+      if (response.status === 200 && response.data === "OTP hợp lệ") {
         alert('OTP hợp lệ. Bạn có thể đặt lại mật khẩu mới.');
         setOtpVerified(true);
       } else {

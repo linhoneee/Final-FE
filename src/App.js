@@ -49,6 +49,9 @@ import CustomerCouponList from './components/DiscountAndPromotion/CustomerCoupon
 import AddCustomerCoupon from './components/DiscountAndPromotion/AddCustomerCoupon';
 import EditCustomerCoupon from './components/DiscountAndPromotion/EditCustomerCoupon';
 
+import SuccessPage from './pages/SuccessPage';
+import OrderList from './components/Order/OrderList';
+
 function App() {
   return (
     <Provider store={store}>
@@ -111,6 +114,9 @@ function App() {
           <Route path="/edit-warehouse/:id" element={<EditWarehouse />} />
           <Route path="/warehouse/:warehouseId/inventory" element={<WarehouseInventory />} />
           <Route path="/warehouse/:warehouseId/addProduct" element={<AddProductWarehouse />} />
+         
+         {/* Payment Routes */}
+         <Route path="/success" element={<SuccessPage />} /> {/* Thêm route này */}
 
 
           {/* Discount and Promotion Routes */}
@@ -120,6 +126,11 @@ function App() {
           <Route path="/customer-coupons" element={<CustomerCouponList />} />
           <Route path="/add-customer-coupon" element={<AddCustomerCoupon />} />
           <Route path="/edit-customer-coupon/:id" element={<EditCustomerCoupon />} />
+
+
+
+          {/* Order Routes */}
+          <Route path="/order/:userId" element={<OrderList/>} />
         </Routes>
       </Router>
     </Provider>

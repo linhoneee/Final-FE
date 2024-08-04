@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import UserService from '../../services/UserService';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 import '../../Css/ModalResetPass.css';
 
-const ForgotPassword = ({ open, handleClose }) => {
+const ForgotPassword = ({ open, handleClose, handleOpenResetPassword }) => {
   const [email, setEmail] = useState('');
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,8 +18,8 @@ const ForgotPassword = ({ open, handleClose }) => {
       }
       await UserService.sendOtp(email);
       alert('OTP đã được gửi tới email của bạn');
-      navigate('/reset-password', { state: { email } });
       handleClose();
+      handleOpenResetPassword(email);
     } catch (error) {
       alert('Gửi OTP thất bại');
       console.error('Lỗi gửi OTP:', error);

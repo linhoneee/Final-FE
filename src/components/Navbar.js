@@ -68,6 +68,9 @@ const Navbar = () => {
               <Link to={`/cart/${userID}`}>Cart</Link>
             </li>
             <li>
+              <Link to={`/order/${userID}`}>order history</Link>
+            </li>
+            <li>
               <button onClick={handleLogout}>Logout</button>
             </li>
           </>

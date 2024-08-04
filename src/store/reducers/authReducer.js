@@ -1,4 +1,3 @@
-// src/store/reducers/authReducer.js
 import { LOGIN_SUCCESS, LOGOUT } from '../actions/authActions';
 
 const token = localStorage.getItem('token');

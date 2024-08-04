@@ -4,12 +4,12 @@ const USER_API_BASE_URL = "http://localhost:8080/users";
 
 class UserService {
     registerUser(user) {
-            return axios.post(USER_API_BASE_URL + "/register", user);
-        }
+        return axios.post(USER_API_BASE_URL + "/register", user);
+    }
 
-        loginUser(user) {
-            return axios.post(USER_API_BASE_URL + "/login", user);
-        }
+    loginUser(user) {
+        return axios.post(USER_API_BASE_URL + "/login", user);
+    }
 
     getUsers() {
         return axios.get(USER_API_BASE_URL);
@@ -35,7 +35,6 @@ class UserService {
         return axios.put(USER_API_BASE_URL + '/block/' + userId);
     }
 
-
     sendOtp(email) {
         return axios.post(USER_API_BASE_URL + "/forgot-password", { email });
     }
@@ -47,11 +46,14 @@ class UserService {
     resetPassword(email, newPassword) {
         return axios.post(USER_API_BASE_URL + "/reset-password", { email, newPassword });
     }
+
     checkEmailExists(email) {
         return axios.post(USER_API_BASE_URL + "/check-email", { email });
     }
 
-
+    loginWithGoogle() {
+        window.location.href = USER_API_BASE_URL + "/SSO/signingoogle";
+    }
 }
 
 const instance = new UserService();
