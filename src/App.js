@@ -35,7 +35,6 @@ import AddressList from './components/Address/AddressList';
 import EditAddress from './components/Address/EditAddress';
 import ForgotPassword from './components/User/ForgotPassword';
 import ResetPassword from './components/User/ResetPassword';
-import AddAddressPlus from './components/Address/AddAddressPlus';
 import WarehouseList from './components/Warehouse/WarehouseList';
 import AddWarehouse from './components/Warehouse/AddWarehouse';
 import EditWarehouse from './components/Warehouse/EditWarehouse';
@@ -106,7 +105,6 @@ function App() {
           <Route path="/user/:userId/addresses" element={<AddressList />} />
           <Route path="/user/:userId/add-address" element={<AddAddress />} />
           <Route path="/user/:userId/edit-address/:id" element={<EditAddress />} />
-          <Route path="/user/:userId/add-addressplus" element={<AddAddressPlus />} />
 
           {/* Warehouse Routes */}
           <Route path="/warehouses" element={<WarehouseList />} />

@@ -13,6 +13,7 @@ import { AddressModal, DefaultAddress } from '../components/Checkout/AddressModa
 import TotalCost from '../components/Checkout/TotalCost';
 import Coupons from '../components/Checkout/Coupons';
 import PaymentMethod from '../components/Checkout/PaymentMethod';
+import AddAddressPlusModal from '../components/Address/AddAddressPlusModal'; // Corrected path
 
 const Checkout = () => {
   const location = useLocation();
@@ -32,6 +33,7 @@ const Checkout = () => {
   const [defaultAddress, setDefaultAddress] = useState(null);
   const [addresses, setAddresses] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false); // State to control AddAddressPlusModal
   const [coupons, setCoupons] = useState([]);
   const [selectedCoupon, setSelectedCoupon] = useState(null);
   const [discountResult, setDiscountResult] = useState(null);
@@ -60,7 +62,11 @@ const Checkout = () => {
     const fetchInitialData = async () => {
       try {
         const primaryAddressResponse = await AddressService.getPrimaryAddress(id);
-        setDefaultAddress(primaryAddressResponse.data);
+        if (primaryAddressResponse.data) {
+          setDefaultAddress(primaryAddressResponse.data);
+        } else {
+          setDefaultAddress(null);
+        }
 
         const addressesResponse = await AddressService.getAddressesByUserId(id);
         setAddresses(addressesResponse.data);
@@ -216,7 +222,14 @@ const Checkout = () => {
   return (
     <div>
       <h2>Checkout</h2>
-      <DefaultAddress defaultAddress={defaultAddress} onChangeAddress={() => setIsModalOpen(true)} />
+      {!defaultAddress ? (
+        <div style={{ color: 'red' }}>
+          Bạn chưa có địa chỉ, yêu cầu tạo địa chỉ mới
+          <button onClick={() => setIsAddAddressModalOpen(true)}>Tạo địa chỉ mới</button>
+        </div>
+      ) : (
+        <DefaultAddress defaultAddress={defaultAddress} onChangeAddress={() => setIsModalOpen(true)} />
+      )}
       <CartItemList selectedCartItems={selectedCartItems} />
       <ShippingTypeList shippingTypes={shippingTypes} selectedShipping={selectedShipping} setSelectedShipping={setSelectedShipping} />
       {selectedShipping && (
@@ -248,6 +261,22 @@ const Checkout = () => {
           addresses={addresses}
           onClose={() => setIsModalOpen(false)}
           onSelect={handleAddressChange}
+        />
+      )}
+      {isAddAddressModalOpen && (
+        <AddAddressPlusModal
+          userId={id}
+          onClose={() => setIsAddAddressModalOpen(false)}
+          onSave={() => {
+            // Refetch addresses after adding new address
+            AddressService.getAddressesByUserId(id).then(response => {
+              setAddresses(response.data);
+              // Set the newly added address as default if it's the first address
+              if (response.data.length === 1) {
+                setDefaultAddress(response.data[0]);
+              }
+            });
+          }}
         />
       )}
     </div>

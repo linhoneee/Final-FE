@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import AddressService from '../../services/AddressService';
 import AddressFields from '../AddressFields';
 import AddressMap from '../AddressMap';
@@ -16,8 +14,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-const AddAddressPlus = () => {
-  const userId = useSelector(state => state.auth.userID); 
+const AddAddressPlusModal = ({ userId, onClose, onSave }) => {
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
@@ -34,8 +31,6 @@ const AddAddressPlus = () => {
     latitude: 21.028511, // Default coordinates for Hanoi
     longitude: 105.804817 // Default coordinates for Hanoi
   });
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get('https://vapi.vnappmob.com/api/province/')
@@ -107,7 +102,8 @@ const AddAddressPlus = () => {
       ward: address.wardName
     };
     AddressService.createAddress(userId, addressToSend).then(() => {
-      navigate(`/user/${userId}/addresses`);
+      onSave();
+      onClose();
     });
   };
 
@@ -120,29 +116,32 @@ const AddAddressPlus = () => {
   };
 
   return (
-    <div>
-      <h2>Add Address Plus</h2>
-      <form onSubmit={addAddress}>
-        <AddressFields 
-          address={address}
-          handleChange={handleChange}
-          provinces={provinces}
-          districts={districts}
-          wards={wards}
-          setAddress={setAddress}
-        />
-        <AddressMap address={address} setAddress={setAddress} />
-        {address.latitude && address.longitude && (
-          <div>
-            <h3>Coordinates</h3>
-            <p>Longitude: {address.longitude}</p>
-            <p>Latitude: {address.latitude}</p>
-          </div>
-        )}
-        <button type="submit">Add Address</button>
-      </form>
+    <div className="modal">
+      <div className="modal-content">
+        <h2>Add Address Plus</h2>
+        <form onSubmit={addAddress}>
+          <AddressFields 
+            address={address}
+            handleChange={handleChange}
+            provinces={provinces}
+            districts={districts}
+            wards={wards}
+            setAddress={setAddress}
+          />
+          <AddressMap address={address} setAddress={setAddress} />
+          {address.latitude && address.longitude && (
+            <div>
+              <h3>Coordinates</h3>
+              <p>Longitude: {address.longitude}</p>
+              <p>Latitude: {address.latitude}</p>
+            </div>
+          )}
+          <button type="submit">Add Address</button>
+          <button type="button" onClick={onClose}>Cancel</button>
+        </form>
+      </div>
     </div>
   );
 };
 
-export default AddAddressPlus;
+export default AddAddressPlusModal;
