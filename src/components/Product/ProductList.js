@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ProductService from "../../services/ProductService";
 import ProductDiscountService from "../../services/ProductDiscountService";
+import InventoryService from "../../services/InventoryService"; // Import InventoryService
 import AddProductDiscount from "../DiscountAndPromotion/AddProductDiscount";
 import EditProductDiscount from "../DiscountAndPromotion/EditProductDiscount";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +11,7 @@ const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [images, setImages] = useState([]);
   const [productDiscounts, setProductDiscounts] = useState([]);
+  const [inventory, setInventory] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -35,6 +37,13 @@ const ProductList = () => {
       console.log("Product Discounts:", response.data);
     }).catch(err => {
       console.error("Error fetching product discounts:", err);
+    });
+
+    InventoryService.getAllInventory().then((response) => {
+      setInventory(response.data);
+      console.log("Inventory:", response.data);
+    }).catch(err => {
+      console.error("Error fetching inventory:", err);
     });
   }, []);
 
@@ -94,6 +103,12 @@ const ProductList = () => {
     }
   };
 
+  const checkStockForProduct = (productId) => {
+    const productInventory = inventory.filter(item => item.productId === productId);
+    const totalQuantity = productInventory.reduce((acc, item) => acc + item.quantity, 0);
+    return totalQuantity > 0;
+  };
+
   return (
     <div>
       <h1>Product List</h1>
@@ -111,45 +126,49 @@ const ProductList = () => {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
-            <tr key={product.id}>
-              <td>{product.id}</td>
-              <td>{product.productName}</td>
-              <td>{product.descriptionDetails}</td>
-              <td>
-                {getDiscountedPrice(product.id) ? (
-                  <span style={{ textDecoration: 'line-through' }}>${product.price}</span>
-                ) : (
-                  <span>${product.price}</span>
-                )}
-              </td>
-              <td>
-                {getDiscountedPrice(product.id) ? (
-                  <span style={{ color: 'red' }}>${getDiscountedPrice(product.id)}</span>
-                ) : (
-                  <span>N/A</span>
-                )}
-              </td>
-              <td>{product.weight}</td>
-              <td>
-                {getProductImages(product.id).map((image, index) => (
-                  <img key={index} src={image.url} alt={product.productName} width="50" />
-                ))}
-              </td>
-              <td>
-                <button onClick={() => deleteProduct(product.id)}>Delete</button>
-                <button onClick={() => updateProduct(product.id)}>Update</button>
-                {!getDiscountedPrice(product.id) ? (
-                  <button onClick={() => openAddModal(product)}>Add Discount</button>
-                ) : (
-                  <>
-                    <button onClick={() => openEditModal(product)}>Edit Discount</button>
-                    <button onClick={() => deleteDiscount(product.id)}>Delete Discount</button>
-                  </>
-                )}
-              </td>
-            </tr>
-          ))}
+          {products.map((product) => {
+            const inStock = checkStockForProduct(product.id);
+            return (
+              <tr key={product.id} style={{ backgroundColor: inStock ? 'white' : 'lightgrey' }}>
+                <td>{product.id}</td>
+                <td>{product.productName}</td>
+                <td>{product.descriptionDetails}</td>
+                <td>
+                  {getDiscountedPrice(product.id) ? (
+                    <span style={{ textDecoration: 'line-through' }}>${product.price}</span>
+                  ) : (
+                    <span>${product.price}</span>
+                  )}
+                </td>
+                <td>
+                  {getDiscountedPrice(product.id) ? (
+                    <span style={{ color: 'red' }}>${getDiscountedPrice(product.id)}</span>
+                  ) : (
+                    <span>N/A</span>
+                  )}
+                </td>
+                <td>{product.weight}</td>
+                <td>
+                  {getProductImages(product.id).map((image, index) => (
+                    <img key={index} src={image.url} alt={product.productName} width="50" />
+                  ))}
+                </td>
+                <td>
+                  <button onClick={() => deleteProduct(product.id)}>Delete</button>
+                  <button onClick={() => updateProduct(product.id)}>Update</button>
+                  {!getDiscountedPrice(product.id) ? (
+                    <button onClick={() => openAddModal(product)}>Add Discount</button>
+                  ) : (
+                    <>
+                      <button onClick={() => openEditModal(product)}>Edit Discount</button>
+                      <button onClick={() => deleteDiscount(product.id)}>Delete Discount</button>
+                    </>
+                  )}
+                  {!inStock && <p style={{ color: 'red' }}>Sản phẩm đã hết hàng</p>}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
 
