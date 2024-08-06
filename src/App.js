@@ -51,6 +51,9 @@ import EditCustomerCoupon from './components/DiscountAndPromotion/EditCustomerCo
 import SuccessPage from './pages/SuccessPage';
 import OrderList from './components/Order/OrderList';
 
+import ReviewResponsePage from './pages/ReviewResponsePage';
+
+
 function App() {
   return (
     <Provider store={store}>
@@ -126,9 +129,12 @@ function App() {
           <Route path="/edit-customer-coupon/:id" element={<EditCustomerCoupon />} />
 
 
-
           {/* Order Routes */}
           <Route path="/order/:userId" element={<OrderList/>} />
+
+
+          <Route path="/reviews/responses" element={<ReviewResponsePage />} />
+
         </Routes>
       </Router>
     </Provider>

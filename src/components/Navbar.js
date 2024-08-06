@@ -71,6 +71,10 @@ const Navbar = () => {
               <Link to={`/order/${userID}`}>order history</Link>
             </li>
             <li>
+              <Link to="/reviews/responses">reviews responses</Link>
+            </li>
+           
+            <li>
               <button onClick={handleLogout}>Logout</button>
             </li>
           </>

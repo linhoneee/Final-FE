@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProductService from '../../services/ProductService';
+import ReviewService from '../../services/ReviewService';
 import CartService from '../../services/CartService';
 import Modal from 'react-modal';
-import '../../Css/ImageModal.css'; // Import file CSS
+import '../../Css/ProductDetails.css'; // Import the new CSS file
 
-Modal.setAppElement('#root'); // Đặt phần tử gốc cho react-modal
+Modal.setAppElement('#root'); // Set the root element for react-modal
 
 const ProductDetails = () => {
-  const { id } = useParams(); // Lấy id của sản phẩm từ URL
+  const { id } = useParams(); // Get product id from URL
   const [product, setProduct] = useState(null);
   const [images, setImages] = useState([]);
   const [primaryImage, setPrimaryImage] = useState(null);
@@ -17,10 +18,12 @@ const ProductDetails = () => {
   const [error, setError] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [reviews, setReviews] = useState([]);
   const navigate = useNavigate();
-  const userID = useSelector(state => state.auth.userID); // Lấy userID từ Redux store
+  const userID = useSelector(state => state.auth.userID); // Get userID from Redux store
 
   useEffect(() => {
+    // Fetch product details
     ProductService.GetProductById(id)
       .then(response => {
         setProduct(response.data.product);
@@ -33,6 +36,16 @@ const ProductDetails = () => {
         console.error('Error fetching product details:', error);
         setError(error);
         setLoading(false);
+      });
+
+    // Fetch product reviews
+    ReviewService.getReviewsByProductId(id)
+      .then(response => {
+        setReviews(response.data);
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching reviews:', error);
       });
   }, [id]);
 
@@ -67,6 +80,51 @@ const ProductDetails = () => {
       });
   };
 
+  const renderStars = (rating) => {
+    return Array.from({ length: 5 }, (_, index) => (
+      <span key={`star_${index}`} className={index < rating ? 'filled' : ''}>★</span>
+    ));
+  };
+
+  const renderReviews = (reviews) => {
+    const reviewMap = {};
+    const rootReviews = [];
+
+    // Create map and classify reviews/responses
+    reviews.forEach(review => {
+      reviewMap[review.review.id] = { ...review, responses: [] };
+      if (review.review.parentId === null) {
+        rootReviews.push(reviewMap[review.review.id]);
+      } else if (reviewMap[review.review.parentId]) {
+        reviewMap[review.review.parentId].responses.push(reviewMap[review.review.id]);
+      }
+    });
+
+    // Render reviews and responses
+    const renderReviewItem = (review, isResponse = false) => (
+      <div key={review.review.id} className={`review ${isResponse ? 'response' : ''}`}>
+        <div className="review-header">
+          <img src={`http://localhost:6001${review.user.picture}`} alt="User Avatar" />
+          <p><strong>{review.user.username}</strong> ({review.user.email})</p>
+        </div>
+        <div className="review-body">
+          {review.review.parentId === null && (
+            <div className="star-rating">
+              {renderStars(review.review.rating)}
+            </div>
+          )}
+          <div className="comment">
+            <span><strong>Comment:</strong> {review.review.comment}</span>
+            <span className="date"><strong>Date:</strong> {new Date(review.review.createdAt).toLocaleString()}</span>
+          </div>
+        </div>
+        {review.responses.map(response => renderReviewItem(response, true))}
+      </div>
+    );
+
+    return rootReviews.map(review => renderReviewItem(review));
+  };
+
   if (loading) {
     return <p>Loading product details...</p>;
   }
@@ -76,7 +134,7 @@ const ProductDetails = () => {
   }
 
   return (
-    <div>
+    <div className="product-details-container">
       {product && (
         <>
           <h2>{product.productName}</h2>
@@ -85,7 +143,7 @@ const ProductDetails = () => {
           <p>Price: ${product.price}</p>
           <p>Weight: {product.weight} g</p>
           <h3>Images</h3>
-          <div>
+          <div className="product-images">
             {images.map(image => (
               <img
                 key={image.id}
@@ -106,6 +164,15 @@ const ProductDetails = () => {
               <button onClick={closeModal} className="modal-close-button">Close</button>
             </Modal>
           )}
+
+          <h3>Reviews</h3>
+          <div className="review-container">
+            {reviews.length > 0 ? (
+              renderReviews(reviews)
+            ) : (
+              <p>No reviews found.</p>
+            )}
+          </div>
         </>
       )}
     </div>

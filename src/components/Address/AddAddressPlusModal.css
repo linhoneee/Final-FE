@@ -1,0 +1,135 @@
+.add-address-plus-modal {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    max-width: 1200px;
+    height: 80vh;
+    margin: auto;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+  }
+  
+  .add-address-plus-modal-header, .add-address-plus-modal-footer {
+    padding: 20px;
+    background-color: #f1f1f1;
+    text-align: center;
+  }
+  
+  .add-address-plus-modal-header h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .add-address-plus-modal-footer {
+    display: none; /* Ẩn phần footer */
+  }
+  
+  .add-address-plus-modal-content {
+    display: flex;
+    height: 100%; /* Đặt chiều cao cố định cho nội dung modal */
+  }
+  
+  .add-address-plus-modal-left, .add-address-plus-modal-right {
+    padding: 25px;
+  }
+  
+  .add-address-plus-modal-left {
+    width: 30%;
+    border-right: 1px solid #ddd;
+    overflow-y: auto; /* Cho phép cuộn nếu nội dung quá dài */
+  }
+  
+  .add-address-plus-modal-right {
+    width: 70%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .add-address-plus-modal-right .map-container {
+    flex: 1;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px; /* Tạo khoảng cách giữa bản đồ và phần hiển thị tọa độ */
+  }
+  
+  .add-address-plus-modal .coordinates {
+    background-color: #f1f1f1;
+    padding: 10px;
+    text-align: center;
+    border-top: 1px solid #ddd;
+  }
+  
+  .add-address-plus-modal .coordinates h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .add-address-plus-modal .coordinates p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .add-address-plus-modal form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .add-address-plus-modal form button.btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .add-address-plus-modal form button.btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .add-address-plus-modal form button.cancel-btn {
+    background-color: #6c757d;
+  }
+  
+  .add-address-plus-modal form button.cancel-btn:hover {
+    background-color: #5a6268;
+  }
+  
+  .add-address-plus-modal input, .add-address-plus-modal select, .add-address-plus-modal textarea {
+    width: 100%;
+    box-sizing: border-box; /* Đảm bảo padding và border được tính vào chiều rộng tổng */
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .add-address-plus-modal input:focus, .add-address-plus-modal select:focus, .add-address-plus-modal textarea:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  .add-address-plus-modal label[for="isPrimary"] {
+    display: none; /* Ẩn nhãn "Is Primary" */
+  }
+  
+  .add-address-plus-modal input[name="isPrimary"] {
+    display: none; /* Ẩn checkbox "Is Primary" */
+  }
+  

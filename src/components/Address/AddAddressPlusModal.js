@@ -3,7 +3,8 @@ import axios from 'axios';
 import AddressService from '../../services/AddressService';
 import AddressFields from '../AddressFields';
 import AddressMap from '../AddressMap';
-import L from 'leaflet'; 
+import L from 'leaflet';
+import './AddAddressPlusModal.css';
 
 // Fix the default icon issue for Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -76,31 +77,38 @@ const AddAddressPlusModal = ({ userId, onClose, onSave }) => {
         limit: 1
       }
     })
-    .then(response => {
-      if (response.data.length > 0) {
-        const { lat, lon } = response.data[0];
-        setAddress(prevState => ({
-          ...prevState,
-          latitude: parseFloat(lat),
-          longitude: parseFloat(lon)
-        }));
-      } else {
-        console.error('Could not find coordinates for this address');
-      }
-    })
-    .catch(error => {
-      console.error('Error fetching coordinates:', error);
-    });
+      .then(response => {
+        if (response.data.length > 0) {
+          const { lat, lon } = response.data[0];
+          setAddress(prevState => ({
+            ...prevState,
+            latitude: parseFloat(lat),
+            longitude: parseFloat(lon)
+          }));
+        } else {
+          console.error('Could not find coordinates for this address');
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching coordinates:', error);
+      });
   };
 
   const addAddress = (e) => {
     e.preventDefault();
+
+    if (!address.receiverName || !address.provinceCity || !address.district || !address.ward || !address.street) {
+      alert("Please fill in all the address fields.");
+      return;
+    }
+
     const addressToSend = {
       ...address,
       provinceCity: address.provinceCityName,
       district: address.districtName,
       ward: address.wardName
     };
+
     AddressService.createAddress(userId, addressToSend).then(() => {
       onSave();
       onClose();
@@ -116,29 +124,37 @@ const AddAddressPlusModal = ({ userId, onClose, onSave }) => {
   };
 
   return (
-    <div className="modal">
-      <div className="modal-content">
+    <div className="add-address-plus-modal">
+      <div className="add-address-plus-modal-header">
         <h2>Add Address Plus</h2>
-        <form onSubmit={addAddress}>
-          <AddressFields 
-            address={address}
-            handleChange={handleChange}
-            provinces={provinces}
-            districts={districts}
-            wards={wards}
-            setAddress={setAddress}
-          />
-          <AddressMap address={address} setAddress={setAddress} />
+      </div>
+      <div className="add-address-plus-modal-content">
+        <div className="add-address-plus-modal-left">
+          <form onSubmit={addAddress}>
+            <AddressFields 
+              address={address}
+              handleChange={handleChange}
+              provinces={provinces}
+              districts={districts}
+              wards={wards}
+              setAddress={setAddress}
+            />
+            <button type="submit" className="btn">Add Address</button>
+            <button type="button" className="btn" onClick={onClose}>Cancel</button>
+          </form>
+        </div>
+        <div className="add-address-plus-modal-right">
+          <div className="map-container">
+            <AddressMap address={address} setAddress={setAddress} />
+          </div>
           {address.latitude && address.longitude && (
-            <div>
+            <div className="coordinates">
               <h3>Coordinates</h3>
               <p>Longitude: {address.longitude}</p>
               <p>Latitude: {address.latitude}</p>
             </div>
           )}
-          <button type="submit">Add Address</button>
-          <button type="button" onClick={onClose}>Cancel</button>
-        </form>
+        </div>
       </div>
     </div>
   );

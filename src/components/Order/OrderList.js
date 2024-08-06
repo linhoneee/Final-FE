@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import OrderService from "../../services/OrderService";
 import { useSelector } from 'react-redux';
+import ReviewModal from "../Review/ReviewModal";
 
 const OrderList = () => {
     const userId = useSelector(state => state.auth.userID);
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [selectedProduct, setSelectedProduct] = useState(null); // State to hold the selected product for review
 
     useEffect(() => {
         if (userId) {
@@ -14,11 +16,12 @@ const OrderList = () => {
                 const parsedOrders = response.data.map(order => ({
                     ...order,
                     distanceData: JSON.parse(order.distanceData),
-                    items: JSON.parse(order.items),
-                    selectedShipping: JSON.parse(order.selectedShipping),
+                    items: JSON.parse(order.items).map(item => ({
+                        ...item,
+                        isReviewed: item.isReviewed || false
+                    }))
                 }));
                 setOrders(parsedOrders);
-                console.log(parsedOrders);
                 setLoading(false);
             }).catch((error) => {
                 setError(error);
@@ -26,6 +29,26 @@ const OrderList = () => {
             });
         }
     }, [userId]);
+
+    const handleReviewClick = (order, product) => {
+        setSelectedProduct({ orderId: order.id, product }); // Set the selected product for the modal
+    };
+
+    const handleReviewSuccess = async (orderId, productId) => {
+        // Cập nhật trạng thái sản phẩm trên backend
+        await OrderService.markProductAsReviewed(orderId, productId);
+
+        // Update the orders state to mark the product as reviewed
+        setOrders(orders.map(order =>
+            order.id === orderId ? {
+                ...order,
+                items: order.items.map(item =>
+                    item.productId === productId ? { ...item, isReviewed: true } : item
+                )
+            } : order
+        ));
+        setSelectedProduct(null); // Close the modal
+    };
 
     if (loading) {
         return <div>Loading...</div>;
@@ -49,6 +72,7 @@ const OrderList = () => {
                             <th>Distance Data</th>
                             <th>Items</th>
                             <th>Selected Shipping</th>
+                            <th>Actions</th> {/* New column for actions */}
                         </tr>
                     </thead>
                     <tbody>
@@ -88,6 +112,9 @@ const OrderList = () => {
                                                             <img src={`http://localhost:6001${item.primaryImageUrl}`} alt={item.name} style={{ maxWidth: '200px', maxHeight: '200px' }} />
                                                         </div>
                                                     )}
+                                                    {!item.isReviewed && (
+                                                        <button onClick={() => handleReviewClick(order, item)}>Review</button> // Review button for item
+                                                    )}
                                                 </li>
                                             ))}
                                         </ul>
@@ -107,6 +134,14 @@ const OrderList = () => {
                 </table>
             ) : (
                 <p>No orders found.</p>
+            )}
+            {selectedProduct && (
+                <ReviewModal
+                    order={orders.find(o => o.id === selectedProduct.orderId)}
+                    product={selectedProduct.product}
+                    onClose={() => setSelectedProduct(null)}
+                    onSuccess={handleReviewSuccess}
+                /> // Pass onSuccess prop to ReviewModal
             )}
         </div>
     );
