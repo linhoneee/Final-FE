@@ -1,0 +1,158 @@
+.review-response-page {
+    background-color: #ecf9f0;
+    padding: 40px;
+    border-radius: 16px;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 15px 40px rgba(0, 128, 0, 0.15);
+}
+
+.review-response-page h2 {
+    color: #1abc9c;
+    font-size: 36px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 4px solid #1abc9c;
+    padding-bottom: 15px;
+}
+
+.review-response-page .review-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+.review-response-page .review-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 16px 40px rgba(0, 128, 0, 0.3);
+}
+.review-response-page .review-item {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 8px 30px rgba(0, 128, 0, 0.2);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+
+
+.review-response-page .review-item p {
+    margin: 10px 0;
+    font-size: 20px;
+    color: #2c3e50;
+    height: 40px;
+    }
+
+.review-response-page .review-item button {
+    background-color: #1abc9c;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 28px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    display: block;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 128, 0, 0.2);
+}
+
+.review-response-page .review-item button:hover {
+    background-color: #16a085;
+    transform: translateY(-3px);
+}
+
+
+.review-response-page .review-item::before {
+    content: '';
+    position: absolute;
+    top: -75%;
+    left: -75%;
+    width: 150%;
+    height: 150%;
+    background-color: rgba(26, 188, 156, 0.15);
+    transform: rotate(45deg);
+    transition: all 0.6s ease;
+}
+.review-response-page .review-item:hover::before {
+    top: -50%;
+    left: -50%;
+    transform: rotate(0deg);
+}
+
+
+.review-response-page .review-item p,
+.review-response-page .review-item button {
+    position: relative;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+    margin-left: 500px;
+    margin-top: 100px;
+    width: 80%;
+    max-width: 600px;
+    box-shadow: 0 20px 60px rgba(0, 128, 0, 0.4);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    z-index: 5051;
+}
+
+.modal-content textarea {
+    width: 100%;
+    height: 120px;
+    border-radius: 10px;
+    border: 2px solid #1abc9c;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    box-shadow: inset 0 2px 4px rgba(0, 128, 0, 0.1);
+}
+
+.modal-content button {
+    background-color: #1abc9c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-bottom: 10px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.modal-content button:hover {
+    background-color: #16a085;
+    transform: translateY(-2px);
+}
+
+.modal-content button:last-child {
+    margin-top: 10px;
+    background-color: #95a5a6;
+}
+
+.modal-content button:last-child:hover {
+    background-color: red;
+}

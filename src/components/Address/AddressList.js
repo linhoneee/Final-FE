@@ -1,19 +1,22 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import AddressService from '../../services/AddressService';
+import AddAddressPlusModal from './AddAddressPlusModal'; 
 
 const AddressList = () => {
   const [addresses, setAddresses] = useState([]);
+  const [showModal, setShowModal] = useState(false); // State to control modal visibility
   const navigate = useNavigate();
-  const { userId } = useParams(); // Lấy userId từ URL parameters
+  const userID = useSelector(state => state.auth.userID); // Lấy userID từ Redux store
 
   const fetchAddresses = useCallback(() => {
-    AddressService.getAddressesByUserId(userId).then((response) => {
+    AddressService.getAddressesByUserId(userID).then((response) => {
       // Sắp xếp danh sách địa chỉ, đưa địa chỉ mặc định lên đầu
       const sortedAddresses = response.data.sort((a, b) => b.isPrimary - a.isPrimary);
       setAddresses(sortedAddresses);
     });
-  }, [userId]);
+  }, [userID]);
 
   useEffect(() => {
     fetchAddresses();
@@ -29,7 +32,7 @@ const AddressList = () => {
     const addressToUpdate = addresses.find(address => address.id === id);
     addressToUpdate.isPrimary = true;
 
-    AddressService.updateAddress(userId, addressToUpdate, id).then(() => {
+    AddressService.updateAddress(userID, addressToUpdate, id).then(() => {
       fetchAddresses(); // Fetch updated addresses
     }).catch(handleError);
   };
@@ -38,10 +41,26 @@ const AddressList = () => {
     console.error('Error:', error);
   };
 
+  const handleShowModal = () => {
+    setShowModal(true); // Open the modal when the new button is clicked
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false); // Close the modal
+  };
+
+  const handleSave = () => {
+    fetchAddresses(); // Refresh address list after saving new address
+    setShowModal(false); // Close the modal
+  };
+
   return (
-    <div>
+    <div className="address-list-container">
       <h2>Address List</h2>
-      <button onClick={() => navigate(`/user/${userId}/add-address`)}>Add Address</button>
+      <div className="address-list-buttons">
+        <button onClick={() => navigate(`/user/${userID}/add-address`)}>Add Address</button> {/* Existing Add Address button */}
+        <button onClick={handleShowModal}>Select Address</button> {/* New button to show modal */}
+      </div>
       <table>
         <thead>
           <tr>
@@ -52,8 +71,8 @@ const AddressList = () => {
             <th>Ward</th>
             <th>Street</th>
             <th>Status</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
+            {/* <th>Latitude</th>
+            <th>Longitude</th> */}
             <th>Actions</th>
           </tr>
         </thead>
@@ -67,19 +86,27 @@ const AddressList = () => {
               <td>{address.ward}</td>
               <td>{address.street}</td>
               <td>{address.isPrimary ? 'Mặc định' : ' '}</td>
-              <td>{address.latitude}</td>
-              <td>{address.longitude}</td>
+              {/* <td>{address.latitude}</td>
+              <td>{address.longitude}</td> */}
               <td>
-                <button onClick={() => navigate(`/user/${userId}/edit-address/${address.id}`)}>Edit</button>
-                <button onClick={() => deleteAddress(address.id)}>Delete</button>
-                {!address.isPrimary && <button onClick={() => setPrimaryAddress(address.id)}>Thiết lập mặc định</button>}
-                {/* && bình thường sẽ được hiểu là và nhưng trong trường hợp này
-              dùng để nói về điều kiện hiển thị 1 phần tử */}
+                <button className="action-button" onClick={() => navigate(`/user/${userID}/edit-address/${address.id}`)}>Edit</button>
+                <button className="action-button" onClick={() => deleteAddress(address.id)}>Delete</button>
+                {!address.isPrimary && (
+                  <button className="action-button" onClick={() => setPrimaryAddress(address.id)}>Thiết lập mặc định</button>
+                )}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {showModal && (
+        <AddAddressPlusModal
+          userId={userID}
+          onClose={handleCloseModal}
+          onSave={handleSave}
+        />
+      )}
     </div>
   );
 };

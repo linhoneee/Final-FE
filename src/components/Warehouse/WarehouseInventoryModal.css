@@ -1,0 +1,61 @@
+.warehouse-inventory-table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.warehouse-inventory-table th,
+.warehouse-inventory-table td {
+  padding: 20px 25px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+  color: #333333;
+}
+
+.warehouse-inventory-table th {
+  background-color: #a5d6a7; /* Màu xanh lá cây nhạt */
+  font-weight: 700;
+  color: #1b5e20; /* Màu xanh lá cây đậm */
+  text-transform: uppercase;
+}
+
+.warehouse-inventory-table img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.warehouse-inventory-table img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+
+.modal-close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.modal-close-button:hover {
+  background-color: #b71c1c;
+}

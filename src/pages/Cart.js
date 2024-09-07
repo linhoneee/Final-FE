@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import CartService from '../services/CartService';
 import InventoryService from '../services/InventoryService';
+import './Cart.css'; // Import CSS file
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -27,44 +28,35 @@ const Cart = () => {
   useEffect(() => {
     const fetchCartAndInventory = async () => {
       try {
+        let items = [];
         if (id) {
           const cartResponse = await CartService.FindCartByUserId(id);
-          console.log('Cart items:', cartResponse.data);
-          let items = [];
           if (cartResponse.data.items) {
             items = JSON.parse(cartResponse.data.items);
           }
-          calculateTotal(items);
-          setCartItems(items);
         }
+
         const inventoryResponse = await InventoryService.getAllInventory();
         setInventory(inventoryResponse.data);
+
+        const updatedItems = items.map(item => {
+          const productInventory = inventoryResponse.data.filter(inv => inv.productId === item.productId);
+          return {
+            ...item,
+            warehouse: productInventory.map(inv => inv.warehouseId).join(', '),
+            inStock: checkStockForProduct(item.productId) // Sử dụng checkStockForProduct để cập nhật trạng thái tồn kho
+          };
+        });
+
+        setCartItems(updatedItems);
+
+        calculateTotal(updatedItems);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
     fetchCartAndInventory();
-  }, [id, calculateTotal]);
-
-  useEffect(() => {
-    const updateStockStatus = () => {
-      setCartItems(prevCartItems => {
-        return prevCartItems.map(item => ({
-          ...item,
-          inStock: checkStockForProduct(item.productId),
-        }));
-      });
-    };
-    if (inventory.length > 0) {
-      updateStockStatus();
-    }
-  }, [inventory, checkStockForProduct]);
-
-  const getWarehouseIdsForProduct = (productId) => {
-    return inventory
-      .filter(item => item.productId === productId)
-      .map(item => item.warehouseId);
-  };
+  }, [id, calculateTotal, checkStockForProduct]);
 
   const handleAddItem = (productId) => {
     const item = cartItems.find(item => item.productId === productId);
@@ -82,9 +74,11 @@ const Cart = () => {
     CartService.AddCart(id, cart)
       .then(response => {
         setCartItems(prevCartItems => {
-          return prevCartItems.map(item =>
+          const updatedItems = prevCartItems.map(item =>
             item.productId === productId ? { ...item, quantity: item.quantity + 1 } : item
           );
+          calculateTotal(updatedItems);
+          return updatedItems;
         });
       });
   };
@@ -94,15 +88,17 @@ const Cart = () => {
     if (isNaN(quantity) || quantity <= 0) return;
 
     const currentItem = cartItems.find(item => item.productId === productId);
-    if (!currentItem || !currentItem.inStock) return;
+    if (!currentItem || !checkStockForProduct(productId)) return;
 
     const difference = quantity - currentItem.quantity;
     if (difference === 0) return;
 
     setCartItems(prevCartItems => {
-      return prevCartItems.map(item =>
+      const updatedItems = prevCartItems.map(item =>
         item.productId === productId ? { ...item, quantity: quantity } : item
       );
+      calculateTotal(updatedItems);
+      return updatedItems;
     });
 
     const cart = {
@@ -111,24 +107,16 @@ const Cart = () => {
       price: currentItem.price,
       weight: currentItem.weight,
       warehouseIds: currentItem.warehouseIds,
-      primaryImageUrl: currentItem.primaryImageUrl // Thêm primaryImageUrl vào mục giỏ hàng
+      primaryImageUrl: currentItem.primaryImageUrl
     };
 
     if (difference > 0) {
-      // Nếu số lượng tăng
       CartService.AddCart(id, cart)
-        .then(response => {
-          // Tùy chọn xử lý phản hồi nếu cần thiết
-        })
         .catch(error => {
           console.error('Error updating cart item quantity:', error);
         });
     } else {
-      // Nếu số lượng giảm
       CartService.DecreaseCart(id, cart)
-        .then(response => {
-          // Tùy chọn xử lý phản hồi nếu cần thiết
-        })
         .catch(error => {
           console.error('Error updating cart item quantity:', error);
         });
@@ -145,15 +133,17 @@ const Cart = () => {
       price: item.price,
       weight: item.weight,
       warehouseIds: item.warehouseIds,
-      primaryImageUrl: item.primaryImageUrl // Add primaryImageUrl to cart item
+      primaryImageUrl: item.primaryImageUrl
     };
 
     CartService.DecreaseCart(id, cart)
       .then(response => {
         setCartItems(prevCartItems => {
-          return prevCartItems.map(item =>
+          const updatedItems = prevCartItems.map(item =>
             item.productId === productId ? { ...item, quantity: item.quantity - 1 } : item
           );
+          calculateTotal(updatedItems);
+          return updatedItems;
         });
       });
   };
@@ -168,13 +158,15 @@ const Cart = () => {
       price: item.price,
       weight: item.weight,
       warehouseIds: item.warehouseIds,
-      primaryImageUrl: item.primaryImageUrl // Add primaryImageUrl to cart item
+      primaryImageUrl: item.primaryImageUrl
     };
 
     CartService.ClearProductInCart(id, cart)
       .then(response => {
         setCartItems(prevCartItems => {
-          return prevCartItems.filter(item => item.productId !== productId);
+          const updatedItems = prevCartItems.filter(item => item.productId !== productId);
+          calculateTotal(updatedItems);
+          return updatedItems;
         });
       });
   };
@@ -203,142 +195,180 @@ const Cart = () => {
     navigate(`/products/${productId}`);
   };
 
-  const handleCheckout = () => {
-    const selectedCartItems = cartItems.filter(item => selectedItems.includes(item.productId));
-    const warehouseGroups = {};
+  const getWarehouseIdsForProduct = (productId) => {
+    return inventory
+      .filter(item => item.productId === productId)
+      .map(item => item.warehouseId);
+  };
+  
+  const groupItemsByIndividualWarehouse = (selectedCartItems, inventory) => {
+    let warehouseGroups = {};
 
     selectedCartItems.forEach(item => {
-      const warehouseIds = getWarehouseIdsForProduct(item.productId).sort().join(',');
-      if (!warehouseGroups[warehouseIds]) {
-        warehouseGroups[warehouseIds] = [];
-      }
-      warehouseGroups[warehouseIds].push(item);
-    });
+      const itemWarehouseIds = getWarehouseIdsForProduct(item.productId);
 
-    const groupedItems = {};
-    for (const warehouseIdStr of Object.keys(warehouseGroups)) {
-      const warehouseIds = warehouseIdStr.split(',');
-      for (const warehouseId of warehouseIds) {
-        if (!groupedItems[warehouseId]) {
-          groupedItems[warehouseId] = [];
+      itemWarehouseIds.forEach(warehouseId => {
+        if (!warehouseGroups[warehouseId]) {
+          warehouseGroups[warehouseId] = {
+            warehouseIds: [warehouseId],
+            items: []
+          };
         }
-        groupedItems[warehouseId].push(...warehouseGroups[warehouseIdStr]);
-      }
-    }
-
-    const filteredGroupedItems = Object.entries(groupedItems).map(([warehouseId, items]) => ({
-      warehouseId,
-      items: items.filter((item, index, self) =>
-        self.findIndex(i => i.productId === item.productId) === index
-      )
-    }));
-
-    if (filteredGroupedItems.length > 1) {
-      setModalContent(filteredGroupedItems);
+        warehouseGroups[warehouseId].items.push(item);
+      });
+    });
+    return Object.values(warehouseGroups);
+  };
+  
+  const handleCheckout = () => {
+    const selectedCartItems = cartItems.filter(item => selectedItems.includes(item.productId));
+    
+    const warehouseGroups = groupItemsByIndividualWarehouse(selectedCartItems, inventory);
+    
+    console.log("Final Warehouse Groups:", warehouseGroups);
+  
+    const allInOneGroup = warehouseGroups.length === 1 || warehouseGroups.some(group => group.items.length === selectedCartItems.length);
+  
+    if (allInOneGroup) {
+      console.log("All items in one group - proceeding to checkout:");
+      const selectedGroup = warehouseGroups.find(group => group.items.length === selectedCartItems.length) || warehouseGroups[0];
+      navigate(`/checkout/${id}`, { state: { selectedCartItems: selectedGroup.items, warehouseIds: selectedGroup.warehouseIds } });
+    } else if (warehouseGroups.length > 1) {
+      console.log("Multiple groups - showing modal:");
+      setModalContent(warehouseGroups);
       setShowModal(true);
-    } else {
-      navigate(`/checkout/${id}`, { state: { selectedCartItems, warehouseIds: filteredGroupedItems[0].warehouseId } });
+    } else if (warehouseGroups.length === 1) {
+      console.log("Single group - proceeding to checkout:");
+      console.log("Selected Cart Items:", warehouseGroups[0].items);
+      console.log("Calculated WarehouseIds:", warehouseGroups[0].warehouseIds);
+      navigate(`/checkout/${id}`, { state: { selectedCartItems: warehouseGroups[0].items, warehouseIds: warehouseGroups[0].warehouseIds } });
     }
   };
-
+  
   const handleModalCheckout = () => {
     if (selectedModalGroup !== null) {
       const selectedGroup = modalContent[selectedModalGroup];
-      navigate(`/checkout/${id}`, { state: { selectedCartItems: selectedGroup.items, warehouseIds: selectedGroup.warehouseId } });
+      console.log("Selected Cart Items for Modal Checkout:", selectedGroup.items);
+      console.log("Selected Modal Group WarehouseIds:", selectedGroup.warehouseIds);
+      navigate(`/checkout/${id}`, { state: { selectedCartItems: selectedGroup.items, warehouseIds: selectedGroup.warehouseIds } });
     }
     setShowModal(false);
   };
-
+  
   return (
-    <div>
-      <h2>Your Cart</h2>
-      <div>
+    <div className="cart-container">
+      <h2 className="cart-header">Your Cart</h2>
+      <div className="cart-items">
         {cartItems.length > 0 ? (
           <>
-            <input
-              type="checkbox"
-              checked={selectedItems.length === cartItems.filter(item => item.inStock).length}
-              onChange={handleSelectAllItems}
-            /> Select All
+            <div className="select-all">
+              <input
+                type="checkbox"
+                checked={selectedItems.length === cartItems.filter(item => item.inStock).length}
+                onChange={handleSelectAllItems}
+                className="cart-checkbox"
+              /> 
+              <p>Select All</p>
+            </div>
             {cartItems.map(item => (
-              <div key={item.productId} style={{ backgroundColor: item.inStock ? 'white' : 'lightgrey' }}>
+              <div key={item.productId} className={`cart-item ${item.inStock ? '' : 'out-of-stock'}`}>
                 <input
                   type="checkbox"
                   checked={selectedItems.includes(item.productId)}
                   onChange={() => handleSelectItem(item.productId)}
                   disabled={!item.inStock}
+                  className="cart-checkbox"
                 />
-                <h3 onClick={() => handleProductClick(item.productId)} style={{ cursor: 'pointer' }}>Product ID: {item.productId}</h3>
-                <p>Name: {item.name}</p>
-                <p>Price: ${item.price}</p>
-                <p>Weight: {item.weight} g</p>
-                <p>Warehouse IDs: {item.warehouseIds}</p>
-                {item.primaryImageUrl && (
-                  <img src={`http://localhost:6001${item.primaryImageUrl}`} alt="Primary" width="100" />
-                )}
-                <button onClick={() => handleDecreaseItem(item.productId)} disabled={!item.inStock}>-</button>
-                <input
-                  type="number"
-                  value={item.quantity}
-                  onChange={(e) => handleQuantityChange(item.productId, e.target.value)}
-                  min="1"
-                  style={{ width: '50px', textAlign: 'center' }}
-                  disabled={!item.inStock}
-                />
-                <button onClick={() => handleAddItem(item.productId)} disabled={!item.inStock}>+</button>
-                <button onClick={() => handleRemoveItem(item.productId)}>Remove</button>
-                <p>warehouseIds in inventory: {getWarehouseIdsForProduct(item.productId).join(', ')}</p>
-                {!item.inStock && <p style={{ color: 'red' }}>Sản phẩm đã hết hàng</p>}
+                <img src={`http://localhost:6001${item.primaryImageUrl}`} alt="Primary" className="product-image" />
+                <div className="product-info">
+                  <h3 onClick={() => handleProductClick(item.productId)} className="product-link">
+                    Name: {item.name}
+                  </h3>
+                  <p>Product ID: {item.productId}</p>
+                  <p>Price: ${item.price}</p>
+                  <p>Weight: {item.weight} g</p>
+                  <p>Warehouse: {item.warehouse}</p>
+                  {!item.inStock && (
+                    <p style={{ color: 'red', fontWeight: 'bold' }}>Sản phẩm đã hết hàng</p>
+                  )}
+                </div>
+                <div className="quantity-control">
+                  <button onClick={() => handleDecreaseItem(item.productId)} className="quantity-button" disabled={!item.inStock}>-</button>
+                  <input
+                    type="number"
+                    value={item.quantity}
+                    onChange={(e) => handleQuantityChange(item.productId, e.target.value)}
+                    min="1"
+                    className="quantity-input"
+                    disabled={!item.inStock}
+                  />
+                  <button onClick={() => handleAddItem(item.productId)} className="quantity-button" disabled={!item.inStock}>+</button>
+                </div>
+                <button onClick={() => handleRemoveItem(item.productId)} className="remove-button">Remove</button>
               </div>
             ))}
-            <h3>Total: ${total}</h3>
-            <button onClick={handleCheckout} disabled={selectedItems.length === 0}>Proceed to Checkout</button>
+            <h3 className="total">Total: ${total}</h3>
+            <button onClick={handleCheckout} className="checkout-button" disabled={selectedItems.length === 0}>Proceed to Checkout</button>
           </>
         ) : (
-          <p>Your cart is empty.</p>
+          <p className="empty-cart">Your cart is empty.</p>
         )}
       </div>
 
       {showModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Thông báo</h2>
-            <p>
-              Các sản phẩm bạn chọn thuộc về các kho hàng khác nhau. Vui lòng chọn mua trước một trong số các đơn hàng sau:
-            </p>
-            {modalContent.map((group, index) => (
-              <div key={index} style={{ marginBottom: '20px' }}>
-                <h3>Đơn hàng {index + 1}</h3>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Product ID</th>
-                      <th>Name</th>
-                      <th>Price</th>
-                      <th>Warehouse IDs</th>
-                      <th>Image</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {group.items.map(item => (
-                      <tr key={item.productId} onClick={() => setSelectedModalGroup(index)} style={{ cursor: 'pointer', backgroundColor: selectedModalGroup === index ? 'lightblue' : 'white' }}>
-                        <td>{item.productId}</td>
-                        <td>{item.name}</td>
-                        <td>${item.price}</td>
-                        <td>{getWarehouseIdsForProduct(item.productId).join(', ')}</td>
-                        <td>
-                          {item.primaryImageUrl && (
-                            <img src={`http://localhost:6001${item.primaryImageUrl}`} alt="Primary" width="50" />
-                          )}
-                        </td>
+        <div className="custom-modal">
+          <div className="custom-modal-content">
+            <div className="custom-modal-header">
+              <h2>Thông báo</h2>
+              <button onClick={() => setShowModal(false)} className="custom-close-modal-button">×</button>
+            </div>
+            <div className="custom-modal-body">
+              <p>
+                Các sản phẩm bạn chọn thuộc về các kho hàng khác nhau. Vui lòng chọn mua trước một trong số các đơn hàng sau:
+              </p>
+              {modalContent.map((group, index) => (
+                <div key={index} className="custom-modal-group">
+                  <h3>Đơn hàng {index + 1}</h3>
+                  <table className="custom-modal-table">
+                    <thead>
+                      <tr>
+                        <th>Product ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Warehouse IDs</th>
+                        <th>Image</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <button onClick={handleModalCheckout} disabled={selectedModalGroup === null || selectedModalGroup !== index}>Checkout Đơn hàng {index + 1}</button>
-              </div>
-            ))}
-            <button onClick={() => setShowModal(false)}>Đóng</button>
+                    </thead>
+                    <tbody>
+                      {group.items.map(item => (
+                        <tr
+                          key={item.productId}
+                          onClick={() => setSelectedModalGroup(index)}
+                          className={selectedModalGroup === index ? 'custom-selected-modal-group' : ''}
+                        >
+                          <td>{item.productId}</td>
+                          <td>{item.name}</td>
+                          <td>${item.price}</td>
+                          <td>{getWarehouseIdsForProduct(item.productId).join(', ')}</td>
+                          <td>
+                            {item.primaryImageUrl && (
+                              <img src={`http://localhost:6001${item.primaryImageUrl}`} alt="Primary" width="50" />
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <button
+                    onClick={handleModalCheckout}
+                    className="custom-checkout-modal-button"
+                    disabled={selectedModalGroup === null || selectedModalGroup !== index}
+                  >
+                    Checkout Đơn hàng {index + 1}
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}

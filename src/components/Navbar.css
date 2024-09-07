@@ -1,0 +1,177 @@
+    
+/* Navbar container styling */
+.navbar-component {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #2e7d32 0%, #4caf50 50%, #66bb6a 100%);
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    color: white;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    /* position: sticky; */
+    top: 0;
+    z-index: 1000;
+}
+
+/* Styling for the logo within the navbar */
+.navbar-component-logo {
+    font-size: 2em;
+    font-weight: bold;
+    color: #ffffff;
+    transition: transform 0.5s ease, color 0.5s ease;
+}
+
+.navbar-component-logo a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Hover effect for the logo */
+.navbar-component-logo:hover {
+    transform: scale(1.15);
+    color: #a5d6a7;
+}
+
+/* Container for navigation links */
+.navbar-component-links {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    gap: 20px;
+}
+
+/* Styling for individual navigation items */
+.navbar-component-item {
+    font-size: 1em;
+    transition: transform 0.4s ease, color 0.4s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.navbar-component-item a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px 15px;
+    transition: color 0.4s ease, transform 0.4s ease;
+    display: flex;
+    align-items: center;
+}
+
+/* Hover effect for navigation items */
+.navbar-component-item:hover {
+    transform: translateY(-5px);
+    color: #ffffff;
+}
+
+/* Pseudo-element for underlining effect */
+.navbar-component-item::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    height: 3px;
+    background-color: #a5d6a7;
+    opacity: 0;
+    transform: translateX(-50%);
+    transition: all 0.4s ease;
+}
+
+/* Hover effect for underlining navigation items */
+.navbar-component-item:hover::after {
+    opacity: 1;
+    width: 100%;
+}
+
+/* Styling for the welcome message */
+.navbar-component-welcome {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #c8e6c9;
+}
+
+/* Styling for the cart count */
+.navbar-component-cart-count {
+    background-color: #e53935; /* Màu nền đỏ đậm */
+    color: white; /* Màu chữ trắng */
+    padding: 2px 8px; /* Khoảng cách bên trong */
+    border-radius: 12px; /* Bo góc để tạo hình elip */
+    font-size: 0.9em; /* Giảm kích thước chữ */
+    font-weight: bold; /* Độ đậm chữ */
+    margin-left: 8px; /* Khoảng cách bên trái số lượng */
+    display: inline-block; /* Hiển thị inline với các phần tử khác */
+    animation: navbar-component-bounce 1s infinite; /* Thêm hiệu ứng nhảy để thu hút sự chú ý */
+}
+
+/* Bounce animation for the cart count */
+@keyframes navbar-component-bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0); /* Trả về vị trí ban đầu */
+    }
+    40% {
+        transform: translateY(-10px); /* Di chuyển lên trên 10px */
+    }
+    60% {
+        transform: translateY(-5px); /* Di chuyển lên trên 5px */
+    }
+}
+
+/* Styling for the logout button */
+.navbar-component-logout-button {
+    background-color: #388e3c;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 44px;
+    cursor: pointer;
+    transition: background-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.navbar-component-logout-button:hover {
+    background-color: #2e7d32;
+    transform: scale(1.15);
+    box-shadow: 0 8px 25px rgba(46, 125, 50, 0.5);
+}
+
+.navbar-component-logout-button:focus {
+    outline: none;
+}
+
+.navbar-component-logout-button:active {
+    transform: scale(1);
+}
+/* CSS chung cho Navbar và NavBarAdmin (phiên bản ngang và dọc) đã có sẵn */
+
+.navbar-component-vertical {
+    flex-direction: column; /* Đặt layout thành cột dọc */
+    align-items: flex-start; /* Căn lề trái cho các mục */
+    width: 250px; /* Đặt chiều rộng cố định cho navbar dọc */
+    padding: 20px;
+}
+/* CSS chung cho Navbar và NavBarAdmin (phiên bản ngang và dọc) đã có sẵn */
+
+.navbar-component-vertical .navbar-component-links {
+    flex-direction: column; /* Chuyển thành cột dọc */
+    width: 100%; /* Chiếm toàn bộ chiều rộng container */
+    gap: 10px; /* Khoảng cách giữa các mục */
+}
+
+.navbar-component-vertical .navbar-component-item {
+    justify-content: flex-start; /* Căn lề trái cho nội dung */
+    width: 100%; /* Chiếm toàn bộ chiều rộng */
+    padding: 10px 0; /* Điều chỉnh padding để phù hợp với layout dọc */
+}
+
+.navbar-component-vertical .navbar-component-logout-button {
+    width: 100%; /* Nút đăng xuất chiếm toàn bộ chiều rộng */
+    margin-top: 20px; /* Khoảng cách trên nút */
+}

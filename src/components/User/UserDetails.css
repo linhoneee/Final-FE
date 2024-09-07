@@ -1,0 +1,279 @@
+/* Import a beautiful Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+.user-details-container {
+    font-family: 'Montserrat', sans-serif;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.user-details-container h2 {
+    font-size: 2em;
+    color: #2e7d32;
+    font-weight: bold;
+    text-align: center;
+}
+
+.user-details-container p {
+    font-size: 1em;
+    color: #555;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.user-details-form {
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-section, .right-section {
+    width: 45%;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="file"],
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="file"]:focus,
+.form-group select:focus {
+    border-color: #2e7d32;
+    box-shadow: 0 0 10px rgba(46, 125, 50, 0.5);
+    outline: none;
+}
+
+.form-group small {
+    font-size: 0.9em;
+    color: #888;
+}
+
+.gender-options {
+    display: flex;
+    gap: 15px;
+}
+
+.gender-options label {
+    font-size: 1em;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.gender-options input[type="radio"] {
+    appearance: none;
+    background-color: #fff;
+    margin: 0;
+    font: inherit;
+    color: #2e7d32;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid #2e7d32;
+    border-radius: 50%;
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s;
+}
+
+.gender-options input[type="radio"]::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform 0.3s ease;
+    background-color: #2e7d32;
+}
+
+.gender-options input[type="radio"]:checked::before {
+    transform: scale(1);
+}
+
+.gender-options input[type="radio"]:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(46, 125, 50, 0.5);
+}
+
+.birthday-options {
+    display: flex;
+    gap: 10px;
+}
+
+.birthday-options select {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.file-input {
+    display: none;
+}
+
+.user-picture {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-picture img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.upload-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s;
+    margin-top: 10px;
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+
+.upload-button:hover {
+    background-color: #388E3C;
+    transform: scale(1.05);
+}
+
+.upload-button:active {
+    transform: scale(1);
+}
+
+.update-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 10px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s;
+    margin-top: 20px;
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.update-button:hover {
+    background-color: #388E3C;
+    transform: scale(1.05);
+}
+
+.update-button:active {
+    transform: scale(1);
+}
+
+/* Address List Section */
+.address-list-section {
+    margin-top: 50px;
+}
+
+.address-list-section h2 {
+    font-size: 1.8em;
+    color: #2e7d32;
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+/* Address table styling */
+.address-list-section table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.address-list-section th, .address-list-section td {
+    padding: 15px;
+    text-align: left;
+    font-size: 1em;
+    color: #555;
+    border-bottom: 1px solid #ddd;
+}
+
+.address-list-section th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    color: #2e7d32;
+}
+
+.address-list-section td {
+    background-color: #fff;
+}
+
+.address-list-section tr:hover td {
+    background-color: #f1f1f1;
+}
+
+.address-list-section td:last-child {
+    text-align: center;
+}
+
+.address-list-section button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s;
+    margin-right: 5px;
+}
+
+.address-list-section button:hover {
+    background-color: #388E3C;
+    transform: scale(1.05);
+}
+
+.address-list-section button:active {
+    transform: scale(1);
+}
+
+.address-list-section button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}

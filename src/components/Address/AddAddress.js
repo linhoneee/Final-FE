@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import AddressService from '../../services/AddressService';
 
 const AddAddress = () => {
-  const userId = useSelector(state => state.auth.userID); // Lấy userID từ reduxstore
+  const userId = useSelector(state => state.auth.userID);
   const [address, setAddress] = useState({
     receiverName: '',
     provinceCity: '',

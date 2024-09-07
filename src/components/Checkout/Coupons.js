@@ -1,8 +1,9 @@
 import React from 'react';
 import { TextField } from '@material-ui/core';
+import './Coupons.css'; // Import the new CSS file
 
 const Coupons = ({ coupons, voucherCode, handleVoucherCodeChange, handleCouponSelect, handleApplyCoupon }) => (
-  <div>
+  <div className="coupons-container">
     <h3>Coupons</h3>
     <select onChange={handleCouponSelect}>
       <option value="">Select a coupon</option>
@@ -12,11 +13,15 @@ const Coupons = ({ coupons, voucherCode, handleVoucherCodeChange, handleCouponSe
         </option>
       ))}
     </select>
-    <TextField
-      label="Enter Voucher Code"
-      value={voucherCode}
-      onChange={handleVoucherCodeChange}
-    />
+    <div className="coupon-input-container">
+      <TextField
+        label="Enter Voucher Code"
+        value={voucherCode}
+        onChange={handleVoucherCodeChange}
+        variant="outlined"
+        className="coupon-input"
+      />
+    </div>
     <button onClick={handleApplyCoupon}>Apply Coupon</button>
   </div>
 );

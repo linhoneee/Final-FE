@@ -15,6 +15,9 @@ class MessageService {
   sendMessage(message) {
     return axios.post(API_URL, message);
   }
+  getLatestMessagesForAllRooms() {
+    return axios.get(`${API_URL}/latestMessages`);
+  }
 }
 
 const instance = new MessageService();

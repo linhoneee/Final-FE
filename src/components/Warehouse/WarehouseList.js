@@ -1,14 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import WarehouseService from '../../services/WarehouseService';
+import WarehouseInventory from './WarehouseInventory'; 
+import AddProduct from './AddProductWarehouse'; 
+import Modal from 'react-modal'; // Import react-modal
+import './WarehouseList.css'; // Import CSS
+
+Modal.setAppElement('#root'); // Cấu hình root cho Modal
 
 const WarehouseList = () => {
   const [warehouses, setWarehouses] = useState([]);
+  const [inventoryVisible, setInventoryVisible] = useState({});
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [currentWarehouseId, setCurrentWarehouseId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     WarehouseService.getAllWarehouses().then((response) => {
       setWarehouses(response.data);
+      console.log(response.data);
     });
   }, []);
 
@@ -18,11 +28,28 @@ const WarehouseList = () => {
     });
   };
 
+  const toggleInventoryVisibility = (warehouseId) => {
+    setInventoryVisible((prevState) => ({
+      ...prevState,
+      [warehouseId]: !prevState[warehouseId],
+    }));
+  };
+
+  const openAddProductModal = (warehouseId) => {
+    setCurrentWarehouseId(warehouseId);
+    setModalIsOpen(true);
+  };
+
+  const closeAddProductModal = () => {
+    setModalIsOpen(false);
+    setCurrentWarehouseId(null);
+  };
+
   return (
-    <div>
-      <h2>Warehouse List</h2>
-      <button onClick={() => navigate('/add-warehouse')}>Add Warehouse</button>
-      <table>
+    <div className="warehouse-list-container">
+      <h2 className="warehouse-list-title">Warehouse List</h2>
+      <button onClick={() => navigate('/add-warehouse')} className="warehouse-list-add-btn">Add Warehouse</button>
+      <table className="warehouse-list-table">
         <thead>
           <tr>
             <th>ID</th>
@@ -30,31 +57,51 @@ const WarehouseList = () => {
             <th>Province/City</th>
             <th>District</th>
             <th>Ward</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
+            {/* <th>Latitude</th>
+            <th>Longitude</th> */}
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {warehouses.map((warehouse) => (
-            <tr key={warehouse.id}>
-              <td>{warehouse.id}</td>
-              <td>{warehouse.name}</td>
-              <td>{warehouse.provinceCity}</td>
-              <td>{warehouse.district}</td>
-              <td>{warehouse.ward}</td>
-              <td>{warehouse.latitude}</td>
-              <td>{warehouse.longitude}</td>
-              <td>
-                <button onClick={() => navigate(`/edit-warehouse/${warehouse.id}`)}>Edit</button>
-                <button onClick={() => deleteWarehouse(warehouse.id)}>Delete</button>
-                <button onClick={() => navigate(`/warehouse/${warehouse.id}/inventory`)}>View Inventory</button>
-                <button onClick={() => navigate(`/warehouse/${warehouse.id}/addProduct`)}>Add Product</button>
-              </td>
-            </tr>
+            <React.Fragment key={warehouse.id}>
+              <tr>
+                <td>{warehouse.id}</td>
+                <td>{warehouse.name}</td>
+                <td>{warehouse.provinceCity}</td>
+                <td>{warehouse.district}</td>
+                <td>{warehouse.ward}</td>
+                {/* <td>{warehouse.latitude}</td>
+                <td>{warehouse.longitude}</td> */}
+                <td>
+                  <button onClick={() => navigate(`/edit-warehouse/${warehouse.id}`)} className="warehouse-list-action-btn">Edit</button>
+                  <button onClick={() => deleteWarehouse(warehouse.id)} className="warehouse-list-action-btn warehouse-list-delete-btn">Delete</button>
+                  <button onClick={() => toggleInventoryVisibility(warehouse.id)} className="warehouse-list-action-btn">
+                    {inventoryVisible[warehouse.id] ? 'Hide Inventory' : 'View Inventory'}
+                  </button>
+                  <button onClick={() => openAddProductModal(warehouse.id)} className="warehouse-list-action-btn">Add Product</button>
+                </td>
+              </tr>
+              {inventoryVisible[warehouse.id] && (
+                <tr>
+                  <td colSpan="8">
+                    <WarehouseInventory warehouseId={warehouse.id} />
+                  </td>
+                </tr>
+              )}
+            </React.Fragment>
           ))}
         </tbody>
       </table>
+
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeAddProductModal}
+        className="modal-content"
+        overlayClassName="modal-overlay"
+      >
+        <AddProduct warehouseId={currentWarehouseId} closeModal={closeAddProductModal} />
+      </Modal>
     </div>
   );
 };

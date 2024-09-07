@@ -1,0 +1,66 @@
+/* AddProductModal.css */
+.add-product-modal {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 500px;
+  margin: 0 auto;
+  animation: slideUpFadeIn 0.5s forwards;
+}
+
+@keyframes slideUpFadeIn {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.add-product-modal h2 {
+  color: #036b52; /* Deep green */
+  text-align: center;
+}
+
+.add-product-modal form {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-product-modal label {
+  margin-bottom: 10px;
+  color: #036b52; /* Deep green */
+}
+
+.add-product-modal input[type="text"], .add-product-modal select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.add-product-modal input[type="text"]:focus, .add-product-modal select:focus {
+  border-color: #04a77a; /* Medium green */
+  box-shadow: 0 0 0 2px #c8e6c9; /* Light green */
+}
+
+.cancel-button, .button {
+  background-color: #ccc;
+  color: black;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.cancel-button:hover {
+  background-color: #bbb;
+}
+
+.button {
+  background-color: #048a81; /* Medium green */
+  color: white;
+}
+
+.button:hover {
+  background-color: #02675e; /* Darker green */
+  transform: scale(1.05);
+}

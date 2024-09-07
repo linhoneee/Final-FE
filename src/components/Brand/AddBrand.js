@@ -1,29 +1,30 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import BrandService from '../../services/BrandService';
+import './AddBrand.css';
 
-const AddBrand = () => {
+const AddBrand = ({ onClose }) => {
   const [name, setName] = useState('');
-  const navigate = useNavigate();
 
   const saveBrand = (e) => {
-    e.preventDefault();
     const brand = { name };
     BrandService.createBrand(brand).then(() => {
-      navigate('/brands');
+      onClose();
     });
   };
 
   return (
-    <div className="container">
-      <h2>Add Brand</h2>
-      <form>
-        <div className="form-group">
-          <label>Name</label>
-          <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} />
-        </div>
-        <button className="btn btn-success mt-2" onClick={saveBrand}>Save</button>
-      </form>
+    <div className="brand-add-modal">
+      <div className="brand-add-modal-content">
+        <h2 className="brand-add-modal-title">Thêm thương hiệu</h2>
+        <form>
+          <div className="brand-add-modal-form-group">
+            <label>Tên thương hiệu</label>
+            <input type="text" className="brand-add-modal-input" value={name} onChange={(e) => setName(e.target.value)} />
+          </div>
+          <button onClick={saveBrand} className="brand-add-modal-btn brand-add-modal-btn-primary">Lưu</button>
+          <button onClick={onClose} className="brand-add-modal-btn brand-add-modal-btn-danger">Hủy</button>
+        </form>
+      </div>
     </div>
   );
 };

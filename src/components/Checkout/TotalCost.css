@@ -1,0 +1,45 @@
+/* Import a beautiful Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+.total-cost-container {
+    font-family: 'Montserrat', sans-serif;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    margin-top: 20px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
+.total-cost-container h3 {
+    font-size: 2em;
+    color: #2e7d32;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.cost-item {
+    font-size: 1.2em;
+    color: #555;
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.total-cost {
+    font-size: 1.5em;
+    color: #d32f2f;
+    margin-top: 20px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+}
+
+.total-cost-container p span {
+    color: #2e7d32;
+    font-weight: bold;
+}

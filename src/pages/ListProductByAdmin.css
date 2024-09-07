@@ -1,0 +1,59 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+.admin-container {
+  font-family: 'Montserrat', sans-serif;
+  padding: 40px;
+  background-color: #f0f4f8;
+}
+
+.admin-header {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  font-size: 2.5em;
+  font-weight: 700;
+  background: linear-gradient(45deg, #0f9b0f, #00b09b);
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: fadeInHeader 1.5s ease-in-out;
+}
+
+@keyframes fadeInHeader {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.add-product-button {
+  background: linear-gradient(45deg, #0f9b0f, #00b09b);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  margin: 20px auto;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  display: block;
+  transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.add-product-button:hover {
+  background: linear-gradient(45deg, #00b09b, #0f9b0f);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.add-product-button:active {
+  transform: translateY(0);
+}
+
+.add-product-form {
+  margin-bottom: 40px;
+}
+

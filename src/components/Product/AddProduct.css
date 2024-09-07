@@ -1,0 +1,140 @@
+/* Import a beautiful Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+.add-product-container {
+  font-family: 'Montserrat', sans-serif; /* Sử dụng font chữ Montserrat */
+  max-width: 800px; /* Đặt chiều rộng tối đa của container */
+  margin: 50px auto; /* Căn giữa container và tạo khoảng cách trên dưới */
+  padding: 20px; /* Khoảng cách bên trong container */
+  background: rgba(255, 255, 255, 0.8); /* Nền mờ với hiệu ứng glassmorphism */
+  border-radius: 15px; /* Bo góc container */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Đổ bóng cho container */
+  backdrop-filter: blur(10px); /* Làm mờ nền phía sau */
+  transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển đổi mượt mà */
+}
+
+.add-product-header {
+  text-align: center; /* Căn giữa tiêu đề */
+  color: #2c3e50; /* Màu chữ */
+  margin-bottom: 30px; /* Khoảng cách bên dưới tiêu đề */
+  font-size: 2em; /* Kích thước chữ */
+  font-weight: 700; /* Độ đậm chữ */
+  background: linear-gradient(45deg, #0f9b0f, #00b09b); /* Đặt gradient màu xanh lá cây cho chữ */
+  -webkit-background-clip: text; /* Dùng nền gradient cho chữ */
+  color: transparent; /* Làm cho phần chữ trở nên trong suốt */
+}
+
+.add-product-form {
+  margin-bottom: 20px; /* Khoảng cách bên dưới form */
+}
+
+.add-product-form-group {
+  margin-bottom: 20px; /* Khoảng cách bên dưới mỗi nhóm form */
+}
+
+.add-product-label {
+  display: block; /* Hiển thị dưới dạng khối */
+  margin-bottom: 10px; /* Khoảng cách bên dưới nhãn */
+  color: #2c3e50; /* Màu chữ */
+  font-weight: 600; /* Độ đậm chữ */
+}
+
+.add-product-input,
+.add-product-textarea {
+  width: 100%; /* Chiếm toàn bộ chiều rộng */
+  padding: 10px; /* Khoảng cách bên trong */
+  border-radius: 10px; /* Bo góc */
+  border: 1px solid #ddd; /* Đường viền */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+  transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển đổi mượt mà */
+  font-size: 1em; /* Kích thước chữ */
+  width: 750px;
+}
+
+.add-product-input:focus,
+.add-product-textarea:focus {
+  border-color: #0f9b0f; /* Đổi màu viền khi focus */
+  box-shadow: 0 4px 12px rgba(0, 155, 15, 0.4); /* Đổ bóng khi focus */
+  outline: none; /* Loại bỏ viền outline */
+}
+
+.add-product-button {
+  display: inline-block; /* Hiển thị dưới dạng khối */
+  padding: 10px 20px; /* Khoảng cách bên trong */
+  border: none; /* Loại bỏ đường viền */
+  border-radius: 50px; /* Bo góc nút */
+  background: linear-gradient(45deg, #0f9b0f, #00b09b); /* Gradient màu xanh lá cây */
+  color: white; /* Màu chữ */
+  font-size: 1em; /* Kích thước chữ */
+  font-weight: 600; /* Độ đậm chữ */
+  cursor: pointer; /* Con trỏ chuột khi hover */
+  transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển đổi mượt mà */
+}
+
+.add-product-button:hover {
+  background: linear-gradient(45deg, #00b09b, #0f9b0f); /* Gradient màu xanh lá cây khi hover */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Đổ bóng khi hover */
+}
+
+.add-product-button:active {
+  transform: translateY(2px); /* Dịch chuyển xuống dưới khi click */
+}
+
+.add-product-images {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px; /* Khoảng cách bên dưới nhóm hình ảnh */
+}
+
+.add-product-image-container {
+  display: inline-block; /* Hiển thị dưới dạng khối */
+  margin-right: 10px; /* Khoảng cách bên phải container */
+  margin-bottom: 10px; /* Khoảng cách bên dưới container */
+  text-align: center; /* Căn giữa nội dung */
+}
+
+.add-product-image {
+  width: 100px; /* Chiều rộng của hình ảnh */
+  height: 100px; /* Chiều cao của hình ảnh */
+  border-radius: 10px; /* Bo góc hình ảnh */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Đổ bóng cho hình ảnh */
+  margin-bottom: 5px; /* Khoảng cách bên dưới hình ảnh */
+  cursor: pointer; /* Thay đổi con trỏ chuột thành dạng pointer khi hover */
+}
+
+.add-product-remove-button {
+  background: #e74c3c; /* Màu nền cho nút Remove */
+  border: none; /* Loại bỏ đường viền */
+  padding: 5px 10px; /* Khoảng cách bên trong nút */
+  border-radius: 5px; /* Bo góc nút */
+  color: white; /* Màu chữ */
+  cursor: pointer; /* Con trỏ chuột khi hover */
+  transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển đổi mượt mà */
+}
+
+.add-product-remove-button:hover {
+  background: #c0392b; /* Màu nền khi hover cho nút Remove */
+}
+
+.add-product-file-label {
+  display: inline-block;
+  padding: 10px 20px; /* Khoảng cách bên trong nhãn */
+  border-radius: 50px; /* Bo góc nhãn */
+  background: linear-gradient(45deg, #0f9b0f, #00b09b); /* Gradient màu xanh lá cây */
+  color: white; /* Màu chữ */
+  font-size: 1em; /* Kích thước chữ */
+  font-weight: 600; /* Độ đậm chữ */
+  cursor: pointer; /* Con trỏ chuột khi hover */
+  transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển đổi mượt mà */
+  text-align: center; /* Căn giữa chữ trong nhãn */
+  margin-top: 10px; /* Khoảng cách bên trên nhãn */
+}
+
+.add-product-file-label:hover {
+  background: linear-gradient(45deg, #00b09b, #0f9b0f); /* Gradient màu xanh lá cây khi hover */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Đổ bóng khi hover */
+}
+
+.add-product-file-input {
+  display: none; /* Ẩn input file thực sự */
+}

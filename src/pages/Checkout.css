@@ -1,0 +1,328 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+/* Container Styling */
+.checkout-container {
+    font-family: 'Montserrat', sans-serif; /* Sử dụng font chữ Montserrat */
+    background: rgba(255, 255, 255, 0.9); /* Nền mờ với hiệu ứng glassmorphism */
+    padding: 30px; /* Khoảng cách bên trong container */
+    border-radius: 20px; /* Bo góc container */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Đổ bóng cho container */
+    margin: 40px auto; /* Căn giữa container và tạo khoảng cách trên dưới */
+    max-width: 1200px; /* Đặt chiều rộng tối đa cho container */
+    transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển đổi mượt mà */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Đường viền mờ */
+    animation: fadeInContainer 1s ease-in-out; /* Hiệu ứng fade in khi tải trang */
+}
+
+@keyframes fadeInContainer {
+    from {
+        opacity: 0;
+        transform: translateY(20px); /* Bắt đầu từ trạng thái dịch chuyển xuống dưới */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0); /* Trở về vị trí ban đầu */
+    }
+}
+
+/* Header Styling */
+.checkout-header {
+    text-align: center; /* Căn giữa tiêu đề */
+    color: #2c3e50; /* Màu chữ */
+    margin-bottom: 30px; /* Khoảng cách bên dưới tiêu đề */
+    font-size: 2.5em; /* Kích thước chữ */
+    font-weight: 700; /* Độ đậm chữ */
+    text-transform: uppercase; /* Chuyển tất cả chữ thành chữ in hoa */
+    letter-spacing: 2px; /* Khoảng cách giữa các chữ */
+    background: linear-gradient(45deg, #0f9b0f, #00b09b); /* Đặt gradient màu xanh lá cây cho chữ */
+    -webkit-background-clip: text; /* Dùng nền gradient cho chữ */
+    color: transparent; /* Làm cho phần chữ trở nên trong suốt */
+    animation: fadeInHeader 1.5s ease-in-out; /* Hiệu ứng fade in khi tải trang */
+}
+
+@keyframes fadeInHeader {
+    from {
+        opacity: 0;
+        transform: translateY(-20px); /* Bắt đầu từ trạng thái dịch chuyển lên trên */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0); /* Trở về vị trí ban đầu */
+    }
+}
+
+/* Button Styling */
+.checkout-button {
+    display: inline-block; /* Hiển thị dưới dạng khối */
+    padding: 15px 30px; /* Khoảng cách bên trong nút */
+    border: none; /* Loại bỏ đường viền */
+    border-radius: 50px; /* Bo góc nút */
+    background: linear-gradient(45deg, #0f9b0f, #00b09b); /* Gradient màu xanh lá cây */
+    color: white; /* Màu chữ */
+    font-size: 1em; /* Kích thước chữ */
+    font-weight: 600; /* Độ đậm chữ */
+    cursor: pointer; /* Con trỏ chuột khi hover */
+    transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển đổi mượt mà */
+    margin-top: 20px; /* Khoảng cách bên trên nút */
+    text-align: center; /* Căn giữa chữ trong nút */
+}
+
+.checkout-button:hover {
+    background: linear-gradient(45deg, #00b09b, #0f9b0f); /* Gradient màu xanh lá cây khi hover */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Đổ bóng khi hover */
+    transform: translateY(-3px); /* Dịch chuyển lên trên khi hover */
+}
+
+.checkout-button:active {
+    transform: translateY(0); /* Trả về vị trí ban đầu khi active */
+}
+
+/* Cart Item Styling */
+.checkout-cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+    transition: all 0.3s ease-in-out;
+}
+
+.checkout-cart-item img {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+}
+
+.checkout-product-info {
+    flex-grow: 1;
+    margin-right: 20px;
+}
+
+.checkout-product-info h3 {
+    font-size: 1.2em;
+    color: #0f9b0f;
+    margin: 0;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+}
+
+.checkout-product-info h3:hover {
+    color: #00b09b;
+}
+
+.checkout-product-info p {
+    color: #555;
+    margin: 5px 0;
+}
+
+.checkout-quantity-control {
+    display: flex;
+    align-items: center;
+}
+
+.checkout-quantity-button {
+    background: #0f9b0f;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.3s;
+}
+
+.checkout-quantity-button:hover {
+    background: #00b09b;
+}
+
+.checkout-quantity-button:active {
+    transform: translateY(2px);
+}
+
+.checkout-quantity-input {
+    width: 50px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin: 0 10px;
+    padding: 5px;
+    font-size: 1em;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+.checkout-quantity-input:focus {
+    border-color: #0f9b0f;
+    box-shadow: 0 4px 12px rgba(0, 155, 15, 0.4);
+    outline: none;
+}
+
+.checkout-remove-button {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.3s, box-shadow 0.3s;
+}
+
+.checkout-remove-button:hover {
+    background: #c0392b;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+}
+
+.checkout-remove-button:active {
+    transform: translateY(0);
+}
+
+.checkout-total {
+    font-size: 1.5em;
+    font-weight: 600;
+    color: #2c3e50;
+    text-align: right;
+    margin-top: 20px;
+}
+
+.checkout-empty-cart {
+    text-align: center;
+    color: #555;
+    font-size: 1.2em;
+    margin-top: 20px;
+}
+
+/* Modal Styling */
+.checkout-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+
+.checkout-modal-content {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    width: 700px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transform: scale(0.7);
+    animation: scaleIn 0.3s forwards;
+    backdrop-filter: blur(10px);
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    to {
+        transform: scale(1);
+    }
+}
+
+.checkout-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.checkout-modal-header h2 {
+    margin: 0;
+    font-size: 1.8em;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.checkout-close-modal-button {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s, box-shadow 0.3s;
+}
+
+.checkout-close-modal-button:hover {
+    background-color: #c0392b;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+}
+
+.checkout-close-modal-button:active {
+    transform: translateY(0);
+}
+
+.checkout-modal-body {
+    margin-bottom: 20px;
+}
+
+.checkout-modal-group {
+    margin-bottom: 20px;
+}
+
+.checkout-modal-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.checkout-modal-table th, .checkout-modal-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.checkout-modal-table th {
+    background-color: #e9e9e9;
+    color: #333;
+    font-weight: bold;
+}
+
+.checkout-selected-modal-group {
+    background-color: #dff0d8;
+}
+
+.checkout-modal-button {
+    background: linear-gradient(45deg, #0f9b0f, #00b09b);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin-top: 10px;
+}
+
+.checkout-modal-button:hover {
+    background: linear-gradient(45deg, #00b09b, #0f9b0f);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+}
+
+.checkout-modal-button:active {
+    transform: translateY(0);
+}
+.route-map {
+    height: 500px;
+    width: 100%;
+  }
+  

@@ -1,3 +1,4 @@
+// src/components/Message/MessagesComponent.js
 import React, { useState, useEffect, useRef } from 'react';
 import {
   TextField,
@@ -8,25 +9,35 @@ import {
   Avatar,
   Typography,
   IconButton,
+  Dialog,
+  DialogContent,
+  DialogTitle
 } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useSelector } from 'react-redux';
-import MessageService from '../../services/MessageService'; // Import đúng cách đối tượng mặc định
-import { useParams } from 'react-router-dom';
+import MessageService from '../../services/MessageService';
+import './MessagesComponent.css';
 
-const MessagesComponent = ({ initialMessages }) => {
-  const { roomId } = useParams();
+const MessagesComponent = ({ open, onClose, initialMessages }) => {
+  const userID = useSelector((state) => state.auth.userID);
+  const roomId = userID;
+
   const [messages, setMessages] = useState(initialMessages || []);
   const [message, setMessage] = useState('');
   const stompClient = useRef(null);
   const inputRef = useRef(null);
+  const messagesEndRef = useRef(null);
 
   const username = useSelector((state) => state.auth.username) || 'Unknown';
-  const userID = useSelector((state) => state.auth.userID);
 
   useEffect(() => {
+    if (!roomId) {
+      console.error('Room ID is undefined');
+      return;
+    }
+
     const socket = new SockJS('http://localhost:6010/ws');
     const client = new Client({
       webSocketFactory: () => socket,
@@ -43,13 +54,32 @@ const MessagesComponent = ({ initialMessages }) => {
     stompClient.current = client;
 
     MessageService.getMessagesByRoomId(roomId)
-      .then(response => setMessages(response.data))
-      .catch(console.error);
+      .then(response => {
+        console.log("Received messages: ", response.data);
+        setMessages(response.data);
+      })
+      .catch(error => {
+        console.error("Error fetching messages: ", error);
+      });
 
     return () => {
       client.deactivate();
     };
   }, [roomId]);
+
+  useEffect(() => {
+    if (open) {
+      // Cuộn xuống dưới khi modal được mở
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100); // Delay nhỏ để đảm bảo DOM đã render
+    }
+  }, [open]);
+
+  useEffect(() => {
+    // Cuộn xuống dưới mỗi khi có tin nhắn mới
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   const handleSendMessage = () => {
     if (message.trim() && username.trim() && userID) {
@@ -67,40 +97,66 @@ const MessagesComponent = ({ initialMessages }) => {
         body: JSON.stringify(chatMessage)
       });
       
-      setMessage(''); // Xóa tin nhắn sau khi gửi
+      setMessage('');
       inputRef.current?.focus();
     }
   };
 
   return (
-    <div>
-      <List>
-        {messages.map((msg, index) => (
-          <ListItem key={index}>
-            <ListItemAvatar>
-              <Avatar>{msg.username?.charAt(0) || '?'}</Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              primary={<Typography variant="subtitle1">{msg.username || 'Unknown'}</Typography>}
-              secondary={msg.text}
-            />
-          </ListItem>
-        ))}
-      </List>
+    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+      <DialogTitle>Messages</DialogTitle>
+      <DialogContent>
+        <List className="custom-messages-list">
+          {messages.map((msg, index) => (
+            <ListItem
+              key={index}
+              className={`custom-message-item ${String(msg.userId) === userID ? 'custom-message-right' : 'custom-message-left'}`}
+            >
+              <ListItemAvatar style={{ padding: '10px' }}>
+                <Avatar style={{ width: '60px', height: '60px', fontSize: '24px' }}>
+                  {msg.username?.charAt(0) || '?'}
+                </Avatar>
+              </ListItemAvatar>
 
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <TextField
-          placeholder="Type a message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          fullWidth
-          inputRef={inputRef}
-        />
-        <IconButton onClick={handleSendMessage} disabled={!message.trim()}>
-          <SendIcon />
-        </IconButton>
-      </div>
-    </div>
+              <ListItemText
+                primary={
+                  <>
+                    <Typography variant="subtitle1" className={`custom-message-username ${String(msg.userId) === userID ? 'custom-message-info-right' : ''}`}
+                      style={{ fontSize: '20px', fontWeight: 'bold' }}   >
+                      {msg.username || 'Unknown'}
+                    </Typography>
+                    <Typography component="span" variant="body2" className={`custom-message-text ${String(msg.userId) === userID ? 'custom-message-info-right' : ''}`}
+                      style={{ fontSize: '20px' }}   >
+                      {msg.text}
+                    </Typography>
+                    <Typography component="span" variant="caption" className={`custom-message-time ${String(msg.userId) === userID ? 'custom-message-time-right' : ''}`}
+                      style={{ fontSize: '15px' }}   >
+                      {msg.createdAt ? new Date(msg.createdAt).toLocaleTimeString() : 'Invalid Date'}
+                    </Typography>
+                  </>
+                }
+                className="custom-message-text-container"
+              />
+            </ListItem>
+          ))}
+          <div ref={messagesEndRef} />
+        </List>
+
+        <div className="custom-message-input-container">
+          <TextField
+            placeholder="Type a message"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            fullWidth
+            inputRef={inputRef}
+            className="custom-message-input"
+          />
+          <IconButton onClick={handleSendMessage} disabled={!message.trim()} className="custom-message-send-button">
+            <SendIcon />
+          </IconButton>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

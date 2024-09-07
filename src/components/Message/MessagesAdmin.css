@@ -1,0 +1,143 @@
+/* Container chính cho phần hiển thị tin nhắn */
+.message-admin-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Container chính cho phần ảnh đại diện và tên người dùng ở đầu khu vực nhắn tin */
+.message-admin-room-user-info {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #c8e6c9;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  height: 70px;
+}
+
+/* Avatar lớn hơn cho người dùng trong khu vực tiêu đề */
+.message-admin-room-user-avatar {
+  width: 70px !important;
+  height: 70px !important;
+  margin-right: 15px !important;
+}
+
+/* Tên người dùng lớn hơn trong khu vực tiêu đề */
+.message-admin-room-user-name {
+  font-size: 25px !important;
+  font-weight: bold !important;
+  color: #333;
+}
+
+/* CSS cho message của user chỉnh sang được bên phải */
+.message-admin-custom-message-item.message-admin-custom-message-right {
+  flex-direction: row-reverse;
+}
+
+/* CSS cho message bên trái */
+.message-admin-custom-message-item.message-admin-custom-message-left .message-admin-custom-message-text-container {
+  background-color: #e8f5e9;
+  padding: 18px;
+  border-radius: 12px;
+  max-width: 40%;
+}
+
+/* Thời gian của tin nhắn bên trái */
+.message-admin-custom-message-time {
+  display: block;
+  text-align: right;
+  margin-top: 5px;
+  color: #666;
+}
+
+/* CSS cho message bên phải */
+.message-admin-custom-message-item.message-admin-custom-message-right .message-admin-custom-message-text-container {
+  background-color: #c8e6c9;
+  padding: 18px;
+  border-radius: 12px;
+  max-width: 40%;
+  text-align: right;
+}
+
+/* Thời gian của tin nhắn bên phải */
+.message-admin-custom-message-time-right {
+  display: block;
+  text-align: left;
+  margin-top: 5px;
+  color: #666;
+}
+
+/* Avatar lớn hơn trong từng tin nhắn */
+.message-admin-custom-avatar .message-admin-custom-message-avatar {
+  width: 60px;
+  height: 60px;
+  margin: 10px;
+}
+
+/* Tên người dùng trong tin nhắn */
+.message-admin-custom-message-username {
+  font-size: 18px !important;
+  font-weight: bold !important;
+  color: #333;
+}
+
+/* Nội dung tin nhắn */
+.message-admin-custom-message-text {
+  font-size: 17px !important;
+  color: #555;
+}
+
+/* Container cho danh sách tin nhắn */
+.message-admin-custom-messages-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Container cho input tin nhắn */
+.message-admin-custom-message-input-container {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+  border-top: 1px solid #c8e6c9;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Input tin nhắn */
+.message-admin-custom-message-input {
+  flex-grow: 1;
+  border-radius: 20px;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.message-admin-custom-message-input:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+/* Nút gửi tin nhắn */
+.message-admin-custom-message-send-button {
+  background-color: #388e3c !important;
+  color: white !important;
+  border-radius: 50% !important;
+  width: 45px !important;
+  height: 45px !important;
+  display: flex !important;
+  align-items: center!important;
+  justify-content: center !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
+  margin-left: 10px !important;
+}
+
+.message-admin-custom-message-send-button:hover {
+  background-color: #2e7d32 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}

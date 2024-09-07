@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import OrderService from "../../services/OrderService";
 import { useSelector } from 'react-redux';
 import ReviewModal from "../Review/ReviewModal";
+import "./OrderList.css"; // Import the CSS file
 
 const OrderList = () => {
     const userId = useSelector(state => state.auth.userID);
@@ -9,6 +10,8 @@ const OrderList = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedProduct, setSelectedProduct] = useState(null); // State to hold the selected product for review
+    const [currentPage, setCurrentPage] = useState(1); // State to track the current page
+    const ordersPerPage = 2; // Number of orders per page
 
     useEffect(() => {
         if (userId) {
@@ -16,11 +19,14 @@ const OrderList = () => {
                 const parsedOrders = response.data.map(order => ({
                     ...order,
                     distanceData: JSON.parse(order.distanceData),
+                    selectedShipping: JSON.parse(order.selectedShipping), // Parse selectedShipping
                     items: JSON.parse(order.items).map(item => ({
                         ...item,
                         isReviewed: item.isReviewed || false
                     }))
                 }));
+                // Sort orders by date, with the most recent first
+                parsedOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                 setOrders(parsedOrders);
                 setLoading(false);
             }).catch((error) => {
@@ -50,88 +56,101 @@ const OrderList = () => {
         setSelectedProduct(null); // Close the modal
     };
 
+    const totalPages = Math.ceil(orders.length / ordersPerPage);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    const indexOfLastOrder = currentPage * ordersPerPage;
+    const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+    const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
+
     if (loading) {
-        return <div>Loading...</div>;
+        return <div className="loading">Loading...</div>;
     }
 
     if (error) {
-        return <div>Error: {error.message}</div>;
+        return <div className="error">Error: {error.message}</div>;
     }
 
     return (
-        <div>
-            <h1>Order List</h1>
-            {orders.length > 0 ? (
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>User ID</th>
-                            <th>Total</th>
-                            <th>Created At</th>
-                            <th>Distance Data</th>
-                            <th>Items</th>
-                            <th>Selected Shipping</th>
-                            <th>Actions</th> {/* New column for actions */}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {orders.map((order) => (
-                            <tr key={order.id}>
-                                <td>{order.id}</td>
-                                <td>{order.userId}</td>
-                                <td>{order.total}</td>
-                                <td>{order.createdAt}</td>
-                                <td>
-                                    <h4>User Address</h4>
-                                    <p><strong>Receiver Name:</strong> {order.distanceData.receiverName}</p>
-                                    <p><strong>Address:</strong> {`${order.distanceData.street}, ${order.distanceData.ward}, ${order.distanceData.district}, ${order.distanceData.provinceCity}`}</p>
-                                    <p><strong>Latitude:</strong> {order.distanceData.originLatitude}</p>
-                                    <p><strong>Longitude:</strong> {order.distanceData.originLongitude}</p>
-                                    <h4>Warehouse Address</h4>
-                                    <p><strong>Warehouse Name:</strong> {order.distanceData.warehouseName}</p>
-                                    <p><strong>Address:</strong> {`${order.distanceData.warehouseWard}, ${order.distanceData.warehouseDistrict}, ${order.distanceData.warehouseProvinceCity}`}</p>
-                                    <p><strong>Latitude:</strong> {order.distanceData.destinationLatitude}</p>
-                                    <p><strong>Longitude:</strong> {order.distanceData.destinationLongitude}</p>
+        <div className="order-list-container">
+            <h1 className="order-list-header">Order History</h1>
+            {currentOrders.length > 0 ? (
+                <div className="order-list">
+                    {currentOrders.map((order) => (
+                        <div className="order-card" key={order.id}>
+                            <div className="order-header">
+                                <h2 className="order-id">Order #{order.id}</h2>
+                                <p className="order-date">{new Date(order.createdAt).toLocaleDateString()}</p>
+                            </div>
+                            <div className="order-body">
+                                <div className="order-info">
+                                    <p><strong>Total:</strong> ${order.total ? order.total.toFixed(2) : 'N/A'}</p>
                                     <p><strong>Distance:</strong> {order.distanceData.distance} km</p>
-                                </td>
-                                <td>
+                                    <p><strong>Shipping:</strong> {order.selectedShipping.name}</p>
+                                </div>
+                                <div className="order-addresses">
+                                    <div className="address">
+                                        <h3>Warehouse Address</h3>
+                                        <p><strong>Name:</strong> {order.distanceData.warehouseName}</p>
+                                        <p><strong>Address:</strong> {`${order.distanceData.warehouseWard}, ${order.distanceData.warehouseDistrict}, ${order.distanceData.warehouseProvinceCity}`}</p>
+                                    </div>
+                                    <div className="address">
+                                        <h3>Receiver Address</h3>
+                                        <p><strong>Name:</strong> {order.distanceData.receiverName}</p>
+                                        <p><strong>Address:</strong> {`${order.distanceData.street}, ${order.distanceData.ward}, ${order.distanceData.district}, ${order.distanceData.provinceCity}`}</p>
+                                    </div>
+                                </div>
+                                <div className="order-items">
+                                    <h3>Items</h3>
                                     {Array.isArray(order.items) ? (
-                                        <ul>
+                                        <ul className="items-list">
                                             {order.items.map((item, index) => (
-                                                <li key={index}>
-                                                    <p><strong>Product ID:</strong> {item.productId}</p>
-                                                    <p><strong>Name:</strong> {item.name}</p>
-                                                    <p><strong>Price:</strong> {item.price}</p>
-                                                    <p><strong>Quantity:</strong> {item.quantity}</p>
-                                                    <p><strong>Weight:</strong> {item.weight}</p>
-                                                    <p><strong>Warehouse IDs:</strong> {item.warehouseIds}</p>
-                                                    {item.primaryImageUrl && (
-                                                        <div>
-                                                            <p><strong>Image:</strong></p>
-                                                            <img src={`http://localhost:6001${item.primaryImageUrl}`} alt={item.name} style={{ maxWidth: '200px', maxHeight: '200px' }} />
-                                                        </div>
-                                                    )}
-                                                    {!item.isReviewed && (
-                                                        <button onClick={() => handleReviewClick(order, item)}>Review</button> // Review button for item
-                                                    )}
+                                                <li className="item" key={index}>
+                                                    <div className="item-image">
+                                                        {item.primaryImageUrl && (
+                                                            <img src={`http://localhost:6001${item.primaryImageUrl}`} alt={item.name} />
+                                                        )}
+                                                    </div>
+                                                    <div className="item-details">
+                                                        <p><strong>{item.name}</strong></p>
+                                                        <p>Product ID: {item.productId}</p>
+                                                        <p>Price: ${item.price ? item.price.toFixed(2) : 'N/A'}</p>
+                                                        <p>Quantity: {item.quantity}</p>
+                                                        {!item.isReviewed && (
+                                                            <button className="review-button" onClick={() => handleReviewClick(order, item)}>Review</button>
+                                                        )}
+                                                    </div>
                                                 </li>
                                             ))}
                                         </ul>
                                     ) : (
                                         <p>No items found.</p>
                                     )}
-                                </td>
-                                <td>
-                                    <p><strong>ID:</strong> {order.selectedShipping.id}</p>
-                                    <p><strong>Name:</strong> {order.selectedShipping.name}</p>
-                                    <p><strong>Price per Km:</strong> {order.selectedShipping.pricePerKm}</p>
-                                    <p><strong>Price per Kg:</strong> {order.selectedShipping.pricePerKg}</p>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                    <div className="pagination">
+                        <button
+                            onClick={() => paginate(currentPage - 1)}
+                            disabled={currentPage === 1}
+                            className="pagination-button"
+                        >
+                            Previous
+                        </button>
+                        <span className="pagination-info">
+                            Page {currentPage} of {totalPages}
+                        </span>
+                        <button
+                            onClick={() => paginate(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                            className="pagination-button"
+                        >
+                            Next
+                        </button>
+                    </div>
+                </div>
             ) : (
                 <p>No orders found.</p>
             )}
@@ -141,7 +160,7 @@ const OrderList = () => {
                     product={selectedProduct.product}
                     onClose={() => setSelectedProduct(null)}
                     onSuccess={handleReviewSuccess}
-                /> // Pass onSuccess prop to ReviewModal
+                />
             )}
         </div>
     );

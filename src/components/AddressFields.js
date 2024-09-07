@@ -86,8 +86,8 @@ const AddressFields = ({ address, handleChange, provinces, districts, wards, set
       <label>Street</label>
       <input type="text" name="street" value={address.street} onChange={handleChange} required />
 
-      <label>Is Primary</label>
-      <input type="checkbox" name="isPrimary" checked={address.isPrimary} onChange={handleChange} />
+      <label className="is-primary-label">Is Primary</label>
+      <input className="is-primary-checkbox" type="checkbox" name="isPrimary" checked={address.isPrimary} onChange={handleChange} />
     </>
   );
 };

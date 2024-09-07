@@ -1,0 +1,46 @@
+/* Import a beautiful Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+.payment-method-container {
+    font-family: 'Montserrat', sans-serif;
+
+    text-align: center;
+}
+
+.payment-method-container h3 {
+    font-size: 2em;
+    color: #2e7d32;
+    margin-bottom: 20px;
+}
+
+.payment-method-container .payment-options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.payment-method-container label {
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.payment-method-container label:hover {
+    color: #2e7d32;
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.payment-method-container input[type="radio"] {
+    margin-right: 10px;
+    cursor: pointer;
+}

@@ -1,0 +1,261 @@
+.list-product-container {
+    font-family: 'Montserrat', sans-serif;
+    max-width: 1300px;
+    margin: 50px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Header styles for the list */
+.list-product-header {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    font-weight: 700;
+    background: linear-gradient(45deg, #0f9b0f, #00b09b);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+/* Main content layout for filters and products */
+.main-content {
+    display: flex;
+}
+
+/* Styles for the filters container */
+.checkbox-filters {
+    margin-right: 20px;
+}
+
+.checkbox-filters h4 {
+    font-size: 18px;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    background: linear-gradient(45deg, #0f9b0f, #00b09b);
+    -webkit-background-clip: text;
+    color: transparent;
+    transition: all 0.3s ease;
+}
+
+/* Gradient underline with animation */
+.checkbox-filters h4::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(45deg, #0f9b0f, #00b09b);
+    border-radius: 5px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.checkbox-filters h4:hover::after {
+    transform: scaleX(1);
+}
+
+.checkbox-filters h4:hover {
+    color: #00b09b;
+}
+
+/* Custom checkbox styles */
+.checkbox-filters input[type="checkbox"] {
+    display: none; /* Hide default checkbox */
+}
+
+.checkbox-filters label {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+/* Custom checkbox appearance */
+.checkbox-filters label::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border: 2px solid #4CAF50;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.checkbox-filters input[type="checkbox"]:checked + label::before {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+    background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white"%3e%3cpath d="M13.485 1.929a1.5 1.5 0 1 0-2.121 2.121L7 8.414 4.636 6.05a1.5 1.5 0 1 0-2.121 2.122l3 3a1.5 1.5 0 0 0 2.122 0l6-6a1.5 1.5 0 0 0 0-2.122z"/%3e%3c/svg%3e');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.checkbox-filters input[type="checkbox"]:focus + label::before {
+    border-color: #45a049;
+}
+
+/* Improve label hover effect */
+.checkbox-filters label:hover {
+    color: #4CAF50;
+}
+
+.checkbox-filters label:hover::before {
+    border-color: #4CAF50;
+}
+
+/* Products grid layout */
+.products-grid {
+    padding-top: 5px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Product card styles */
+.product-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    position: relative;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.product-card.out-of-stock {
+    background: lightgrey;
+}
+
+.product-name {
+    font-size: 1.5em;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.product-price {
+    font-size: 1.2em;
+    color: #333;
+}
+
+.product-price .original-price {
+    text-decoration: line-through;
+    color: #777;
+}
+
+.product-price .discounted-price {
+    color: red;
+    font-weight: 600;
+}
+
+.product-category, .product-description, .product-weight {
+    font-size: 1em;
+    color: #555;
+    margin: 5px 0;
+}
+
+.image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product-image:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.out-of-stock-text {
+    color: red;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.add-to-cart-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1em;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 50px;
+    transition: background-color 0.3s ease, transform 0.3s, box-shadow 0.3s;
+}
+
+.add-to-cart-button:hover {
+    background-color: #45a049;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+}
+
+.add-to-cart-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.add-to-cart-button:active {
+    transform: translateY(0);
+}
+
+/* Search input styles */
+.search-input {
+    width: 250px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    outline: none;
+    transition: all 0.3s ease;
+    margin-left: 170px;
+}
+
+.search-input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+
+/* Selector dropdown styles */
+.sort-select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    outline: none;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 15px;
+}
+
+.sort-select:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}

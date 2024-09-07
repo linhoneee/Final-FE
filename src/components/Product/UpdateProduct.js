@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ProductService from '../../services/ProductService';
+import './UpdateProduct.css'; // Import CSS file
 
 const UpdateProduct = () => {
   const { id } = useParams();
@@ -112,64 +113,73 @@ const UpdateProduct = () => {
   };
 
   return (
-    <div>
-      <h2>Update Product</h2>
-      <form onSubmit={updateProductDetails}>
-        <div>
-          <label>Product Name:</label>
+    <div className="update-product-container">
+      <h2 className="update-product-header">Update Product</h2>
+      <form className="update-product-form" onSubmit={updateProductDetails}>
+        <div className="update-product-form-group">
+          <label className="update-product-label">Product Name:</label>
           <input
             type="text"
+            className="update-product-input"
             value={productName}
             onChange={(e) => setProductName(e.target.value)}
           />
         </div>
-        <div>
-          <label>Description:</label>
+        <div className="update-product-form-group">
+          <label className="update-product-label">Description:</label>
           <textarea
+            className="update-product-textarea"
             value={descriptionDetails}
             onChange={(e) => setDescriptionDetails(e.target.value)}
           />
         </div>
-        <div>
-          <label>Price:</label>
+        <div className="update-product-form-group">
+          <label className="update-product-label">Price:</label>
           <input
             type="number"
+            className="update-product-input"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
           />
         </div>
-        <div>
-          <label>Weight:</label>
+        <div className="update-product-form-group">
+          <label className="update-product-label">Weight:</label>
           <input
             type="number"
+            className="update-product-input"
             value={weight}
             onChange={(e) => setWeight(e.target.value)}
           />
         </div>
-        <button type="submit">Update Product Details</button>
+        <button type="submit" className="update-product-button">Update Product Details</button>
       </form>
 
-      <h2>Update Product Images</h2>
-      <form onSubmit={updateProductImages}>
-        <div>
-          <label>Images:</label>
-          {imageUrls.map((image, index) => (
-            <div key={index}>
-              <img src={image.url} alt={`Product ${index + 1}`} width="50" />
-              <button type="button" onClick={() => handleRemoveImage(index)}>Remove</button>
-              <button type="button" onClick={() => setAsPrimaryImage(index)}>
-                {image.isPrimary ? 'Primary' : 'Set as Primary'}
-              </button>
-            </div>
-          ))}
+      <h2 className="update-product-header">Update Product Images</h2>
+      <form className="update-product-form" onSubmit={updateProductImages}>
+        <div className="update-product-form-group">
+          <label className="update-product-label">Images:</label>
+          <div className="update-product-images">
+            {imageUrls.map((image, index) => (
+              <div key={index} className="update-product-image-container">
+                <img src={image.url} alt={`Product ${index + 1}`} className="update-product-image" />
+                <button type="button" className="update-product-button update-product-remove-button" onClick={() => handleRemoveImage(index)}>Remove</button>
+                <button type="button" className="update-product-button update-product-primary-button" onClick={() => setAsPrimaryImage(index)}>
+                  {image.isPrimary ? 'Primary' : 'Set as Primary'}
+                </button>
+              </div>
+            ))}
+          </div>
+          <label className="update-product-file-label" htmlFor="file-input">Choose Files</label>
           <input
+            id="file-input"
             type="file"
             multiple
+            className="update-product-file-input"
             onChange={handleImageChange}
             ref={fileInputRef}
           />
         </div>
-        <button type="submit">Update Product Images</button>
+        <button type="submit" className="update-product-button">Update Product Images</button>
       </form>
     </div>
   );

@@ -1,135 +1,151 @@
+/* Container chính cho modal "Add Address Plus" */
 .add-address-plus-modal {
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-    max-width: 1200px;
-    height: 80vh;
-    margin: auto;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-  }
-  
-  .add-address-plus-modal-header, .add-address-plus-modal-footer {
-    padding: 20px;
-    background-color: #f1f1f1;
-    text-align: center;
-  }
-  
-  .add-address-plus-modal-header h2 {
-    margin: 0;
-    font-size: 24px;
-    color: #333;
-  }
-  
-  .add-address-plus-modal-footer {
-    display: none; /* Ẩn phần footer */
-  }
-  
-  .add-address-plus-modal-content {
-    display: flex;
-    height: 100%; /* Đặt chiều cao cố định cho nội dung modal */
-  }
-  
-  .add-address-plus-modal-left, .add-address-plus-modal-right {
-    padding: 25px;
-  }
-  
-  .add-address-plus-modal-left {
-    width: 30%;
-    border-right: 1px solid #ddd;
-    overflow-y: auto; /* Cho phép cuộn nếu nội dung quá dài */
-  }
-  
-  .add-address-plus-modal-right {
-    width: 70%;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .add-address-plus-modal-right .map-container {
-    flex: 1;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 20px; /* Tạo khoảng cách giữa bản đồ và phần hiển thị tọa độ */
-  }
-  
-  .add-address-plus-modal .coordinates {
-    background-color: #f1f1f1;
-    padding: 10px;
-    text-align: center;
-    border-top: 1px solid #ddd;
-  }
-  
-  .add-address-plus-modal .coordinates h3 {
-    margin: 0;
-    font-size: 18px;
-    color: #333;
-  }
-  
-  .add-address-plus-modal .coordinates p {
-    margin: 5px 0;
-    font-size: 16px;
-    color: #555;
-  }
-  
-  .add-address-plus-modal form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .add-address-plus-modal form button.btn {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    color: white;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .add-address-plus-modal form button.btn:hover {
-    background-color: #0056b3;
-  }
-  
-  .add-address-plus-modal form button.cancel-btn {
-    background-color: #6c757d;
-  }
-  
-  .add-address-plus-modal form button.cancel-btn:hover {
-    background-color: #5a6268;
-  }
-  
-  .add-address-plus-modal input, .add-address-plus-modal select, .add-address-plus-modal textarea {
-    width: 100%;
-    box-sizing: border-box; /* Đảm bảo padding và border được tính vào chiều rộng tổng */
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  .add-address-plus-modal input:focus, .add-address-plus-modal select:focus, .add-address-plus-modal textarea:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-  }
-  
-  .add-address-plus-modal label[for="isPrimary"] {
-    display: none; /* Ẩn nhãn "Is Primary" */
-  }
-  
-  .add-address-plus-modal input[name="isPrimary"] {
-    display: none; /* Ẩn checkbox "Is Primary" */
-  }
-  
+  display: flex; /* Sử dụng flexbox để tạo bố cục chính của modal */
+  flex-direction: column; /* Sắp xếp các phần tử con theo chiều dọc */
+  width: 90%; /* Chiếm 90% chiều rộng của màn hình */
+  max-width: 1200px; /* Đặt chiều rộng tối đa cho modal */
+  height: 93vh; /* Chiếm 80% chiều cao của màn hình */
+  margin: auto; /* Căn giữa modal theo chiều ngang */
+  background-color: #ffffff; /* Màu nền trắng cho modal */
+  border-radius: 12px; /* Bo tròn các góc của modal */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Tăng cường bóng mờ để tạo hiệu ứng nổi bật */
+  overflow: hidden; /* Ngăn nội dung tràn ra ngoài modal */
+  position: fixed; /* Đặt modal cố định trên màn hình */
+  top: 50%; /* Căn giữa modal theo chiều dọc */
+  left: 50%; /* Căn giữa modal theo chiều ngang */
+  transform: translate(-50%, -50%); /* Dịch chuyển modal vào giữa màn hình */
+  z-index: 1000; /* Đặt modal lên trên cùng so với các phần tử khác */
+}
+
+/* Định dạng cho phần header của modal */
+.add-address-plus-modal-header {
+  padding: 20px; /* Thêm khoảng cách bên trong header */
+  background-color: #4caf50; /* Màu nền xanh lá cây chủ đạo */
+  text-align: center; /* Căn giữa nội dung bên trong header */
+  border-bottom: 2px solid #388e3c; /* Đường viền dưới header với màu xanh lá đậm hơn */
+}
+
+/* Định dạng cho tiêu đề trong phần header */
+.add-address-plus-modal-header h2 {
+  margin: 0; /* Loại bỏ khoảng cách xung quanh tiêu đề */
+  font-size: 24px; /* Kích thước chữ lớn cho tiêu đề */
+  color: #ffffff !important; /* Màu chữ trắng nổi bật trên nền xanh lá */
+  text-align: center !important; /* Căn giữa nội dung bên trong header */
+
+}
+
+/* Định dạng cho phần nội dung chính của modal */
+.add-address-plus-modal-content {
+  display: flex; /* Sử dụng flexbox để chia phần nội dung thành hai cột */
+  height: 100%; /* Chiều cao cố định cho nội dung modal */
+}
+
+/* Định dạng cho phần bên trái của modal (chứa form) */
+.add-address-plus-modal-left {
+  width: 30%; /* Chiếm 30% chiều rộng của modal */
+  padding: 25px; /* Thêm khoảng cách bên trong */
+  border-right: 1px solid #ddd; /* Thêm đường viền chia giữa phần trái và phải */
+  overflow-y: auto; /* Cho phép cuộn nếu nội dung quá dài */
+}
+
+/* Định dạng cho phần bên phải của modal (chứa bản đồ và tọa độ) */
+.add-address-plus-modal-right {
+  width: 70%; /* Chiếm 70% chiều rộng của modal */
+  padding: 25px; /* Thêm khoảng cách bên trong */
+  display: flex; /* Sử dụng flexbox để sắp xếp các phần tử bên trong */
+  flex-direction: column; /* Sắp xếp các phần tử theo chiều dọc */
+}
+
+/* Định dạng cho container chứa bản đồ */
+.add-address-plus-modal-right .map-container {
+  border-radius: 12px; /* Bo tròn các góc của container bản đồ */
+  overflow: hidden; /* Ngăn nội dung bản đồ tràn ra ngoài container */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Thêm bóng mờ để tạo chiều sâu cho bản đồ */
+  margin-bottom: 20px;
+}
+
+/* Định dạng cho phần hiển thị tọa độ */
+.add-address-plus-modal .coordinates {
+  background-color: #f1f1f1; /* Màu nền xám nhạt */
+  padding: 10px; /* Thêm khoảng cách bên trong */
+  text-align: center; /* Căn giữa nội dung bên trong */
+  border-top: 1px solid #ddd; /* Thêm đường viền trên để tách biệt với bản đồ */
+  border-radius: 12px; /* Bo tròn các góc của phần tọa độ */
+}
+
+/* Định dạng cho tiêu đề của phần tọa độ */
+.add-address-plus-modal .coordinates h3 {
+  margin: 0; /* Loại bỏ khoảng cách xung quanh tiêu đề */
+  font-size: 18px; /* Kích thước chữ vừa phải cho tiêu đề tọa độ */
+  color: #333; /* Màu chữ xám đậm */
+}
+
+/* Định dạng cho văn bản hiển thị tọa độ */
+.add-address-plus-modal .coordinates p {
+  margin: 5px 0; /* Thêm khoảng cách trên và dưới */
+  font-size: 16px; /* Kích thước chữ cho tọa độ */
+  color: #555; /* Màu chữ xám nhạt hơn */
+}
+
+/* Định dạng cho form trong modal */
+.add-address-plus-modal form {
+  display: flex; /* Sử dụng flexbox để sắp xếp các phần tử bên trong form */
+  flex-direction: column; /* Sắp xếp các phần tử form theo chiều dọc */
+}
+
+/* Định dạng cho các nút bấm trong form */
+.add-address-plus-modal form button.btn {
+  margin-top: 15px; /* Thêm khoảng cách trên để tách biệt với các phần tử khác */
+  padding: 12px 20px; /* Thêm khoảng cách bên trong nút */
+  font-size: 16px; /* Kích thước chữ vừa phải cho nút */
+  color: white; /* Màu chữ trắng để tương phản với nền nút */
+  background-color: #4caf50; /* Màu nền xanh lá cây chủ đạo cho nút */
+  border: none; /* Loại bỏ đường viền mặc định của nút */
+  border-radius: 8px; /* Bo tròn các góc của nút */
+  cursor: pointer; /* Thay đổi con trỏ chuột thành hình bàn tay khi hover vào nút */
+  transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu nền khi hover */
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3); /* Thêm bóng mờ cho nút */
+}
+
+/* Hiệu ứng hover cho nút bấm */
+.add-address-plus-modal form button.btn:hover {
+  background-color: #388e3c; /* Màu nền xanh đậm hơn khi hover */
+}
+
+/* Định dạng cho nút hủy */
+.add-address-plus-modal form button.cancel-btn {
+  background-color: #f44336; /* Màu nền đỏ cho nút hủy */
+}
+
+/* Hiệu ứng hover cho nút hủy */
+.add-address-plus-modal form button.cancel-btn:hover {
+  background-color: #d32f2f; /* Màu nền đỏ đậm hơn khi hover */
+}
+
+/* Định dạng cho các trường nhập liệu trong form */
+.add-address-plus-modal input, .add-address-plus-modal select, .add-address-plus-modal textarea {
+  width: 100%; /* Chiếm toàn bộ chiều rộng của container */
+  box-sizing: border-box; /* Đảm bảo padding và border được tính vào chiều rộng tổng */
+  padding: 12px; /* Thêm khoảng cách bên trong các trường nhập liệu */
+  margin: 10px 0; /* Thêm khoảng cách trên và dưới giữa các trường */
+  border: 1px solid #ccc; /* Đường viền xám nhạt cho các trường nhập liệu */
+  border-radius: 8px; /* Bo tròn các góc của trường nhập liệu */
+  font-size: 16px; /* Kích thước chữ vừa phải cho nội dung nhập liệu */
+}
+
+/* Hiệu ứng focus cho các trường nhập liệu */
+.add-address-plus-modal input:focus, .add-address-plus-modal select:focus, .add-address-plus-modal textarea:focus {
+  border-color: #4caf50; /* Đổi màu viền sang xanh lá cây khi được focus */
+  outline: none; /* Loại bỏ viền mặc định khi focus */
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Thêm hiệu ứng đổ bóng khi focus */
+}
+
+/* Ẩn nhãn "Is Primary" */
+.is-primary-label {
+  display: none; /* Ẩn nhãn */
+}
+
+/* Ẩn checkbox "Is Primary" */
+.is-primary-checkbox {
+  display: none; /* Ẩn checkbox */
+}

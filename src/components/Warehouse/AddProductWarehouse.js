@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import InventoryService from '../../services/InventoryService';
 import ProductService from '../../services/ProductService';
+import InventoryService from '../../services/InventoryService';
 import Select from 'react-select';
+import './AddProductModal.css'; // Import CSS
 
-const AddProduct = () => {
-  const { warehouseId } = useParams();
-  const navigate = useNavigate();
+const AddProduct = ({ warehouseId, closeModal }) => {
   const [newProduct, setNewProduct] = useState({
     productId: '',
     quantity: '',
@@ -29,7 +27,6 @@ const AddProduct = () => {
             }
           }));
           setProducts(processedProducts);
-          console.log(processedProducts);
         } else {
           console.error('Invalid response data:', response.data);
         }
@@ -76,9 +73,9 @@ const AddProduct = () => {
     };
 
     InventoryService.addProductToWarehouse(warehouseId, product)
-      .then((response) => {
+      .then(() => {
         alert('Product added to warehouse successfully!');
-        navigate(`/warehouse/${warehouseId}/inventory`);
+        closeModal(); // Đóng modal sau khi thêm sản phẩm thành công
       })
       .catch((error) => {
         console.error('Error adding product to warehouse:', error);
@@ -87,12 +84,12 @@ const AddProduct = () => {
   };
 
   const customStyles = {
-    option: (provided, state) => ({
+    option: (provided) => ({
       ...provided,
       display: 'flex',
       alignItems: 'center',
     }),
-    singleValue: (provided, state) => ({
+    singleValue: (provided) => ({
       ...provided,
       display: 'flex',
       alignItems: 'center',
@@ -120,7 +117,7 @@ const AddProduct = () => {
   }));
 
   return (
-    <div>
+    <div className="add-product-modal">
       <h2>Add Product to Warehouse</h2>
       <form>
         <label>
@@ -154,8 +151,8 @@ const AddProduct = () => {
         {errors.quantity && <p style={{ color: 'red' }}>{errors.quantity}</p>}
         <br />
         <button type="button" onClick={handleAddProduct}>Add Product</button>
+        <button type="button" onClick={closeModal} className="cancel-button">Cancel</button>
       </form>
-      <button onClick={() => navigate(`/warehouse/${warehouseId}`)}>Back to Warehouse</button>
     </div>
   );
 };

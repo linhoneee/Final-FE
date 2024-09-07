@@ -39,7 +39,7 @@ const EditAddress = () => {
   useEffect(() => {
     AddressService.getAddressById(id).then((response) => {
       const addr = response.data;
-      console.log('Address data from database:', addr); // Log dữ liệu từ cơ sở dữ liệu
+      console.log('Address data from database:', addr); 
       setAddress({
         receiverName: addr.receiverName,
         provinceCity: addr.provinceCity,
@@ -54,7 +54,6 @@ const EditAddress = () => {
         longitude: addr.longitude
       });
 
-      // Fetch provinces and set default selected
       axios.get('https://vapi.vnappmob.com/api/province/')
         .then(response => {
           setProvinces(response.data.results);
@@ -65,7 +64,6 @@ const EditAddress = () => {
               provinceCity: selectedProvince.province_id,
               provinceCityName: selectedProvince.province_name
             }));
-            // Fetch districts for the selected province
             axios.get(`https://vapi.vnappmob.com/api/province/district/${selectedProvince.province_id}`)
               .then(response => {
                 setDistricts(response.data.results);

@@ -1,18 +1,19 @@
 import React from 'react';
+import './ShippingTypeListCheckout.css'; // Import the new CSS file
 
 const ShippingTypeList = ({ shippingTypes, selectedShipping, setSelectedShipping }) => (
-  <div>
+  <div className="shipping-type-list-container">
     <h3>Shipping Types</h3>
-    <ul>
+    <ul className="shipping-type-list">
       {shippingTypes.map(shipping => (
-        <li key={shipping.id}>
+        <li key={shipping.id} className="shipping-type-item">
           <input
             type="checkbox"
             checked={selectedShipping.id === shipping.id}
             onChange={() => setSelectedShipping(shipping)}
           />
-          <p>ID: {shipping.id}</p>
-          <p>Name: {shipping.name}</p>
+          <p className="shipping-id">ID: {shipping.id}</p>
+          <p className="shipping-name">Name: {shipping.name}</p>
           <p>Price per Km: ${shipping.pricePerKm}</p>
           <p>Price per Kg: ${shipping.pricePerKg}</p>
         </li>

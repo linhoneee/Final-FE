@@ -33,8 +33,8 @@ const ReviewModal = ({ order, product, onClose, onSuccess }) => {
     };
 
     return (
-        <div className="modal">
-            <div className="modal-content">
+        <div className="modal-review">
+            <div className="modal-review-content">
                 <h2>Review Product {product.name}</h2>
                 {error && <p className="error">{error}</p>}
                 <label>
@@ -46,7 +46,6 @@ const ReviewModal = ({ order, product, onClose, onSuccess }) => {
                                 className={rating >= star ? "filled" : ""}
                                 onClick={() => setRating(star)}
                             >
-                                ★
                             </span>
                         ))}
                     </div>
@@ -60,7 +59,7 @@ const ReviewModal = ({ order, product, onClose, onSuccess }) => {
                     />
                 </label>
                 <button onClick={handleSubmit}>Submit Review</button>
-                <button onClick={onClose}>Close</button>
+                <button className="close" onClick={onClose}>Close</button>
             </div>
         </div>
     );

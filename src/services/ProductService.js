@@ -50,6 +50,17 @@ class ProductService {
   SetPrimaryImage(productId, imageId) {
     return axios.put(`${API_URL}/${productId}/images/${imageId}/primary`);
   }
+
+  GetProductsByFilters(searchTerm, brandIds, categoryIds, sortOrder) {
+    return axios.get(`${API_URL}/search`, {
+      params: {
+        searchTerm: searchTerm || '',
+        brandId: brandIds.join(',') || '', 
+        categoryId: categoryIds.join(',') || '', 
+        sortOrder: sortOrder || ''
+      }
+    });
+  }
 }
 
 const instance = new ProductService();

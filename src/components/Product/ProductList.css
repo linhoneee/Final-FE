@@ -1,73 +1,180 @@
-/* ProductList.css */
+/* Import a beautiful Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
 
+/* Container Styling */
+.product-list-container {
+  font-family: 'Montserrat', sans-serif; /* Sử dụng font chữ Montserrat */
+  background: rgba(255, 255, 255, 0.7); /* Đặt nền mờ với hiệu ứng glassmorphism */
+  backdrop-filter: blur(20px); /* Làm mờ nền phía sau */
+  padding: 40px; /* Khoảng cách bên trong container */
+  border-radius: 20px; /* Bo góc container */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Đổ bóng cho container */
+  margin: 40px auto; /* Căn giữa container và tạo khoảng cách trên dưới */
+  max-width: 1200px; /* Đặt chiều rộng tối đa cho container */
+  transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển đổi mượt mà */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Đường viền mờ */
+  animation: fadeInContainer 1s ease-in-out; /* Hiệu ứng fade in khi tải trang */
+}
+
+@keyframes fadeInContainer {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* Bắt đầu từ trạng thái dịch chuyển xuống dưới */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* Trở về vị trí ban đầu */
+  }
+}
+
+.product-list-container:hover {
+  transform: translateY(-5px); /* Dịch chuyển lên trên khi hover */
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2); /* Đổ bóng đậm hơn khi hover */
+}
+
+/* Header Styling */
+.product-list-header {
+  text-align: center; /* Căn giữa tiêu đề */
+  color: #2c3e50; /* Màu chữ */
+  margin-bottom: 30px; /* Khoảng cách bên dưới tiêu đề */
+  font-size: 2.8em; /* Kích thước chữ */
+  font-weight: 700; /* Độ đậm chữ */
+  text-transform: uppercase; /* Chuyển tất cả chữ thành chữ in hoa */
+  letter-spacing: 2px; /* Khoảng cách giữa các chữ */
+  background: linear-gradient(45deg, #0f9b0f, #00b09b); /* Đặt gradient màu xanh lá cây cho chữ */
+  -webkit-background-clip: text; /* Dùng nền gradient cho chữ */
+  color: transparent; /* Làm cho phần chữ trở nên trong suốt */
+  animation: fadeInHeader 1.5s ease-in-out; /* Hiệu ứng fade in khi tải trang */
+}
+
+@keyframes fadeInHeader {
+  from {
+    opacity: 0;
+    transform: translateY(-20px); /* Bắt đầu từ trạng thái dịch chuyển lên trên */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* Trở về vị trí ban đầu */
+  }
+}
+
+/* Table Styling */
+.product-list-table {
+  width: 100%; /* Chiếm toàn bộ chiều rộng container */
+  border-collapse: collapse; /* Gộp các đường viền bảng */
+  margin-top: 20px; /* Khoảng cách bên trên bảng */
+  background-color: rgba(255, 255, 255, 0.9); /* Nền mờ cho bảng */
+  border-radius: 15px; /* Bo góc bảng */
+  overflow: hidden; /* Ẩn phần thừa của bảng */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Đổ bóng cho bảng */
+  backdrop-filter: blur(10px); /* Làm mờ nền phía sau bảng */
+}
+
+.product-list-table th,
+.product-list-table td {
+  padding: 10px; /* Giảm khoảng cách bên trong ô bảng */
+  text-align: left; /* Căn trái nội dung trong ô */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6); /* Đường viền dưới cho ô bảng */
+  transition: background-color 0.3s, color 0.3s; /* Hiệu ứng chuyển đổi màu nền và chữ */
+  font-size: 0.9em; /* Giảm kích thước chữ */
+}
+
+.product-list-table th {
+  background-color: #0f9b0f; /* Màu nền cho tiêu đề bảng */
+  color: #fff; /* Màu chữ cho tiêu đề bảng */
+  font-weight: 600; /* Độ đậm chữ cho tiêu đề bảng */
+  text-transform: uppercase; /* Chuyển chữ thành chữ in hoa */
+}
+
+.product-list-table tr {
+  transition: background-color 0.3s; /* Hiệu ứng chuyển đổi màu nền */
+}
+
+.product-list-table tr:hover {
+  background-color: rgba(175, 255, 175, 0.7); /* Màu nền khi hover */
+}
+
+.product-list-table tr:nth-child(even) {
+  background-color: rgba(245, 245, 245, 0.7); /* Màu nền cho các hàng chẵn */
+}
+
+/* Button Styling */
+.product-list-actions button {
+  background: linear-gradient(45deg, #0f9b0f, #00b09b); /* Gradient màu xanh lá cây cho nút */
+  color: white; /* Màu chữ */
+  border: none; /* Loại bỏ đường viền */
+  padding: 10px 20px; /* Giảm khoảng cách bên trong nút */
+  margin: 5px; /* Khoảng cách bên ngoài nút */
+  border-radius: 50px; /* Bo góc nút */
+  cursor: pointer; /* Con trỏ chuột khi hover */
+  font-weight: 600; /* Độ đậm chữ */
+  transition: background 0.3s, transform 0.3s, box-shadow 0.3s; /* Hiệu ứng chuyển đổi màu nền, dịch chuyển và đổ bóng */
+  position: relative; /* Định vị tương đối */
+  overflow: hidden; /* Ẩn phần thừa */
+  z-index: 1; /* Thiết lập độ sâu */
+  font-size: 0.9em; /* Giảm kích thước chữ */
+}
+
+.product-list-actions button::before {
+  content: ''; /* Nội dung trống */
+  position: absolute; /* Định vị tuyệt đối */
+  top: 50%;
+  left: 50%;
+  width: 300%;
+  height: 300%;
+  background: rgba(255, 255, 255, 0.1); /* Nền mờ */
+  transition: all 0.3s; /* Hiệu ứng chuyển đổi */
+  border-radius: 50%; /* Bo góc */
+  z-index: -1; /* Đặt sau nội dung */
+  transform: translate(-50%, -50%) scale(0); /* Dịch chuyển và thu nhỏ */
+}
+
+.product-list-actions button:hover::before {
+  transform: translate(-50%, -50%) scale(1); /* Dịch chuyển và phóng to khi hover */
+}
+
+.product-list-actions button:hover {
+  background: linear-gradient(45deg, #00b09b, #0f9b0f); /* Gradient màu xanh lá cây khi hover */
+  transform: translateY(-3px); /* Dịch chuyển lên trên khi hover */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Đổ bóng khi hover */
+}
+
+.product-list-actions button:active {
+  transform: translateY(0); /* Trả về vị trí ban đầu khi active */
+}
+
+/* Image Styling */
+.product-list-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px; /* Khoảng cách giữa các hình ảnh */
+}
+
+.product-list-images img {
+  width: calc(33.33% - 10px); /* Chiều rộng của hình ảnh */
+  height: 80px; /* Chiều cao của hình ảnh */
+  margin: 5px 0; /* Khoảng cách bên ngoài hình ảnh */
+  border-radius: 15px; /* Bo góc hình ảnh */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.3); /* Đổ bóng cho hình ảnh */
+  transition: transform 0.3s, box-shadow 0.3s; /* Hiệu ứng chuyển đổi dịch chuyển và đổ bóng */
+  cursor: pointer; /* Thay đổi con trỏ chuột thành dạng pointer khi hover */
+}
+
+.product-list-images img:hover {
+  transform: scale(1.1); /* Phóng to khi hover */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4); /* Đổ bóng khi hover */
+}
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 400px;
-    max-width: 100%;
-    z-index: 1001;
-  }
-  
-  .modal-content h2 {
-    margin-top: 0;
-  }
-  
-  .modal-content form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .modal-content form div {
-    margin-bottom: 10px;
-  }
-  
-  .modal-content form label {
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  .modal-content form input {
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .modal-content .modal-buttons {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .modal-content .modal-buttons button {
-    padding: 10px 20px;
-    font-size: 14px;
-    cursor: pointer;
-    border: none;
-    border-radius: 4px;
-  }
-  
-  .modal-content .modal-buttons button:first-child {
-    background-color: #28a745;
-    color: white;
-  }
-  
-  .modal-content .modal-buttons button:last-child {
-    background-color: #dc3545;
-    color: white;
-  }
-  
+  position: fixed; /* Định vị cố định */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Màu nền mờ */
+  display: flex; /* Dùng flexbox để căn giữa */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Đặt trên cùng */
+  opacity: 0; /* Bắt đầu với độ mờ */
+  animation: fadeIn 0.5s forwards; /* Hiệu ứng fade in */
+}

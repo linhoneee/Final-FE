@@ -1,11 +1,11 @@
 import React from 'react';
-import '../../Css/AddressModal.css';
+import './AddressModal.css';
 
 const AddressModal = ({ defaultAddress, addresses, onClose, onSelect, onChangeAddress }) => {
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <span className="close" onClick={onClose}>&times;</span>
+    <div className="address-modal">
+      <div className="address-modal-content">
+        <span className="address-modal-close" onClick={onClose}>&times;</span>
         <h2>Select Address</h2>
         <ul>
           {addresses.map(address => (

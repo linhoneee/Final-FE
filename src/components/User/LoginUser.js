@@ -5,10 +5,12 @@ import { useDispatch } from 'react-redux';
 import { login } from '../../store/actions/authActions';
 import ForgotPassword from './ForgotPassword';
 import ResetPassword from './ResetPassword';
+import './LoginUser.css'; // Import the specific CSS file
 
 const LoginUser = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
   const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
   const [resetPasswordEmail, setResetPasswordEmail] = useState('');
@@ -21,14 +23,12 @@ const LoginUser = () => {
       const response = await UserService.loginUser({ email, password });
       const { token, email: userEmail, username, roles, UserID } = response.data;
 
-      // Store data in localStorage
       localStorage.setItem('token', token);
       localStorage.setItem('username', username);
       localStorage.setItem('email', userEmail);
       localStorage.setItem('roles', roles);
       localStorage.setItem('userID', UserID);
 
-      // Dispatch login action
       dispatch(login(token, userEmail, username, roles, UserID));
 
       alert('Đăng nhập thành công');
@@ -64,11 +64,15 @@ const LoginUser = () => {
     setResetPasswordOpen(true);
   };
 
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
   return (
-    <div>
-      <h2>Đăng nhập người dùng</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
+    <div className="login-container">
+      <h2 className="login-title">Đăng nhập người dùng</h2>
+      <form className="login-form" onSubmit={handleSubmit}>
+        <div className="form-group">
           <label>Email</label>
           <input 
             type="email" 
@@ -77,19 +81,29 @@ const LoginUser = () => {
             onChange={(e) => setEmail(e.target.value)} 
           />
         </div>
-        <div>
+        <div className="form-group">
           <label>Mật khẩu</label>
           <input 
-            type="password" 
+            type={passwordVisible ? "text" : "password"} 
             name="password" 
             value={password} 
             onChange={(e) => setPassword(e.target.value)} 
           />
+          <span className="eye-icon" onClick={togglePasswordVisibility}>
+            {passwordVisible ? '👁️' : '👁️‍🗨️'}
+          </span>
         </div>
-        <button type="submit">Đăng nhập</button>
+        <button type="submit" className="login-button">Đăng nhập</button>
+        <label className="forgot-password-label" onClick={() => setForgotPasswordOpen(true)}>Quên mật khẩu?</label>
       </form>
-      <button onClick={() => setForgotPasswordOpen(true)}>Quên mật khẩu?</button>
-      <button onClick={handleGoogleLogin}>Đăng nhập với Google</button>
+      <button className="google-login-button" onClick={handleGoogleLogin}>
+        <img 
+          src="https://cdn-icons-png.flaticon.com/512/300/300221.png" 
+          alt="Google icon" 
+          className="google-icon" 
+        />
+        Đăng nhập với Google
+      </button>
 
       <ForgotPassword 
         open={forgotPasswordOpen} 

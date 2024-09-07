@@ -1,8 +1,11 @@
-import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import Navbar from './components/Navbar';
+import NavBarAdmin from './components/NavBarAdmin';
+import { Button } from '@material-ui/core';
+import React, { useState } from 'react';
+
 import LoginUser from './components/User/LoginUser';
 import Home from './components/Home';
 import BrandList from './components/Brand/BrandList';
@@ -12,6 +15,8 @@ import CategoryList from './components/Category/CategoryList';
 import AddCategory from './components/Category/AddCategory';
 import EditCategory from './components/Category/EditCategory';
 import AddUser from './components/User/AddUser';
+import UserDetails from './components/User/UserDetails';
+
 import UpdateUser from './components/User/UpdateUser';
 import UserList from './components/User/UserList';
 import ListProductByAdmin from './pages/ListProductByAdmin ';
@@ -28,6 +33,9 @@ import AddShipping from './components/Shipping/AddShipping';
 import UpdateShipping from './components/Shipping/UpdateShipping';
 import Checkout from './pages/Checkout';
 import MessagesComponent from './components/Message/MessagesComponent';
+import MessageAdmin from './components/Message/MessagesAdmin';
+import ChatPage from './components/Message/ChatPage';
+
 // import StripePaymentInfo from './components/Payment/StripePaymentInfo';
 // import PaymentSuccess from './components/Payment/PaymentSuccess'; 
 import AddAddress from './components/Address/AddAddress';
@@ -52,14 +60,62 @@ import SuccessPage from './pages/SuccessPage';
 import OrderList from './components/Order/OrderList';
 
 import ReviewResponsePage from './pages/ReviewResponsePage';
+import Draggable from 'react-draggable';
 
 
 function App() {
+
+  const [isMessageModalOpen, setMessageModalOpen] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleOpenMessageModal = () => {
+    if (!isDragging) {
+      setMessageModalOpen(true);
+    }
+  };
+
+  const handleCloseMessageModal = () => {
+    setMessageModalOpen(false);
+  };
+
   return (
     <Provider store={store}>
       <Router>
         <Navbar />
-        <Routes>
+        
+        <Draggable
+          onStart={() => setIsDragging(false)}
+          onDrag={() => setIsDragging(true)}
+          onStop={() => setTimeout(() => setIsDragging(false), 0)} 
+        >
+<Button 
+    variant="contained" 
+    color="primary" 
+    onClick={handleOpenMessageModal} 
+    style={{
+      position: 'fixed', 
+      bottom: '20px', 
+      right: '20px', 
+      borderRadius: '50%', 
+      width: '60px', 
+      height: '60px',
+      backgroundColor: '#215e24',
+      backgroundImage: 'url("https://cdn-icons-png.flaticon.com/512/6785/6785302.png")',
+      backgroundSize: '40px 40px', 
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      color: 'white',
+      zIndex: 1000,
+    }}
+  />
+        </Draggable>
+        <MessagesComponent open={isMessageModalOpen} onClose={handleCloseMessageModal} />
+
+        <div style={{ display: 'flex'}}> {/* Sử dụng Flexbox để bố trí layout */}
+          <NavBarAdmin /> 
+          {/* NavbarAdmin sẽ nằm ở bên trái */}
+          <div style={{ flexGrow: 1, padding: '20px', overflowY: 'auto' }}> {/* Phần này chứa các component router */}
+            <Routes>
           <Route path="/" element={<Home />} />
 
           {/* Brand Routes */}
@@ -102,7 +158,10 @@ function App() {
           <Route path="/stripe/success" element={<PaymentSuccess />} /> */}
 
           {/* Message Routes */}
-          <Route path="/message/:roomId" element={<MessagesComponent />} />
+          <Route path="/message1/:roomId" element={<MessagesComponent />} />
+          <Route path="/message/:roomId" element={<MessageAdmin />} />
+          <Route path="/chat/:roomId" element={<ChatPage />} />
+
 
           {/* Address Routes */}
           <Route path="/user/:userId/addresses" element={<AddressList />} />
@@ -135,8 +194,13 @@ function App() {
 
           <Route path="/reviews/responses" element={<ReviewResponsePage />} />
 
+          <Route path="/userDetails/:id" element={<UserDetails />} />
+
+
         </Routes>
-      </Router>
+        </div>
+        </div>
+              </Router>
     </Provider>
   );
 }

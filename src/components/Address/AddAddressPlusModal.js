@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 import AddressService from '../../services/AddressService';
 import AddressFields from '../AddressFields';
 import AddressMap from '../AddressMap';
 import L from 'leaflet';
 import './AddAddressPlusModal.css';
+import { radioClasses } from '@mui/material';
 
 // Fix the default icon issue for Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -33,12 +34,30 @@ const AddAddressPlusModal = ({ userId, onClose, onSave }) => {
     longitude: 105.804817 // Default coordinates for Hanoi
   });
 
+  const modalRef = useRef(null);
+
+  const handleClickOutside = useCallback((event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      onClose();
+    }
+  }, [onClose]);
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [handleClickOutside]);
+
   useEffect(() => {
     axios.get('https://vapi.vnappmob.com/api/province/')
       .then(response => setProvinces(response.data.results))
       .catch(error => console.error(error));
   }, []);
 
+  if(provinces){
+    console.log('hihi',provinces);
+  }
   useEffect(() => {
     if (address.provinceCity) {
       axios.get(`https://vapi.vnappmob.com/api/province/district/${address.provinceCity}`)
@@ -102,12 +121,16 @@ const AddAddressPlusModal = ({ userId, onClose, onSave }) => {
       return;
     }
 
+
     const addressToSend = {
       ...address,
       provinceCity: address.provinceCityName,
       district: address.districtName,
       ward: address.wardName
     };
+    // khi log ra, provinceCity, district, ward vãn hiển thị tên nhưng khi add vào nó sẽ lưu vào tọa độ
+    // nếu không có provinceCityName, districtName, wardName nó sẽ lưu tọa độ
+    console.log(addressToSend)
 
     AddressService.createAddress(userId, addressToSend).then(() => {
       onSave();
@@ -124,36 +147,38 @@ const AddAddressPlusModal = ({ userId, onClose, onSave }) => {
   };
 
   return (
-    <div className="add-address-plus-modal">
-      <div className="add-address-plus-modal-header">
-        <h2>Add Address Plus</h2>
-      </div>
-      <div className="add-address-plus-modal-content">
-        <div className="add-address-plus-modal-left">
-          <form onSubmit={addAddress}>
-            <AddressFields 
-              address={address}
-              handleChange={handleChange}
-              provinces={provinces}
-              districts={districts}
-              wards={wards}
-              setAddress={setAddress}
-            />
-            <button type="submit" className="btn">Add Address</button>
-            <button type="button" className="btn" onClick={onClose}>Cancel</button>
-          </form>
+    <div className="add-address-plus-modal-overlay">
+      <div className="add-address-plus-modal" ref={modalRef}>
+        <div className="add-address-plus-modal-header">
+          <h2>Add Address Plus</h2>
         </div>
-        <div className="add-address-plus-modal-right">
-          <div className="map-container">
-            <AddressMap address={address} setAddress={setAddress} />
+        <div className="add-address-plus-modal-content">
+          <div className="add-address-plus-modal-left">
+            <form onSubmit={addAddress}>
+              <AddressFields 
+                address={address}
+                handleChange={handleChange}
+                provinces={provinces}
+                districts={districts}
+                wards={wards}
+                setAddress={setAddress}
+              />
+              <button type="submit" className="btn">Add Address</button>
+              <button type="button" className="btn cancel-btn" onClick={onClose}>Cancel</button>
+            </form>
           </div>
-          {address.latitude && address.longitude && (
-            <div className="coordinates">
-              <h3>Coordinates</h3>
-              <p>Longitude: {address.longitude}</p>
-              <p>Latitude: {address.latitude}</p>
+          <div className="add-address-plus-modal-right">
+            <div className="map-container">
+              <AddressMap address={address} setAddress={setAddress} />
             </div>
-          )}
+            {address.latitude && address.longitude && (
+              <div className="coordinates">
+                <h3>Coordinates</h3>
+                <p>Longitude: {address.longitude}</p>
+                <p>Latitude: {address.latitude}</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -1,0 +1,127 @@
+/* Import a beautiful Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+/* Modal Container */
+.address-modal {
+    position: fixed; /* Định vị cố định modal */
+    z-index: 1000; /* Đặt modal lên trên cùng */
+    left: 0; /* Căn lề trái */
+    top: 0; /* Căn lề trên */
+    width: 100%; /* Chiếm toàn bộ chiều rộng */
+    height: 100%; /* Chiếm toàn bộ chiều cao */
+    overflow: auto; /* Cho phép cuộn nội dung */
+    background-color: rgba(0, 0, 0, 0.5); /* Nền mờ */
+    display: flex; /* Sử dụng Flexbox */
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    font-family: 'Montserrat', sans-serif; /* Font chữ Montserrat */
+}
+
+/* Modal Content */
+.address-modal-content {
+    background-color: #fff; /* Màu nền trắng */
+    padding: 20px; /* Khoảng cách bên trong */
+    border-radius: 15px; /* Bo góc */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Đổ bóng */
+    max-width: 600px; /* Chiều rộng tối đa */
+    width: 100%; /* Chiều rộng 100% */
+    animation: modalFadeIn 0.3s ease-in-out; /* Hiệu ứng mở modal */
+    position: relative; /* Định vị tương đối */
+}
+
+/* Close Button */
+.address-modal-close {
+    position: absolute; /* Định vị tuyệt đối */
+    top: 10px; /* Căn lề trên */
+    right: 20px; /* Căn lề phải */
+    color: #aaa; /* Màu chữ xám nhạt */
+    font-size: 28px; /* Kích thước chữ */
+    font-weight: bold; /* Độ đậm chữ */
+    cursor: pointer; /* Thay đổi con trỏ chuột */
+    transition: color 0.3s; /* Hiệu ứng chuyển đổi màu */
+}
+
+.address-modal-close:hover,
+.address-modal-close:focus {
+    color: #000; /* Màu chữ đen khi hover */
+    text-decoration: none; /* Loại bỏ gạch chân */
+}
+
+/* Modal Header */
+.address-modal-content h2 {
+    font-size: 2em; /* Kích thước chữ */
+    color: #2e7d32; /* Màu chữ xanh lá */
+    margin-bottom: 20px; /* Khoảng cách bên dưới */
+    text-align: center; /* Căn giữa chữ */
+}
+
+/* Address List */
+.address-modal-content ul {
+    list-style-type: none; /* Loại bỏ ký hiệu đầu dòng */
+    padding: 0; /* Loại bỏ khoảng cách bên trong */
+}
+
+.address-modal-content li {
+    padding: 10px; /* Khoảng cách bên trong */
+    border-bottom: 1px solid #ddd; /* Đường viền dưới */
+    cursor: pointer; /* Thay đổi con trỏ chuột */
+    transition: background-color 0.3s; /* Hiệu ứng chuyển đổi màu nền */
+}
+
+.address-modal-content li:hover {
+    background-color: #f9f9f9; /* Màu nền khi hover */
+}
+
+.default-address {
+    background-color: #f4f7f6; /* Màu nền nhạt */
+    padding: 20px; /* Khoảng cách bên trong */
+    border-radius: 10px; /* Bo góc */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+    margin-top: 20px; /* Khoảng cách bên trên */
+}
+
+.default-address h4 {
+    font-size: 1.5em; /* Kích thước chữ */
+    color: #2e7d32; /* Màu chữ xanh lá */
+    margin-bottom: 10px; /* Khoảng cách bên dưới */
+}
+
+.default-address p {
+    margin: 5px 0; /* Khoảng cách trên dưới */
+    color: #555; /* Màu chữ xám đậm */
+}
+
+.default-address button {
+    background-color: #4CAF50; /* Màu nền nút */
+    color: white; /* Màu chữ */
+    border: none; /* Loại bỏ đường viền */
+    padding: 10px 20px; /* Khoảng cách bên trong */
+    text-align: center; /* Căn giữa chữ */
+    text-decoration: none; /* Loại bỏ gạch chân */
+    display: inline-block; /* Hiển thị dưới dạng khối */
+    font-size: 1em; /* Kích thước chữ */
+    margin: 10px 0; /* Khoảng cách bên ngoài */
+    cursor: pointer; /* Thay đổi con trỏ chuột */
+    border-radius: 5px; /* Bo góc nút */
+    transition: background-color 0.3s ease, transform 0.3s, box-shadow 0.3s; /* Hiệu ứng chuyển đổi màu nền, dịch chuyển và đổ bóng */
+}
+
+.default-address button:hover {
+    background-color: #45a049; /* Màu nền khi hover */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Đổ bóng khi hover */
+    transform: translateY(-3px); /* Dịch chuyển lên trên khi hover */
+}
+
+.default-address button:active {
+    transform: translateY(0); /* Trả về vị trí ban đầu khi active */
+}
+
+/* Keyframes for modal fade in */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0; /* Độ mờ từ 0 */
+    }
+    to {
+        opacity: 1; /* Độ mờ đến 1 */
+    }
+}

@@ -1,0 +1,35 @@
+/* Container chính của trang chat */
+.chat-page-container {
+  background-color: #e8f5e9; /* Màu nền xanh lá cây nhạt */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  height: 630px; /* Đảm bảo container bao phủ toàn bộ chiều cao màn hình */
+  overflow: hidden; /* Ngăn chặn cuộn toàn bộ container */
+}
+
+/* Container cho danh sách phòng chat */
+.room-list-container {
+  background-color: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  height: 100%; /* Chiều cao cố định cho RoomList */
+}
+
+/* Container cho khung tin nhắn */
+.message-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Chiều cao cố định cho MessageAdmin */
+  overflow: hidden; /* Ngăn chặn cuộn toàn bộ container */
+}
+
+/* Khung hiển thị khi không có phòng nào được chọn */
+.empty-message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #666; /* Màu xám trung tính */
+}

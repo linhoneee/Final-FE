@@ -54,6 +54,17 @@ class UserService {
     loginWithGoogle() {
         window.location.href = USER_API_BASE_URL + "/SSO/signingoogle";
     }
+
+    updateUserPicture(id, picture) {
+        const formData = new FormData();
+        formData.append('picture', picture);
+
+        return axios.post(`${USER_API_BASE_URL}/${id}/picture`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+    }
 }
 
 const instance = new UserService();

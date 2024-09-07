@@ -1,8 +1,10 @@
 // src/components/Navbar.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../store/actions/authActions';
+import { fetchCartItemCount } from '../store/actions/cartActions'; // Import action
+import './Navbar.css'; // Import the updated CSS file
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -10,6 +12,13 @@ const Navbar = () => {
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
   const username = useSelector(state => state.auth.username);
   const userID = useSelector(state => state.auth.userID);
+  const cartItemCount = useSelector(state => state.cart.itemCount); // Get cart item count from Redux store
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(fetchCartItemCount(userID)); // Fetch cart item count when Navbar is rendered
+    }
+  }, [isLoggedIn, userID, dispatch]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -17,69 +26,39 @@ const Navbar = () => {
   };
 
   return (
-    <nav>
-      <div>
-        <Link to="/">E-commerce CRUD</Link>
+    <nav className="navbar-component">
+      <div className="navbar-component-logo">
+        <Link to="/">Elder Wellness</Link>
       </div>
-      <ul>
+      <ul className="navbar-component-links">
         {isLoggedIn ? (
           <>
-            <li>Welcome, {username}!</li>
-            <li>
-              <Link to="/">HOME</Link>
+            <li className="navbar-component-item navbar-component-welcome">
+              <Link to={`/userDetails/${userID}`}>Welcome, {username}!</Link>
             </li>
-            <li>
-              <Link to="/brands">Brands</Link>
+            <li className="navbar-component-item">
+              <Link to="/productaddcart">Products</Link>
             </li>
-            <li>
-              <Link to="/categories">Categories</Link>
-            </li>
-            <li>
-              <Link to="/productsadmin">Products Admin</Link>
-            </li>
-            <li>
-              <Link to="/productaddcart">Products User</Link>
-            </li>
-            <li>
-              <Link to="/userList">List User</Link>
-            </li>
-            <li>
+            <li className="navbar-component-item">
               <Link to={`/user/${userID}/addresses`}>List addresses</Link>
             </li>
-            <li>
-              <Link to={`/user/${userID}/add-addressplus`}>add-addressplus</Link>
+            <li className="navbar-component-item">
+              <Link to={`/cart/${userID}`} className="cart-link">
+                Cart {cartItemCount > 0 && <span className="navbar-component-cart-count">{cartItemCount}</span>}
+              </Link>
             </li>
-            <li>
-              <Link to="/shippinglist">List Shipping</Link>
+            <li className="navbar-component-item">
+              <Link to={`/order/${userID}`}>Order History</Link>
             </li>
-            <li>
-              <Link to="/warehouses">Warehouse List</Link>
-            </li>
-            <li>
-              <Link to="/product-discounts">product-discounts List</Link>
-            </li>
-            <li>
-              <Link to="/customer-coupons">customer-coupons List</Link>
-            </li>
-            <li>
-              <Link to={`/message/${userID}`}>message</Link>
-            </li>
-            <li>
-              <Link to={`/cart/${userID}`}>Cart</Link>
-            </li>
-            <li>
-              <Link to={`/order/${userID}`}>order history</Link>
-            </li>
-            <li>
-              <Link to="/reviews/responses">reviews responses</Link>
-            </li>
-           
-            <li>
-              <button onClick={handleLogout}>Logout</button>
+            <li className="navbar-component-item">
+              <Link to={`/userDetails/${userID}`}>Account Details</Link>
+            </li>           
+            <li className="navbar-component-item">
+              <button className="navbar-component-logout-button" onClick={handleLogout}>Logout</button>
             </li>
           </>
         ) : (
-          <li>
+          <li className="navbar-component-item">
             <Link to="/login">Login</Link>
           </li>
         )}

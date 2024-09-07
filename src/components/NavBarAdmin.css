@@ -1,0 +1,208 @@
+/* Import a beautiful Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+/* Navbar container styling */
+.navbar-admin-container {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #2e7d32 0%, #4caf50 50%, #66bb6a 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.4s ease;
+}
+
+/* Styling for the logo within the navbar */
+.navbar-admin-logo {
+    font-size: 2em;
+    font-weight: bold;
+    color: #ffffff;
+    transition: transform 0.5s ease, color 0.5s ease;
+}
+
+.navbar-admin-logo a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Hover effect for the logo */
+.navbar-admin-logo:hover {
+    transform: scale(1.15);
+    color: #a5d6a7;
+}
+
+/* Container for navigation links */
+.navbar-admin-links {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    gap: 20px;
+}
+
+/* Styling for individual navigation items */
+.navbar-admin-item {
+    font-size: 1em;
+    transition: transform 0.4s ease, color 0.4s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.navbar-admin-item a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px 15px;
+    transition: color 0.4s ease, transform 0.4s ease;
+    display: flex;
+    align-items: center;
+}
+
+/* Hover effect for navigation items */
+.navbar-admin-item:hover {
+    transform: translateY(-5px);
+    color: #ffffff;
+}
+
+/* Pseudo-element for underlining effect */
+.navbar-admin-item::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    background-color: #a5d6a7;
+    opacity: 0;
+    transform: translateX(-50%);
+    transition: all 0.4s ease;
+}
+
+/* Hover effect for underlining navigation items */
+.navbar-admin-item:hover::after {
+    opacity: 1;
+    width: 100%;
+}
+
+/* Styling for the welcome message */
+.navbar-admin-welcome {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #c8e6c9;
+}
+
+/* Styling for the cart count */
+.navbar-admin-cart-count {
+    background-color: #e53935;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.9em;
+    font-weight: bold;
+    margin-left: 8px;
+    display: inline-block;
+    animation: navbar-admin-bounce 1s infinite;
+}
+
+/* Bounce animation for the cart count */
+@keyframes navbar-admin-bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Styling for the logout button */
+.navbar-admin-logout-button {
+    background-color: #388e3c;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 44px;
+    cursor: pointer;
+    transition: background-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.navbar-admin-logout-button:hover {
+    background-color: #2e7d32;
+    transform: scale(1.15);
+    box-shadow: 0 8px 25px rgba(46, 125, 50, 0.5);
+}
+
+.navbar-admin-logout-button:focus {
+    outline: none;
+}
+
+.navbar-admin-logout-button:active {
+    transform: scale(1);
+}
+
+/* CSS cho navbar dọc, chỉ bao phủ chiều cao của màn hình */
+.navbar-admin-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 250px;
+    padding: 20px;
+    background: linear-gradient(135deg, #2e7d32 0%, #4caf50 50%, #66bb6a 100%);
+    height: 677px !important; /* Bao phủ toàn bộ chiều cao màn hình */
+    box-sizing: border-box; /* Đảm bảo padding không làm tăng chiều cao tổng */
+    overflow-y: auto !important; /* Cho phép cuộn nếu nội dung vượt quá chiều cao màn hình */
+    transition: all 0.4s ease;
+}
+
+/* CSS khi mở rộng navbar */
+.navbar-expanded {
+    width: 350px;
+}
+
+/* Các CSS khác không thay đổi */
+.navbar-admin-vertical .navbar-admin-links {
+    flex-direction: column;
+    width: 100% !important;
+    gap: 10px;
+}
+
+.navbar-admin-vertical .navbar-admin-item {
+    justify-content: flex-start;
+    width: 100% !important;
+    padding: 10px 0 !important;
+}
+
+.navbar-admin-vertical .navbar-admin-logout-button {
+    width: 100% !important;
+}
+
+/* CSS cho thanh cuộn riêng của navbar */
+.navbar-admin-vertical::-webkit-scrollbar {
+    width: 8px !important;
+}
+
+.navbar-admin-vertical::-webkit-scrollbar-track {
+    background: #f0f0f0 !important;
+    border-radius: 10px !important;
+}
+
+.navbar-admin-vertical::-webkit-scrollbar-thumb {
+    background-color: #c8e6c9 !important;
+    border-radius: 10px !important;
+    border: 2px solid #f0f0f0 !important;
+}
+
+/* Tùy chỉnh scrollbar cho các trình duyệt không phải Webkit */
+.navbar-admin-vertical {
+    scrollbar-width: thin !important; /* Tạo thanh cuộn mỏng */
+    scrollbar-color: #c8e6c9 #f0f0f0 !important; /* Màu cho thanh cuộn và track */
+}

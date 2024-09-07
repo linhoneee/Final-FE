@@ -5,7 +5,7 @@ import PaymentService from '../services/PaymentService';
 import AddressService from '../services/AddressService';
 import CustomerCouponService from '../services/CustomerCouponService';
 import 'leaflet/dist/leaflet.css';
-import '../Css/Checkout.css';
+import './Checkout.css';
 import CartItemList from '../components/Checkout/CartItemListCheckout';
 import ShippingTypeList from '../components/Checkout/ShippingTypeListCheckout';
 import DistanceData from '../components/Checkout/DistanceDataCheckout';
@@ -13,12 +13,12 @@ import { AddressModal, DefaultAddress } from '../components/Checkout/AddressModa
 import TotalCost from '../components/Checkout/TotalCost';
 import Coupons from '../components/Checkout/Coupons';
 import PaymentMethod from '../components/Checkout/PaymentMethod';
-import AddAddressPlusModal from '../components/Address/AddAddressPlusModal'; // Corrected path
+import AddAddressPlusModal from '../components/Address/AddAddressPlusModal';
 
 const Checkout = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { selectedCartItems } = location.state || {};
+  const { selectedCartItems, warehouseIds } = location.state || {};  // Nhận warehouseIds từ location.state
   const { id } = useParams();
 
   const [shippingTypes, setShippingTypes] = useState([]);
@@ -33,7 +33,7 @@ const Checkout = () => {
   const [defaultAddress, setDefaultAddress] = useState(null);
   const [addresses, setAddresses] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false); // State to control AddAddressPlusModal
+  const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
   const [coupons, setCoupons] = useState([]);
   const [selectedCoupon, setSelectedCoupon] = useState(null);
   const [discountResult, setDiscountResult] = useState(null);
@@ -97,10 +97,9 @@ const Checkout = () => {
       const totalProductCost = selectedCartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
       setTotalProductCost(totalProductCost);
 
-      const warehouseIds = selectedCartItems.flatMap(item => item.warehouseIds.split(','));
       calculateDistance(defaultAddress, warehouseIds);
     }
-  }, [defaultAddress, selectedCartItems, calculateDistance]);
+  }, [defaultAddress, selectedCartItems, calculateDistance, warehouseIds]);
 
   useEffect(() => {
     if (selectedShipping && distanceData) {
@@ -150,7 +149,6 @@ const Checkout = () => {
         destinationLatitude: distanceData.destinationLatitude,
         destinationLongitude: distanceData.destinationLongitude,
         distance: distanceData.distance,
-        // route: distanceData.route,
       },
       total: totalCost
     };
@@ -171,12 +169,17 @@ const Checkout = () => {
   const handleAddressChange = (newAddress) => {
     setDefaultAddress(newAddress);
     setDistanceData(null);
-    const warehouseIds = selectedCartItems.flatMap(item => item.warehouseIds.split(','));
-    calculateDistance(newAddress, warehouseIds);
+    calculateDistance(newAddress, warehouseIds);  
     setIsModalOpen(false);
   };
 
   const handleApplyCoupon = () => {
+// Nếu selectedCoupon tồn tại (không phải là null hoặc undefined):
+// couponCode sẽ được set bằng selectedCoupon.code.
+// Ví dụ: Nếu selectedCoupon = { code: "FREESHIP" }, thì couponCode = "FREESHIP".
+// sửa lại thành const couponCode = voucherCode.trim() || selectedCoupon?.code || '';
+
+
     const couponCode = voucherCode.trim() || (selectedCoupon ? selectedCoupon.code : '');
     if (couponCode) {
       CustomerCouponService.applyCoupon(couponCode, totalProductCost, shippingCost)
@@ -184,7 +187,6 @@ const Checkout = () => {
           setDiscountResult(response.data);
           const { discountedOrderValue, discountedShippingCost } = response.data;
           setTotalCost(discountedOrderValue + discountedShippingCost);
-          // Reset both selectedCoupon and voucherCode
           setSelectedCoupon(null);
           setVoucherCode('');
         })
@@ -196,12 +198,12 @@ const Checkout = () => {
 
   const handleVoucherCodeChange = (e) => {
     setVoucherCode(e.target.value);
-    setSelectedCoupon(null); // Reset selectedCoupon to null when user enters a new voucher code
+    setSelectedCoupon(null);
   };
 
   const handleCouponSelect = (e) => {
     setSelectedCoupon(coupons.find(c => c.code === e.target.value));
-    setVoucherCode(''); // Reset voucherCode to empty when user selects a coupon from the dropdown
+    setVoucherCode('');
   };
 
   if (loading) {
@@ -220,12 +222,18 @@ const Checkout = () => {
   ` : '';
 
   return (
-    <div>
-      <h2>Checkout</h2>
+    <div className="checkout-container">
+      <h2 className="checkout-header">Checkout</h2>
       {!defaultAddress ? (
-        <div style={{ color: 'red' }}>
-          Bạn chưa có địa chỉ, yêu cầu tạo địa chỉ mới
-          <button onClick={() => setIsAddAddressModalOpen(true)}>Tạo địa chỉ mới</button>
+        <div style={{ color: 'red', fontWeight: 'bold' }}>
+          Bạn chưa có địa chỉ, yêu cầu tạo địa chỉ mới  
+          <button 
+          className="checkout-button" 
+          onClick={() => setIsAddAddressModalOpen(true)} 
+          style={{ marginLeft: '10px' }}
+          >
+            Tạo địa chỉ mới
+          </button>
         </div>
       ) : (
         <DefaultAddress defaultAddress={defaultAddress} onChangeAddress={() => setIsModalOpen(true)} />
@@ -254,7 +262,7 @@ const Checkout = () => {
         handleApplyCoupon={handleApplyCoupon}
       />
       <PaymentMethod paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} />
-      <button onClick={handleConfirmPurchase}>Confirm Purchase</button>
+      <button className="checkout-button" onClick={handleConfirmPurchase}>Confirm Purchase</button>
       {isModalOpen && (
         <AddressModal
           defaultAddress={defaultAddress}
@@ -268,10 +276,8 @@ const Checkout = () => {
           userId={id}
           onClose={() => setIsAddAddressModalOpen(false)}
           onSave={() => {
-            // Refetch addresses after adding new address
             AddressService.getAddressesByUserId(id).then(response => {
               setAddresses(response.data);
-              // Set the newly added address as default if it's the first address
               if (response.data.length === 1) {
                 setDefaultAddress(response.data[0]);
               }

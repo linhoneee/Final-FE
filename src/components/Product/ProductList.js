@@ -7,6 +7,7 @@ import EditProductDiscount from "../DiscountAndPromotion/EditProductDiscount";
 import { useNavigate } from "react-router-dom";
 import './ProductList.css'; // Import CSS file
 
+
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [images, setImages] = useState([]);
@@ -15,6 +16,8 @@ const ProductList = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [showImageModal, setShowImageModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -92,6 +95,16 @@ const ProductList = () => {
     setSelectedProduct(null);
   };
 
+  const openImageModal = (image) => {
+    setSelectedImage(image);
+    setShowImageModal(true);
+  };
+
+  const closeImageModal = () => {
+    setShowImageModal(false);
+    setSelectedImage(null);
+  };
+
   const deleteDiscount = (productId) => {
     const discount = productDiscounts.find(discount => discount.productId === productId);
     if (discount) {
@@ -110,19 +123,19 @@ const ProductList = () => {
   };
 
   return (
-    <div>
-      <h1>Product List</h1>
-      <table>
+    <div className="product-list-container">
+      <h1 className="product-list-header">Product List</h1>
+      <table className="product-list-table">
         <thead>
           <tr>
-            <th>id</th>
-            <th>name</th>
-            <th>description</th>
-            <th>original price</th>
-            <th>discounted price</th>
-            <th>weight</th>
-            <th>images</th>
-            <th>actions</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Original Price</th>
+            <th>Discounted Price</th>
+            <th>Weight</th>
+            <th>Images</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -148,12 +161,17 @@ const ProductList = () => {
                   )}
                 </td>
                 <td>{product.weight}</td>
-                <td>
+                <td className="product-list-images">
                   {getProductImages(product.id).map((image, index) => (
-                    <img key={index} src={image.url} alt={product.productName} width="50" />
+                    <img 
+                      key={index} 
+                      src={image.url} 
+                      alt={product.productName} 
+                      onClick={() => openImageModal(image)}
+                    />
                   ))}
                 </td>
-                <td>
+                <td className="product-list-actions">
                   <button onClick={() => deleteProduct(product.id)}>Delete</button>
                   <button onClick={() => updateProduct(product.id)}>Update</button>
                   {!getDiscountedPrice(product.id) ? (
@@ -194,6 +212,14 @@ const ProductList = () => {
               setProductDiscounts={setProductDiscounts}
               productDiscounts={productDiscounts}
             />
+          </div>
+        </div>
+      )}
+
+      {showImageModal && (
+        <div className="modal-overlay" onClick={closeImageModal}>
+          <div className="modal-content">
+            <img src={selectedImage.url} alt={selectedImage.productName} />
           </div>
         </div>
       )}

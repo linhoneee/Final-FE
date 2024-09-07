@@ -1,4 +1,4 @@
-.modal {
+.modal-review {
     position: fixed;
     top: 0;
     left: 0;
@@ -8,31 +8,137 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    animation: fadeIn 0.4s forwards ease;
 }
 
-.modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 500px;
-    width: 100%;
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-.error {
-    color: red;
+.modal-review-content {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 40px;
+    width: 550px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+    position: relative;
+    opacity: 0;
+    transform: translateY(-40px);
+    animation: slideUp 0.5s forwards ease;
 }
 
-.star-rating {
-    display: flex;
-    gap: 5px;
-    cursor: pointer;
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.star-rating span {
+.modal-review h2 {
+    color: #333;
     font-size: 24px;
-    color: #ccc;
+    margin-bottom: 25px;
+    border-bottom: 3px solid #eeeeee;
+    padding-bottom: 12px;
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
-.star-rating span.filled {
-    color: #f5c518;
+.modal-review .error {
+    color: #e74c3c;
+    margin-bottom: 15px;
+    font-size: 14px;
+    text-align: center;
+    background-color: #fbeaea;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.modal-review label {
+    display: block;
+    color: #555;
+    font-size: 17px;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.modal-review textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    min-height: 130px;
+    background-color: #f9f9f9;
+    margin-bottom: 25px;
+    font-size: 16px;
+    color: #333;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.2s ease, box-shadow 0.3s ease;
+}
+
+.modal-review textarea:focus {
+    border-color: #aed581;
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-review button {
+    background-color: #81c784;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    margin-right: 12px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.modal-review button:hover {
+    background-color: #66bb6a;
+    transform: translateY(-2px);
+}
+
+.modal-review button:active {
+    background-color: #4caf50;
+    transform: translateY(0);
+}
+
+.modal-review .star-rating span {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    background-color: #fff9c4;
+    border: 2px solid #ffeb3b;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.modal-review .star-rating span.filled {
+    background-color: #ffd54f;
+    border-color: #fbc02d;
+}
+
+.modal-review .star-rating {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.modal-review .star-frame {
+    display: inline-block;
+    padding: 2px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }

@@ -1,0 +1,110 @@
+.brand-add-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px); 
+}
+
+.brand-add-modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px; 
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); 
+  max-width: 700px;
+  width: 100%;
+  animation: fadeInScale 0.5s ease-out;
+}
+
+.brand-add-modal-title {
+  text-align: center;
+  color: #2e7d32;
+  font-size: 33px; 
+  font-weight: 700; 
+  margin-bottom: 30px; 
+  text-transform: uppercase;
+}
+
+.brand-add-modal-form-group {
+  margin-bottom: 30px;
+
+}
+.brand-add-modal-form-group label {
+  display: block; /* Hiển thị label trên một dòng riêng, giúp dễ đọc hơn */
+  color: #0e5111;
+  font-size: 16px; /* Kích thước phông chữ */
+  font-weight: bold; /* Độ đậm của phông chữ */
+  margin-bottom: 10px; /* Khoảng cách phía dưới label để tách biệt với input */
+  text-transform: uppercase; /* Chuyển đổi văn bản thành chữ hoa */
+  letter-spacing: 1px; /* Khoảng cách giữa các chữ cái, tăng độ rõ ràng và tính thẩm mỹ */
+}
+
+.brand-add-modal-input {
+  width: 95%;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease;
+}
+
+.brand-add-modal-input:focus {
+  border-color: #4caf50;
+  outline: none;
+  box-shadow: inset 0 3px 6px rgba(0, 128, 0, 0.2);
+}
+
+.brand-add-modal-btn {
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.brand-add-modal-btn-primary {
+  background-color: #4caf50;
+  color: #fff;
+  margin-right: 10px;
+  font-size: 15px;
+}
+
+.brand-add-modal-btn-primary:hover {
+  background-color: #388e3c;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(56, 142, 60, 0.5);
+}
+
+.brand-add-modal-btn-danger {
+  background-color: #e57373;
+  color: #fff;
+  font-size: 15px;
+
+}
+
+.brand-add-modal-btn-danger:hover {
+  background-color: #d32f2f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(211, 47, 47, 0.5);
+}
+
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

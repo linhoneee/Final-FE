@@ -1,0 +1,60 @@
+/* Import a beautiful Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+.shipping-type-list-container {
+    font-family: 'Montserrat', sans-serif;
+
+}
+
+.shipping-type-list-container h3 {
+    font-size: 2em;
+    color: #2e7d32;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.shipping-type-list {
+    list-style: none;
+    padding: 0;
+}
+
+.shipping-type-item {
+    border-bottom: 1px solid #ddd;
+    padding: 15px 0;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; /* Thêm khoảng cách giữa các mục */
+}
+
+.shipping-type-item:hover {
+    background-color: #f9f9f9;
+}
+
+.shipping-type-item p {
+    margin: 5px 20px;
+    color: #555;
+    flex: 1;
+}
+
+.shipping-type-item input[type="checkbox"] {
+    margin-right: 20px;
+    transform: scale(1.5);
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.shipping-type-item input[type="checkbox"]:hover {
+    transform: scale(1.6);
+}
+
+.shipping-type-item .shipping-id,
+.shipping-type-item .shipping-name {
+    font-weight: bold;
+    color: #2e7d32;
+}
+
+.shipping-type-item .shipping-id:hover,
+.shipping-type-item .shipping-name:hover {
+    text-decoration: underline;
+}

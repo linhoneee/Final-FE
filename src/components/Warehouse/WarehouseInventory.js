@@ -1,16 +1,12 @@
-
-import '../../Css/ImageModal.css'; 
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import InventoryService from '../../services/InventoryService';
 import ProductService from '../../services/ProductService';
 import Modal from 'react-modal';
+import './WarehouseInventoryModal.css';
 
 Modal.setAppElement('#root'); // Đặt phần tử gốc cho react-modal
 
-const WarehouseInventory = () => {
-  const { warehouseId } = useParams();
-  const navigate = useNavigate();
+const WarehouseInventory = ({ warehouseId }) => {
   const [inventory, setInventory] = useState([]);
   const [productDetails, setProductDetails] = useState({});
   const [loading, setLoading] = useState(true);
@@ -22,7 +18,6 @@ const WarehouseInventory = () => {
     InventoryService.getInventoriesByWarehouseId(warehouseId).then((response) => {
       const inventoryData = response.data;
       setInventory(inventoryData);
-      console.log('Inventory Data:', inventoryData);
 
       const productDetailPromises = inventoryData.map((item) =>
         ProductService.GetProductById(item.productId)
@@ -42,7 +37,6 @@ const WarehouseInventory = () => {
             return acc;
           }, {});
           setProductDetails(productDetailsMap);
-          console.log('Product Details:', productDetailsMap);
           setLoading(false);
         })
         .catch((err) => {
@@ -67,10 +61,6 @@ const WarehouseInventory = () => {
     setSelectedImage(null);
   };
 
-  const handleAddProduct = () => {
-    navigate(`/warehouse/${warehouseId}/addProduct`);
-  };
-
   if (loading) {
     return <p>Loading inventory details...</p>;
   }
@@ -81,12 +71,11 @@ const WarehouseInventory = () => {
 
   return (
     <div>
-      <h1>Warehouse Inventory for Warehouse ID: {warehouseId}</h1>
-      <table>
+      <h3>Inventory Details for Warehouse ID: {warehouseId}</h3>
+      <table className="warehouse-inventory-table">
         <thead>
           <tr>
             <th>Product ID</th>
-            <th>Description</th>
             <th>Quantity</th>
             <th>Updated At</th>
             <th>Product Name</th>
@@ -100,9 +89,17 @@ const WarehouseInventory = () => {
           {inventory.map((item) => (
             <tr key={item.id}>
               <td>{item.productId}</td>
-              <td>{item.description}</td>
               <td>{item.quantity}</td>
-              <td>{item.updatedAt}</td>
+              <td>
+                {new Intl.DateTimeFormat('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit',
+                }).format(new Date(item.updatedAt))}
+              </td>
               {productDetails[item.productId] ? (
                 <>
                   <td>{productDetails[item.productId].product.productName}</td>
@@ -115,7 +112,6 @@ const WarehouseInventory = () => {
                         key={image.id}
                         src={`http://localhost:6001${image.url}`}
                         alt="Product"
-                        style={{ width: '50px', height: '50px', margin: '5px', cursor: 'pointer' }}
                         onClick={() => openModal(image)}
                       />
                     ))}
@@ -135,8 +131,6 @@ const WarehouseInventory = () => {
           <button onClick={closeModal} className="modal-close-button">Close</button>
         </Modal>
       )}
-
-      <button onClick={handleAddProduct}>Add Product</button>
     </div>
   );
 };
