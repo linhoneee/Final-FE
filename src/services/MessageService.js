@@ -15,9 +15,14 @@ class MessageService {
   sendMessage(message) {
     return axios.post(API_URL, message);
   }
-  getLatestMessagesForAllRooms() {
-    return axios.get(`${API_URL}/latestMessages`);
-  }
+  getLatestMessagesForAllRooms(userId) {
+    return axios.get(`${API_URL}/latestMessages`, {
+        params: {
+            userId: userId // Thêm userId vào query params
+        }
+    });
+}
+
 }
 
 const instance = new MessageService();

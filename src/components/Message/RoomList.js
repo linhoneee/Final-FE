@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { List, ListItem, ListItemText, Avatar } from '@material-ui/core';
+import { List, ListItem, ListItemText, Avatar, Badge } from '@material-ui/core';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
+import { useSelector } from 'react-redux'; 
 import MessageService from '../../services/MessageService';
 import UserService from '../../services/UserService';
 import './RoomList.css';
@@ -11,30 +12,39 @@ const RoomList = ({ onRoomSelect }) => {
   const [selectedRoomId, setSelectedRoomId] = useState(null);
   const stompClient = useRef(null);
 
-  // Hàm fetch dữ liệu phòng và tin nhắn mới nhất
+  const userID = useSelector(state => state.auth.userID);
+
   const fetchRoomData = useCallback(async () => {
+    if (!userID) return;
     try {
-      const messageResponse = await MessageService.getLatestMessagesForAllRooms();
+      const messageResponse = await MessageService.getLatestMessagesForAllRooms(userID);
 
       const roomsWithUsers = await Promise.all(
         messageResponse.data.map(async (room) => {
+          const chatMessage = room.chatMessage;
+
+          if (!chatMessage.roomId) {
+            console.error('Room ID is undefined for room:', room);
+            return { ...room, user: null };
+          }
+
           try {
-            const userResponse = await UserService.getUserById(room.roomId);
+            const userResponse = await UserService.getUserById(chatMessage.roomId);
             const user = userResponse.data;
             return {
               ...room,
               user: user || {},
             };
           } catch (error) {
-            console.error(`Error fetching user for room ${room.roomId}:`, error);
+            console.error(`Error fetching user for room ${chatMessage.roomId}:`, error);
             return { ...room, user: null };
           }
         })
       );
 
       const sortedRooms = roomsWithUsers.sort((a, b) => {
-        const dateA = new Date(a.createdAt);
-        const dateB = new Date(b.createdAt);
+        const dateA = new Date(a.chatMessage.createdAt);
+        const dateB = new Date(b.chatMessage.createdAt);
         return dateB - dateA;
       });
 
@@ -42,9 +52,8 @@ const RoomList = ({ onRoomSelect }) => {
     } catch (error) {
       console.error('Error fetching room data:', error);
     }
-  }, []);
+  }, [userID]);
 
-  // Hàm khởi tạo kết nối WebSocket
   const initializeWebSocket = useCallback(() => {
     const socket = new SockJS('http://localhost:6010/ws');
     const client = new Client({
@@ -55,17 +64,14 @@ const RoomList = ({ onRoomSelect }) => {
           const receivedMessage = JSON.parse(message.body);
 
           setRooms((prevRooms) => {
-            // Cập nhật phòng có tin nhắn mới
             const updatedRooms = prevRooms.map((room) => 
-              room.roomId === receivedMessage.roomId 
-                ? { ...room, text: receivedMessage.text, createdAt: receivedMessage.createdAt } 
+              room.chatMessage.roomId === receivedMessage.chatMessage.roomId 
+                ? { ...room, chatMessage: { ...room.chatMessage, text: receivedMessage.chatMessage.text, createdAt: receivedMessage.chatMessage.createdAt }, unreadCount: receivedMessage.unreadCount }
                 : room
             );
-
-            // Sắp xếp lại danh sách để phòng có tin nhắn mới nhất ở đầu
             return updatedRooms.sort((a, b) => {
-              const dateA = new Date(a.createdAt);
-              const dateB = new Date(b.createdAt);
+              const dateA = new Date(a.chatMessage.createdAt);
+              const dateB = new Date(b.chatMessage.createdAt);
               return dateB - dateA;
             });
           });
@@ -81,13 +87,11 @@ const RoomList = ({ onRoomSelect }) => {
     };
   }, []);
 
-  // Khởi tạo WebSocket và lấy dữ liệu phòng khi component mount
   useEffect(() => {
     fetchRoomData();
     initializeWebSocket();
   }, [fetchRoomData, initializeWebSocket]);
 
-  // Xử lý khi chọn phòng
   const handleRoomSelect = (roomId) => {
     setSelectedRoomId(roomId);
     onRoomSelect(roomId);
@@ -98,10 +102,10 @@ const RoomList = ({ onRoomSelect }) => {
       {rooms.map((room) => (
         <ListItem 
           button 
-          key={room.roomId} 
-          onClick={() => handleRoomSelect(room.roomId)}
+          key={room.chatMessage.roomId} 
+          onClick={() => handleRoomSelect(room.chatMessage.roomId)}
           disabled={!room.user}
-          className={`room-list-item ${selectedRoomId === room.roomId ? 'selected-room' : ''}`}
+          className={`room-list-item ${selectedRoomId === room.chatMessage.roomId ? 'selected-room' : ''}`}
         >
           <Avatar 
             className="room-avatar"
@@ -115,7 +119,14 @@ const RoomList = ({ onRoomSelect }) => {
             primary={room.user && room.user.username ? 
               room.user.username : 
               'Unknown User'}
-            secondary={room.text}
+            secondary={
+              <>
+                {room.chatMessage.text}
+                {room.unreadCount > 0 && (
+                  <Badge badgeContent={room.unreadCount} color="secondary" className="unread-count-badge" />
+                )}
+              </>
+            }
             className="room-info"
           />
         </ListItem>
