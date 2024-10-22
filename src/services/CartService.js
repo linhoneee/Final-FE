@@ -11,7 +11,7 @@ class CartService {
   }
 
   FindCartByUserId(userId) {
-    return axiosInstance.get(`${URLTestKongGateway}/${userId}`);
+    return axiosInstance.get(`${URL}/${userId}`);
   }
 
   DecreaseCart(userId, cart) {

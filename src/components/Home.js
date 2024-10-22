@@ -2,7 +2,15 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../store/actions/authActions';
 import { useNavigate } from 'react-router-dom';
-
+import ImageSlider from '../another/ImageSlider';
+import Footer from '../another/Footer';
+import ImageGallery from '../another/ImageGallery';
+import StoreMap from '../another/StoreMap';
+import RecentlyViewedProducts from '../another/RecentlyViewedProducts';
+// import MatomoDashboard from '../another/MatomoDashboard';
+import BarChar from '../another/BarChart';
+import MapChart from '../another/MapChart';
+import SalesComponent from '../another/SalesComponent';
 const Home = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -43,7 +51,20 @@ const Home = () => {
         }
     }, [dispatch, navigate]);
 
-    return <div>Welcome to Home</div>;
+    return (
+        <div className="content-wrapper">
+            <h1>Welcome to Home</h1>
+            <ImageSlider />
+            <ImageGallery />
+            <RecentlyViewedProducts />
+            <StoreMap />
+            <Footer /> 
+            {/* <MatomoDashboard /> */}
+            <BarChar />
+            <MapChart />
+            <SalesComponent />
+        </div>
+    );
 };
 
 export default Home;

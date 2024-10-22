@@ -1,0 +1,108 @@
+/* Store Locator Main Container */
+.store-locator {
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Store Header with Title and Description */
+.store-header {
+    margin-bottom: 20px;
+}
+
+.store-header h1 {
+    font-size: 32px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.store-header p {
+    font-size: 16px;
+    color: #555;
+    margin: 0 auto;
+}
+
+/* Store Selection Buttons */
+.store-buttons {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.store-buttons button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.store-buttons button:hover {
+    background-color: #0056b3;
+}
+
+/* Map and Store Information Container */
+.store-content {
+    display: flex;
+    gap: 20px;
+}
+
+/* Map Section */
+.map-section {
+    flex: 2;
+}
+
+.leaflet-container {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Store Information Section */
+.store-info {
+    flex: 1;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.store-info h3 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.store-info p {
+    font-size: 16px;
+    color: #555;
+}
+
+.transport-links h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.transport-links p {
+    font-size: 16px;
+    color: #777;
+}
+
+/* Responsive Design for Mobile */
+@media (max-width: 768px) {
+    .store-content {
+        flex-direction: column;
+    }
+
+    .map-section {
+        height: 300px;
+    }
+
+    .store-info {
+        margin-top: 20px;
+    }
+}

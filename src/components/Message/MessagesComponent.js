@@ -1,4 +1,3 @@
-// src/components/Message/MessagesComponent.js
 import React, { useState, useEffect, useRef } from 'react';
 import {
   TextField,
@@ -19,7 +18,8 @@ import SockJS from 'sockjs-client';
 import { useSelector } from 'react-redux';
 import MessageService from '../../services/MessageService';
 import './MessagesComponent.css';
-
+import toast from 'react-hot-toast';
+import showCustomToast from './showCustomToast';
 const MessagesComponent = ({ open, onClose, initialMessages }) => {
   const userID = useSelector((state) => state.auth.userID);
   const roomId = userID;
@@ -45,6 +45,17 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
       onConnect: () => {
         client.subscribe(`/topic/room/${roomId}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
+
+          // Kiểm tra nếu modal không mở, hiển thị alert với nội dung tin nhắn
+          if (!open) {
+            // alert(`Tin nhắn mới từ ${receivedMessage.username}: ${receivedMessage.text}`);
+            // toast.in(`Tin nhắn mới từ ${receivedMessage.username}: ${receivedMessage.text}`)
+            // toast(`Tin nhắn mới từ ${receivedMessage.username}: ${receivedMessage.text}`, {
+            //   icon: '💬', // Biểu tượng tin nhắn
+            // });
+            showCustomToast(receivedMessage.username, receivedMessage.text, receivedMessage.createdAt);
+          }
+
           setMessages((prevMessages) => [...prevMessages, receivedMessage]);
         });
       }
@@ -65,7 +76,7 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
     return () => {
       client.deactivate();
     };
-  }, [roomId]);
+  }, [roomId, open]);
 
   useEffect(() => {
     if (open) {
@@ -96,7 +107,7 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
         destination: '/app/chat.sendMessage',
         body: JSON.stringify(chatMessage)
       });
-      
+
       setMessage('');
       inputRef.current?.focus();
     }

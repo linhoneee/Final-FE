@@ -35,6 +35,15 @@ const ProductDetails = () => {
         const primaryImg = response.data.productImages.find(image => image.isPrimary);
         setPrimaryImage(primaryImg);
         setLoading(false);
+
+              // Gọi hàm lưu vào localStorage
+              addToRecentlyViewed({
+                id: response.data.product.id,
+                name: response.data.product.productName,
+                price: response.data.product.price,
+                imageUrl: primaryImg ? primaryImg.url : ''
+              });
+      
       })
       .catch(error => {
         console.error('Error fetching product details:', error);
@@ -94,7 +103,15 @@ const ProductDetails = () => {
     });
   };
   
-  
+    // Hàm lưu thông tin vào localStorage
+    const addToRecentlyViewed = (product) => {
+      let viewedProducts = JSON.parse(localStorage.getItem('viewedProducts')) || [];
+      // Kiểm tra nếu sản phẩm đã có trong danh sách
+      if (!viewedProducts.some(item => item.id === product.id)) {
+        viewedProducts.push(product);
+        localStorage.setItem('viewedProducts', JSON.stringify(viewedProducts));
+      }
+    };
   
   
   const addToCart = () => {

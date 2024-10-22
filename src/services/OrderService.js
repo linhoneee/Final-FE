@@ -11,6 +11,28 @@ class OrderService {
     markProductAsReviewed = (orderId, productId) => {
         return axios.patch(`${URL}/${orderId}/products/${productId}/reviewed`);
     };
+
+        // API để lấy doanh thu theo ngày
+        getRevenueByDay(day) {
+            return axios.get(`${URL}/revenue-by-hour?date=${day}`);
+        }
+    
+        // API để lấy doanh thu theo tuần
+        getRevenueByWeek(date) {
+            return axios.get(`${URL}/revenue-by-day-of-week?date=${date}`);
+        }
+    
+        getRevenueByDayOfMonth = (year, month) => {
+            return axios.get(`${URL}/revenue-by-day-of-month`, {
+                params: { year, month }
+            });
+        };
+    
+        getRevenueByMonthOfYear = (year) => {
+            return axios.get(`${URL}/revenue-by-month-of-year`, {
+                params: { year }
+            });
+        };
 }
 
 const instance = new OrderService();

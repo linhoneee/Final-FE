@@ -60,7 +60,8 @@ const RoomList = ({ onRoomSelect }) => {
       webSocketFactory: () => socket,
       debug: console.log,
       onConnect: () => {
-        client.subscribe('/topic/latestMessages', (message) => {
+        client.subscribe(`/topic/latestMessages/${userID}`, (message) => {
+
           const receivedMessage = JSON.parse(message.body);
 
           setRooms((prevRooms) => {

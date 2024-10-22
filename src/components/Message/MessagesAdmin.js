@@ -38,7 +38,6 @@ const MessageAdmin = ({ roomId, initialMessages = [] }) => {
     }
   }, [roomId]);
 
-
   const initializeWebSocketAndMessages = useCallback(() => {
     if (!roomId) return;
 
@@ -49,7 +48,19 @@ const MessageAdmin = ({ roomId, initialMessages = [] }) => {
       onConnect: () => {
         client.subscribe(`/topic/room/${roomId}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
-          setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+          
+          // Kiểm tra xem tin nhắn đã tồn tại trong danh sách hay chưa
+          setMessages((prevMessages) => {
+            const messageExists = prevMessages.some(
+              (msg) => msg.id === receivedMessage.id
+            );
+            if (messageExists) {
+              // Nếu tin nhắn đã tồn tại, không thêm vào danh sách
+              return prevMessages;
+            }
+            // Nếu tin nhắn chưa tồn tại, thêm vào danh sách
+            return [...prevMessages, receivedMessage];
+          });
         });
       }
     });
@@ -74,11 +85,9 @@ const MessageAdmin = ({ roomId, initialMessages = [] }) => {
   const fetchUserAvatars = async (messages) => {
     const avatars = {};
     for (const msg of messages) {
-      //Ta sẽ cần kiểm tra xem đã có avatar của userid trong đối tượng vừa tạo chưa, nếu chưa thì thêm vào 
       if (!avatars[msg.userId]) {
         try {
           const userResponse = await UserService.getUserById(msg.userId);
-          //Thêm một key (khóa) là userId vào đối tượng avatars
           avatars[msg.userId] = userResponse.data.picture ? `http://localhost:8080${userResponse.data.picture}` : null;
         } catch (error) {
           console.error(`Failed to fetch avatar for user ${msg.userId}:`, error);
@@ -88,7 +97,6 @@ const MessageAdmin = ({ roomId, initialMessages = [] }) => {
     return avatars;
   };
 
-  // Hàm cuộn xuống cuối danh sách tin nhắn
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -119,7 +127,6 @@ const MessageAdmin = ({ roomId, initialMessages = [] }) => {
     scrollToBottom(); 
   }, [fetchRoomUser, initializeWebSocketAndMessages]);
 
-  // Cuộn xuống cuối danh sách tin nhắn khi có tin nhắn mới
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -141,7 +148,7 @@ const MessageAdmin = ({ roomId, initialMessages = [] }) => {
     <List className="message-admin-custom-messages-list">
       {messages.map((msg, index) => (
         <ListItem
-          key={index}
+          key={msg.id || index}
           className={`message-admin-custom-message-item ${String(msg.userId) === userID ? 'message-admin-custom-message-right' : 'message-admin-custom-message-left'}`}
         >
           <ListItemAvatar className="message-admin-custom-avatar">

@@ -78,6 +78,15 @@ function App() {
     setMessageModalOpen(false);
   };
 
+  // React.useEffect(() => {
+  //   var _mtm = window._mtm = window._mtm || [];
+  //   _mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
+  //   var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+  //   g.async=true; g.src='https://cdn.matomo.cloud/79fb1172120135ngrokfreeapp.matomo.cloud/container_mpwS9ZPS.js';
+  //   s.parentNode.insertBefore(g,s);
+  // }, []);
+
+
   return (
     <Provider store={store}>
       <Router>
@@ -112,7 +121,7 @@ function App() {
         <MessagesComponent open={isMessageModalOpen} onClose={handleCloseMessageModal} />
 
         <div style={{ display: 'flex'}}> {/* Sử dụng Flexbox để bố trí layout */}
-          <NavBarAdmin /> 
+          {/* <NavBarAdmin />  */}
           {/* NavbarAdmin sẽ nằm ở bên trái */}
           <div style={{ flexGrow: 1, padding: '20px', overflowY: 'auto' }}> {/* Phần này chứa các component router */}
             <Routes>
