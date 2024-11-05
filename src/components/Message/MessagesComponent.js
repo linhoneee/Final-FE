@@ -18,8 +18,8 @@ import SockJS from 'sockjs-client';
 import { useSelector } from 'react-redux';
 import MessageService from '../../services/MessageService';
 import './MessagesComponent.css';
-import toast from 'react-hot-toast';
 import showCustomToast from './showCustomToast';
+
 const MessagesComponent = ({ open, onClose, initialMessages }) => {
   const userID = useSelector((state) => state.auth.userID);
   const roomId = userID;
@@ -32,6 +32,26 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
 
   const username = useSelector((state) => state.auth.username) || 'Unknown';
 
+  // Đăng ký Service Worker khi component mount
+  useEffect(() => {
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+      navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+        console.log('Service Worker registered with scope:', registration.scope);
+      }).catch((error) => {
+        console.error('Service Worker registration failed:', error);
+      });
+    }
+  }, []);
+  
+  // Kiểm tra và xin phép quyền thông báo khi khởi động
+  useEffect(() => {
+    if (Notification.permission === 'default') {
+      Notification.requestPermission().then((permission) => {
+        console.log("Notification permission:", permission);
+      }).catch(error => console.error("Failed to request permission:", error));
+    }
+  }, []);
+  
   useEffect(() => {
     if (!roomId) {
       console.error('Room ID is undefined');
@@ -46,17 +66,22 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
         client.subscribe(`/topic/room/${roomId}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
 
-          // Kiểm tra nếu modal không mở, hiển thị alert với nội dung tin nhắn
-          if (!open) {
-            // alert(`Tin nhắn mới từ ${receivedMessage.username}: ${receivedMessage.text}`);
-            // toast.in(`Tin nhắn mới từ ${receivedMessage.username}: ${receivedMessage.text}`)
-            // toast(`Tin nhắn mới từ ${receivedMessage.username}: ${receivedMessage.text}`, {
-            //   icon: '💬', // Biểu tượng tin nhắn
-            // });
+          if (open) {
+            setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+          } else if (document.visibilityState === 'visible') {
             showCustomToast(receivedMessage.username, receivedMessage.text, receivedMessage.createdAt);
+            setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+          } else {
+            if (Notification.permission === 'granted') {
+              navigator.serviceWorker.ready.then((registration) => {
+                registration.showNotification(`Tin nhắn mới từ ${receivedMessage.username}`, {
+                  body: receivedMessage.text,
+                  icon: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png'
+                });
+              });
+            }
+            setMessages((prevMessages) => [...prevMessages, receivedMessage]);
           }
-
-          setMessages((prevMessages) => [...prevMessages, receivedMessage]);
         });
       }
     });
@@ -66,7 +91,6 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
 
     MessageService.getMessagesByRoomId(roomId)
       .then(response => {
-        console.log("Received messages: ", response.data);
         setMessages(response.data);
       })
       .catch(error => {
@@ -80,17 +104,11 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
 
   useEffect(() => {
     if (open) {
-      // Cuộn xuống dưới khi modal được mở
       setTimeout(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-      }, 100); // Delay nhỏ để đảm bảo DOM đã render
+      }, 100);
     }
-  }, [open]);
-
-  useEffect(() => {
-    // Cuộn xuống dưới mỗi khi có tin nhắn mới
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [open, messages]);
 
   const handleSendMessage = () => {
     if (message.trim() && username.trim() && userID) {
@@ -119,29 +137,21 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
       <DialogContent>
         <List className="custom-messages-list">
           {messages.map((msg, index) => (
-            <ListItem
-              key={index}
-              className={`custom-message-item ${String(msg.userId) === userID ? 'custom-message-right' : 'custom-message-left'}`}
-            >
+            <ListItem key={index} className={`custom-message-item ${String(msg.userId) === userID ? 'custom-message-right' : 'custom-message-left'}`}>
               <ListItemAvatar style={{ padding: '10px' }}>
-                <Avatar style={{ width: '60px', height: '60px', fontSize: '24px' }}>
-                  {msg.username?.charAt(0) || '?'}
-                </Avatar>
+                <Avatar style={{ width: '60px', height: '60px', fontSize: '24px' }}>{msg.username?.charAt(0) || '?'}</Avatar>
               </ListItemAvatar>
 
               <ListItemText
                 primary={
                   <>
-                    <Typography variant="subtitle1" className={`custom-message-username ${String(msg.userId) === userID ? 'custom-message-info-right' : ''}`}
-                      style={{ fontSize: '20px', fontWeight: 'bold' }}   >
+                    <Typography variant="subtitle1" className={`custom-message-username ${String(msg.userId) === userID ? 'custom-message-info-right' : ''}`} style={{ fontSize: '20px', fontWeight: 'bold' }}>
                       {msg.username || 'Unknown'}
                     </Typography>
-                    <Typography component="span" variant="body2" className={`custom-message-text ${String(msg.userId) === userID ? 'custom-message-info-right' : ''}`}
-                      style={{ fontSize: '20px' }}   >
+                    <Typography component="span" variant="body2" className={`custom-message-text ${String(msg.userId) === userID ? 'custom-message-info-right' : ''}`} style={{ fontSize: '20px' }}>
                       {msg.text}
                     </Typography>
-                    <Typography component="span" variant="caption" className={`custom-message-time ${String(msg.userId) === userID ? 'custom-message-time-right' : ''}`}
-                      style={{ fontSize: '15px' }}   >
+                    <Typography component="span" variant="caption" className={`custom-message-time ${String(msg.userId) === userID ? 'custom-message-time-right' : ''}`} style={{ fontSize: '15px' }}>
                       {msg.createdAt ? new Date(msg.createdAt).toLocaleTimeString() : 'Invalid Date'}
                     </Typography>
                   </>
@@ -154,14 +164,7 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
         </List>
 
         <div className="custom-message-input-container">
-          <TextField
-            placeholder="Type a message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            fullWidth
-            inputRef={inputRef}
-            className="custom-message-input"
-          />
+          <TextField placeholder="Type a message" value={message} onChange={(e) => setMessage(e.target.value)} fullWidth inputRef={inputRef} className="custom-message-input" />
           <IconButton onClick={handleSendMessage} disabled={!message.trim()} className="custom-message-send-button">
             <SendIcon />
           </IconButton>

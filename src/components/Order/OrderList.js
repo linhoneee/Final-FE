@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import OrderService from "../../services/OrderService";
 import { useSelector } from 'react-redux';
 import ReviewModal from "../Review/ReviewModal";
+import CoordinatesModal from "./CoordinatesModal"; // Import modal tọa độ mới tạo
 import "./OrderList.css"; // Import the CSS file
 
 const OrderList = () => {
@@ -10,6 +11,8 @@ const OrderList = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedProduct, setSelectedProduct] = useState(null); // State to hold the selected product for review
+    const [showCoordinatesModal, setShowCoordinatesModal] = useState(false); // State to control coordinates modal
+    const [selectedDistanceData, setSelectedDistanceData] = useState(null); // State to hold the selected distance data
     const [currentPage, setCurrentPage] = useState(1); // State to track the current page
     const ordersPerPage = 2; // Number of orders per page
 
@@ -28,6 +31,7 @@ const OrderList = () => {
                 // Sort orders by date, with the most recent first
                 parsedOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                 setOrders(parsedOrders);
+                console.log(parsedOrders);
                 setLoading(false);
             }).catch((error) => {
                 setError(error);
@@ -38,6 +42,11 @@ const OrderList = () => {
 
     const handleReviewClick = (order, product) => {
         setSelectedProduct({ orderId: order.id, product }); // Set the selected product for the modal
+    };
+
+    const handleViewLocation = (distanceData) => {
+        setSelectedDistanceData(distanceData); // Set distance data to be displayed in the modal
+        setShowCoordinatesModal(true); // Show the modal
     };
 
     const handleReviewSuccess = async (orderId, productId) => {
@@ -100,6 +109,7 @@ const OrderList = () => {
                                         <p><strong>Name:</strong> {order.distanceData.receiverName}</p>
                                         <p><strong>Address:</strong> {`${order.distanceData.street}, ${order.distanceData.ward}, ${order.distanceData.district}, ${order.distanceData.provinceCity}`}</p>
                                     </div>
+                                    <button className="view-location-button" onClick={() => handleViewLocation(order.distanceData)}>View Location</button>
                                 </div>
                                 <div className="order-items">
                                     <h3>Items</h3>
@@ -160,6 +170,13 @@ const OrderList = () => {
                     product={selectedProduct.product}
                     onClose={() => setSelectedProduct(null)}
                     onSuccess={handleReviewSuccess}
+                />
+            )}
+            {showCoordinatesModal && (
+                <CoordinatesModal
+                    show={showCoordinatesModal}
+                    handleClose={() => setShowCoordinatesModal(false)}
+                    distanceData={selectedDistanceData}
                 />
             )}
         </div>

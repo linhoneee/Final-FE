@@ -1,7 +1,20 @@
 import toast from 'react-hot-toast';
-import { FiMessageCircle } from 'react-icons/fi'; // Import biểu tượng tin nhắn
+import { FiMessageCircle } from 'react-icons/fi';
+
+let isUserInteracted = false;
+
+// Lắng nghe sự kiện tương tác của người dùng
+document.addEventListener('click', () => {
+  isUserInteracted = true;
+});
 
 const showCustomToast = (username, text, createdAt) => {
+  // Tạo và phát âm thanh thông báo nếu người dùng đã tương tác
+  if (isUserInteracted) {
+    const notificationSound = new Audio('/notification-sound.mp3');
+    notificationSound.play().catch(error => console.error("Cannot play notification sound:", error));
+  }
+
   toast(
     (t) => (
       <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -67,4 +80,5 @@ const showCustomToast = (username, text, createdAt) => {
     }
   );
 };
+
 export default showCustomToast;

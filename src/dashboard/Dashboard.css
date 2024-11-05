@@ -1,0 +1,31 @@
+.dashboard-container {
+    display: grid;
+    grid-template-columns: 2fr 2fr; /* Tạo 2 cột với tỉ lệ 2:2 */
+    grid-template-rows: auto 1fr;   /* Tạo 2 hàng, hàng đầu tự điều chỉnh chiều cao */
+    gap: 20px; /* Khoảng cách giữa các phần */
+    height: 100vh; /* Đảm bảo toàn bộ dashboard chiếm đúng 100% chiều cao màn hình */
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: hidden; /* Ẩn phần thừa để không tạo ra thanh cuộn */
+}
+
+.salescomponent {
+    grid-column: 1;
+    grid-row: 1;
+    max-height: 50vh; /* Đặt chiều cao tối đa để tránh cuộn */
+    overflow: auto; /* Cho phép cuộn nội bộ nếu nội dung quá dài */
+}
+
+.barchart {
+    grid-column: 1;
+    grid-row: 2;
+    max-height: 50vh; /* Đặt chiều cao tối đa để tránh cuộn */
+    overflow: auto; /* Cho phép cuộn nội bộ nếu nội dung quá dài */
+}
+
+.mapchart {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    max-height: 100vh; /* Giới hạn chiều cao để không tạo thanh cuộn */
+    overflow: hidden; /* Ẩn phần thừa để không tạo ra thanh cuộn */
+}

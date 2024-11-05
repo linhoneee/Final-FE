@@ -61,7 +61,7 @@ import OrderList from './components/Order/OrderList';
 
 import ReviewResponsePage from './pages/ReviewResponsePage';
 import Draggable from 'react-draggable';
-
+import Dashboard from './dashboard/dashboard';
 
 function App() {
 
@@ -91,7 +91,6 @@ function App() {
     <Provider store={store}>
       <Router>
         <Navbar />
-        
         <Draggable
           onStart={() => setIsDragging(false)}
           onDrag={() => setIsDragging(true)}
@@ -126,6 +125,8 @@ function App() {
           <div style={{ flexGrow: 1, padding: '20px', overflowY: 'auto' }}> {/* Phần này chứa các component router */}
             <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+
 
           {/* Brand Routes */}
           <Route path="/brands" element={<BrandList />} />

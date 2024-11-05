@@ -33,6 +33,11 @@ class OrderService {
                 params: { year }
             });
         };
+
+        getCurrentLocation(orderId) {
+            return axios.get(`${URL}/${orderId}/current-location`);
+        }
+        
 }
 
 const instance = new OrderService();

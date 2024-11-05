@@ -8,9 +8,7 @@ import ImageGallery from '../another/ImageGallery';
 import StoreMap from '../another/StoreMap';
 import RecentlyViewedProducts from '../another/RecentlyViewedProducts';
 // import MatomoDashboard from '../another/MatomoDashboard';
-import BarChar from '../another/BarChart';
-import MapChart from '../another/MapChart';
-import SalesComponent from '../another/SalesComponent';
+
 const Home = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -60,9 +58,7 @@ const Home = () => {
             <StoreMap />
             <Footer /> 
             {/* <MatomoDashboard /> */}
-            <BarChar />
-            <MapChart />
-            <SalesComponent />
+
         </div>
     );
 };
