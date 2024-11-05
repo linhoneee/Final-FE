@@ -7,7 +7,9 @@ const ReportAnalysis = () => {
     salesGrowthRate: 0,
     orderGrowthRate: 0,
   });
-
+  const [dataUser, setDataUser] = useState({
+    totalUser: 0,
+  });
   useEffect(() => {
     // Hardcoded data from the given JSON
     const fetchedData = {
@@ -19,6 +21,14 @@ const ReportAnalysis = () => {
 
     // Update state with fetched data
     setData(fetchedData);
+    
+    const fetchedDataUser = {
+      totalUser: 100,
+
+    };
+
+    // Update state with fetched data
+    setDataUser(fetchedDataUser);
   }, []);
 
   return (
@@ -33,6 +43,10 @@ const ReportAnalysis = () => {
           <h3>Total Orders</h3>
           <p className="value">{data.totalOrders}</p>
           <p className="sub">{data.orderGrowthRate.toFixed(2)}% ↑ in the last month</p>
+        </div>
+        <div className="stat">
+          <h3>Total User</h3>
+          <p className="value">{dataUser.totalUser}</p>
         </div>
       </div>
     </div>

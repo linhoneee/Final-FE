@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import Tooltip from '@material-ui/core/Tooltip';
 
-// Đường dẫn tới file GeoJSON chứa bản đồ Việt Nam
 const geoUrl = "/vn.json";
 
-// Dữ liệu cứng cho các thành phố và số lượng đơn hàng
 const cityData = {
   "Kiên Giang": 21,
   "Đà Nẵng": 20,
@@ -27,15 +25,12 @@ const MapChart = () => {
       .catch((error) => console.error("Error loading GeoJSON:", error));
   }, []);
 
-  // Sắp xếp các thành phố theo số lượng đơn hàng giảm dần và lấy top 5
   const sortedCities = Object.entries(cityData)
     .sort(([, countA], [, countB]) => countB - countA)
     .slice(0, 5);
 
-  // Tạo mảng màu từ đậm đến nhạt
   const colors = ["#B22222", "#CD5C5C", "#F08080", "#FA8072", "#FFDAB9"];
 
-  // Tạo một đối tượng để ánh xạ màu sắc cho từng thành phố trong top 5
   const cityColors = sortedCities.reduce((acc, [city], index) => {
     acc[city] = colors[index];
     return acc;
@@ -50,31 +45,59 @@ const MapChart = () => {
   };
 
   return (
-    <div style={{ position: "relative", width: "100vw", height: "100vh", overflow: "hidden" }}>
+    <div>
+            {/* <h2>top 5 thành phố</h2> */}
+
+ 
+    <div style={{ 
+      position: "relative", 
+      width: "100%", 
+      maxWidth: "885px", // Giới hạn chiều rộng của container
+      maxHeight: "590px", // Giới hạn chiều cao của container
+      overflow: "hidden", 
+      padding: 0, 
+      margin: 0,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", 
+      borderRadius: "8px",
+      backgroundColor: "white"
+    }}>
       {/* Danh sách top 5 thành phố */}
-      <div style={{ position: "absolute", top: "20px", left: "20px", backgroundColor: "white", padding: "10px", borderRadius: "8px", boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", zIndex: 1 }}>
-        <h3>Top 5 Thành Phố</h3>
-        <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+      <div style={{ 
+        position: "absolute", 
+        top: "20px", 
+        left: "20px", 
+        backgroundColor: "white", 
+        padding: "5px", 
+        borderRadius: "4px", 
+        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", 
+        zIndex: 1,
+        maxWidth: "100vh",
+        transform: "translate(135px, 60px)" // Di chuyển bảng top 5
+      }}>
+        <h3 style={{ margin: 0, fontSize: "16px" }}>Top 5 Thành Phố mua hàng nhiều nhất</h3>
+        <ul style={{ listStyle: "none", padding: 0, margin: "5px 0 0 0" }}>
           {sortedCities.map(([city, count], index) => (
             <li 
               key={city} 
               style={{ 
                 display: "flex", 
                 alignItems: "center", 
-                marginBottom: "10px", 
                 fontWeight: "bold", 
+                fontSize: "14px",
                 position: "relative",
-                paddingLeft: "50px" // Tăng khoảng cách để không đè chữ
+                paddingLeft: "40px" 
               }}
             >
-              {/* Đường thẳng ở bên trái tên */}
               <span
                 style={{
                   position: "absolute",
                   left: 0,
-                  width: "30px",   // Độ rộng của đường thẳng
-                  height: "15px",  // Độ dài của đường thẳng
-                  backgroundColor: cityColors[city], // Màu của đường thẳng
+                  width: "20px",
+                  height: "10px",
+                  backgroundColor: cityColors[city],
                 }}
               />
               <span>
@@ -84,17 +107,17 @@ const MapChart = () => {
           ))}
         </ul>
       </div>
-
-      <div style={{ transform: "translateX(-20%)", width: "100%", height: "100%" }}>
+    
+      <div style={{ width: "100%", height: "600%", transform: "translate(-88px, -75px)" }}>
         <ComposableMap
           projection="geoMercator"
-          width={window.innerWidth * 1.2} 
-          height={window.innerHeight}
+          width={500} 
+          height={900} 
           projectionConfig={{
-            scale: 2000, 
-            center: [107, 15]
+            scale: 1800,
+            center: [107, 16] 
           }}
-          style={{ width: "100%", height: "100%" }}
+          style={{ width: "100%", height: "100%", margin: 0, padding: 0 }}
         >
           {geoData && (
             <Geographies geography={geoData}>
@@ -102,10 +125,9 @@ const MapChart = () => {
                 geographies.map((geo) => {
                   const provinceName = geo.properties.name;
                   const matchedProvince = checkProvinceMatch(provinceName);
-
-                  // Áp dụng màu sắc từ cityColors nếu thành phố thuộc top 5, nếu không sẽ là màu xám nhạt
+    
                   const fillColor = matchedProvince ? cityColors[matchedProvince] || "#EAEAEC" : "#EAEAEC";
-
+    
                   return (
                     <Tooltip
                       key={geo.rsmKey}
@@ -131,6 +153,7 @@ const MapChart = () => {
           )}
         </ComposableMap>
       </div>
+    </div>
     </div>
   );
 };

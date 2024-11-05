@@ -8,6 +8,7 @@ import ImageGallery from '../another/ImageGallery';
 import StoreMap from '../another/StoreMap';
 import RecentlyViewedProducts from '../another/RecentlyViewedProducts';
 // import MatomoDashboard from '../another/MatomoDashboard';
+import WeatherDisplay from '../another/WeatherDisplay';
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -58,6 +59,10 @@ const Home = () => {
             <StoreMap />
             <Footer /> 
             {/* <MatomoDashboard /> */}
+
+
+            {/* <WeatherDisplay /> */}
+
 
         </div>
     );

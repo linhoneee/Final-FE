@@ -1,140 +1,98 @@
-/* Container chính của biểu đồ */
-.bar-chart-container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 50px auto;
-    padding: 50px;
-    background: linear-gradient(145deg, #fafafa, #eaeaea);
-    border-radius: 20px;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1), inset 0 8px 16px rgba(255, 255, 255, 0.2);
-    transition: all 0.4s ease;
-    position: relative;
-    overflow: hidden;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+/* Container của biểu đồ */
+.chart-container {
+    width: 690px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Hiệu ứng khi hover vào container */
-.bar-chart-container:hover {
-    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2), inset 0 12px 20px rgba(255, 255, 255, 0.3);
-    transform: translateY(-10px);
-}
-
-/* Style cho tiêu đề của biểu đồ */
-.bar-chart-container h2 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 34px;
+/* Tiêu đề biểu đồ */
+.chart-header {
+    color: #3a7765;
+    font-size: 22px;
     font-weight: bold;
-    color: #333;
     text-align: center;
-    margin-bottom: 25px;
+    margin-bottom: 10px;
+}
+
+/* ResponsiveContainer để biểu đồ điều chỉnh kích thước */
+.responsive-bar-chart {
+    width: 100%;
+    height: 100%;
+    flex-grow: 1;
+}
+
+/* CSS cho lưới và trục của biểu đồ */
+.recharts-cartesian-grid line {
+    stroke-width: 1px;
+    stroke: #e0e0e0;
+}
+
+/* CSS tùy chỉnh cho trục X và Y */
+.axis-text {
+    font-size: 12px; /* Giảm kích thước chữ */
+    color: #3a7765; /* Thay đổi màu chữ để đồng bộ với tiêu đề */
+    font-weight: 500;
+    font-family: Arial, sans-serif;
     text-transform: uppercase;
 }
 
-.bar-chart-container h2::after {
-    content: '';
-    display: block;
-    width: 80px;
-    height: 4px;
-    background: #007bff;
-    margin: 0 auto;
-    margin-top: 8px;
-    border-radius: 3px;
+/* CSS cho các thanh của biểu đồ */
+.bar-this-period {
+    fill: url(#gradientThisPeriod);
+    stroke: #3a7765;
+    stroke-width: 1.5px;
 }
 
-/* Style cho các nút chọn biểu đồ */
-.bar-chart-container button {
-    padding: 14px 40px;
-    margin: 15px;
-    font-size: 16px;
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #ff6b6b, #f09433);
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 30px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
+.bar-last-period {
+    fill: url(#gradientLastPeriod);
+    stroke: #d2691e;
+    stroke-width: 1.5px;
 }
 
-.bar-chart-container button:hover {
-    background: linear-gradient(135deg, #f09433, #ff6b6b);
-    transform: translateY(-4px);
-    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.25);
-}
-
-/* Style cho biểu đồ cột */
-.bar-chart {
-    margin-top: 20px;
-    margin-right: 30px;
-    margin-left: 30px;
-}
-
-/* Gradient cho cột biểu đồ hiện tại */
-.bar-now {
-    fill: linear-gradient(135deg, #ff6b6b, #f09433);
-    transition: all 0.3s ease-in-out;
-    border-radius: 15px 15px 0 0;
-}
-
-/* Gradient cho cột tháng trước */
-.bar-before {
-    fill: linear-gradient(135deg, #00c6ff, #0072ff);
-    transition: all 0.3s ease-in-out;
-    border-radius: 15px 15px 0 0;
-}
-
-/* Hiệu ứng khi hover vào cột */
-.bar-now:hover, .bar-before:hover {
-    transform: scale(1.05);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-    filter: brightness(1.2);
-}
-
-/* Hiển thị tooltip mềm mại */
-.recharts-tooltip-wrapper {
-    background-color: rgba(255, 255, 255, 0.95) !important;
-    border-radius: 10px;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-    font-family: 'Poppins', sans-serif;
+/* Định dạng cho tooltip */
+.recharts-tooltip-label {
+    color: #3a7765;
+    font-weight: bold;
     font-size: 14px;
+}
+
+.recharts-tooltip-item {
     color: #333;
-    padding: 10px;
+    font-size: 13px;
 }
 
-/* Style cho các trục của biểu đồ */
-.axis {
+/* Nút chọn biểu đồ */
+.chart-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.chart-button {
+    padding: 8px 15px;
     font-size: 14px;
-    font-family: 'Poppins', sans-serif;
-    color: #666;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #5a9c8a;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
-/* Style cho grid */
-.grid {
-    stroke-dasharray: 4 4;
-    stroke: rgba(150, 150, 150, 0.2);
+.chart-button:hover {
+    background-color: #3a7765;
+    transform: scale(1.05);
 }
 
-/* Khi không có dữ liệu */
-.bar-chart-container p {
-    font-family: 'Poppins', sans-serif;
-    font-size: 18px;
-    color: #888;
-    text-align: center;
-    margin-top: 40px;
-}
-
-/* Cải thiện hiệu ứng hover cho cột */
-.bar-now:hover, .bar-before:hover {
-    fill: #ff8f00;
-    transform: scale(1.08);
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.3);
-    transition: all 0.4s ease-in-out;
-}
-
-/* Style cho legend */
-.recharts-legend-item {
-    font-family: 'Poppins', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    color: #555;
+.chart-button.active {
+    background-color: #3a7765;
+    color: #ffffff;
 }

@@ -4,7 +4,7 @@ import store from './store/store';
 import Navbar from './components/Navbar';
 import NavBarAdmin from './components/NavBarAdmin';
 import { Button } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
 
 import LoginUser from './components/User/LoginUser';
 import Home from './components/Home';
@@ -87,10 +87,45 @@ function App() {
   // }, []);
 
 
+    // Kiểm soát tab duy nhất
+    // useEffect(() => {
+    //     const tabId = 'unique-tab-id';
+    //     const existingTab = localStorage.getItem('activeTab');
+        
+    //     console.log("Checking for existing active tab...");
+    //     if (existingTab && existingTab !== tabId) {
+    //         alert("Trang web đã được mở ở tab khác. Chuyển hướng bạn về tab đầu tiên.");
+    //         console.log("Redirecting to existing tab");
+    //         window.location.href = '/'; // Chuyển hướng tab mới về trang chủ
+    //     } else {
+    //         console.log("Setting this tab as active tab with ID:", tabId);
+    //         localStorage.setItem('activeTab', tabId); // Lưu ID tab mới vào localStorage
+    //     }
+
+    //     const handleStorageChange = (event) => {
+    //         if (event.key === 'activeTab' && event.newValue !== tabId) {
+    //             alert("Tab khác đã được mở. Đóng tab này hoặc chuyển hướng.");
+    //             console.log("Closing this tab or redirecting");
+    //             window.location.href = '/';
+    //         }
+    //     };
+
+    //     window.addEventListener('storage', handleStorageChange);
+
+    //     return () => {
+    //         window.removeEventListener('storage', handleStorageChange);
+    //         if (localStorage.getItem('activeTab') === tabId) {
+    //             console.log("Removing activeTab ID on tab close:", tabId);
+    //             localStorage.removeItem('activeTab');
+    //         }
+    //     };
+    // }, []);
+
+
   return (
     <Provider store={store}>
       <Router>
-        <Navbar />
+        {/* <Navbar /> */}
         <Draggable
           onStart={() => setIsDragging(false)}
           onDrag={() => setIsDragging(true)}
@@ -120,7 +155,7 @@ function App() {
         <MessagesComponent open={isMessageModalOpen} onClose={handleCloseMessageModal} />
 
         <div style={{ display: 'flex'}}> {/* Sử dụng Flexbox để bố trí layout */}
-          {/* <NavBarAdmin />  */}
+          <NavBarAdmin /> 
           {/* NavbarAdmin sẽ nằm ở bên trái */}
           <div style={{ flexGrow: 1, padding: '20px', overflowY: 'auto' }}> {/* Phần này chứa các component router */}
             <Routes>

@@ -1,31 +1,104 @@
 .dashboard-container {
     display: grid;
-    grid-template-columns: 2fr 2fr; /* Tạo 2 cột với tỉ lệ 2:2 */
-    grid-template-rows: auto 1fr;   /* Tạo 2 hàng, hàng đầu tự điều chỉnh chiều cao */
-    gap: 20px; /* Khoảng cách giữa các phần */
-    height: 100vh; /* Đảm bảo toàn bộ dashboard chiếm đúng 100% chiều cao màn hình */
+    grid-template-columns: 2fr 3fr; /* Hai cột đều nhau */
+    grid-template-rows: 25vh 75vh; /* Hàng đầu 1/4 chiều cao, hàng thứ hai 3/4 chiều cao */
+    gap: 20px;
+    height: 100vh; /* Chiều cao toàn màn hình */
     padding: 20px;
     box-sizing: border-box;
-    overflow: hidden; /* Ẩn phần thừa để không tạo ra thanh cuộn */
+    overflow: hidden;
 }
 
 .salescomponent {
     grid-column: 1;
     grid-row: 1;
-    max-height: 50vh; /* Đặt chiều cao tối đa để tránh cuộn */
-    overflow: auto; /* Cho phép cuộn nội bộ nếu nội dung quá dài */
+    height: 25vh; /* Chiều cao 1/4 màn hình */
+    width: 100%; /* Rộng 1/2 màn hình */
+    overflow: hidden;
 }
 
 .barchart {
-    grid-column: 1;
+    grid-column: 2;
+    grid-row: 1;
+    height: 50vh; 
+    width: 100%; /* Rộng nửa phải màn hình */
+}
+.top-products {
+    margin-top: 99px;
+    grid-column: 2;
     grid-row: 2;
-    max-height: 50vh; /* Đặt chiều cao tối đa để tránh cuộn */
-    overflow: auto; /* Cho phép cuộn nội bộ nếu nội dung quá dài */
+    height: 50vh; 
+    width: 100%; /* Rộng nửa phải màn hình */
 }
 
 .mapchart {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    max-height: 100vh; /* Giới hạn chiều cao để không tạo thanh cuộn */
-    overflow: hidden; /* Ẩn phần thừa để không tạo ra thanh cuộn */
+    grid-column: 1;
+    grid-row: 2;
+    height: 75vh; /* Chiều cao 3/4 màn hình */
+    width: 100%; /* Rộng 1/2 màn hình */
+    overflow: hidden;
+}
+/* CSS cho thông báo chào mừng */
+.welcome-message {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #2e7d32;
+    color: #ffffff;
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-size: 1.4em;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    animation: fadeInOut 3s forwards, slideDown 1s ease-in-out;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.welcome-message span {
+    color: #ffeb3b;
+    margin-left: 5px;
+    font-weight: 900;
+}
+
+/* Hiệu ứng mờ dần */
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Hiệu ứng trượt xuống */
+@keyframes slideDown {
+    0% { transform: translate(-50%, -50px); }
+    100% { transform: translateX(-50%); }
+}
+
+/* CSS cho các thành phần bên trong Dashboard */
+.salescomponent, .mapchart, .barchart {
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* Tùy chỉnh thanh cuộn của Dashboard */
+.dashboard-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dashboard-container::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.dashboard-container::-webkit-scrollbar-thumb {
+    background-color: #c8e6c9;
+    border-radius: 10px;
+    border: 2px solid #f0f0f0;
 }
