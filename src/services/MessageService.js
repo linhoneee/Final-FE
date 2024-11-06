@@ -22,8 +22,16 @@ class MessageService {
         }
     });
 }
-
+  // Phương thức gửi phương tiện (ảnh, video, ghi âm)
+  sendMedia(formData) {
+    return axios.post(`${API_URL}/sendMedia`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  }
 }
+
 
 const instance = new MessageService();
 export default instance;
