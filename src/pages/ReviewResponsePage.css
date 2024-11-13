@@ -21,13 +21,9 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
 }
-.review-response-page .review-item:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 16px 40px rgba(0, 128, 0, 0.3);
-}
+
 .review-response-page .review-item {
     background-color: #ffffff;
-    border: none;
     border-radius: 15px;
     padding: 25px;
     box-shadow: 0 8px 30px rgba(0, 128, 0, 0.2);
@@ -36,14 +32,17 @@
     position: relative;
 }
 
-
+.review-response-page .review-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 16px 40px rgba(0, 128, 0, 0.3);
+}
 
 .review-response-page .review-item p {
     margin: 10px 0;
     font-size: 20px;
     color: #2c3e50;
     height: 40px;
-    }
+}
 
 .review-response-page .review-item button {
     background-color: #1abc9c;
@@ -66,7 +65,6 @@
     transform: translateY(-3px);
 }
 
-
 .review-response-page .review-item::before {
     content: '';
     position: absolute;
@@ -78,19 +76,20 @@
     transform: rotate(45deg);
     transition: all 0.6s ease;
 }
+
 .review-response-page .review-item:hover::before {
     top: -50%;
     left: -50%;
     transform: rotate(0deg);
 }
 
-
 .review-response-page .review-item p,
 .review-response-page .review-item button {
     position: relative;
 }
 
-.modal-overlay {
+/* Modal Overlay Specific to ReviewResponsePage */
+.review-response-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -100,26 +99,25 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 1050;
 }
 
-.modal-content {
+/* Modal Content Specific to ReviewResponsePage */
+.review-response-modal-content {
     background-color: #ffffff;
     border-radius: 20px;
     padding: 30px;
-    margin-left: 500px;
-    margin-top: 100px;
     width: 80%;
     max-width: 600px;
     box-shadow: 0 20px 60px rgba(0, 128, 0, 0.4);
-    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow: hidden;
-    z-index: 5051;
+    z-index: 1051;
 }
 
-.modal-content textarea {
+.review-response-modal-content textarea {
     width: 100%;
     height: 120px;
     border-radius: 10px;
@@ -130,7 +128,7 @@
     box-shadow: inset 0 2px 4px rgba(0, 128, 0, 0.1);
 }
 
-.modal-content button {
+.review-response-modal-content button {
     background-color: #1abc9c;
     color: white;
     border: none;
@@ -143,16 +141,16 @@
     transition: background-color 0.3s, transform 0.3s;
 }
 
-.modal-content button:hover {
+.review-response-modal-content button:hover {
     background-color: #16a085;
     transform: translateY(-2px);
 }
 
-.modal-content button:last-child {
+.review-response-modal-content button:last-child {
     margin-top: 10px;
     background-color: #95a5a6;
 }
 
-.modal-content button:last-child:hover {
+.review-response-modal-content button:last-child:hover {
     background-color: red;
 }

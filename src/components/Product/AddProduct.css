@@ -1,140 +1,150 @@
-/* Import a beautiful Google Font */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
-
-.add-product-container {
-  font-family: 'Montserrat', sans-serif; /* Sử dụng font chữ Montserrat */
-  max-width: 800px; /* Đặt chiều rộng tối đa của container */
-  margin: 50px auto; /* Căn giữa container và tạo khoảng cách trên dưới */
-  padding: 20px; /* Khoảng cách bên trong container */
-  background: rgba(255, 255, 255, 0.8); /* Nền mờ với hiệu ứng glassmorphism */
-  border-radius: 15px; /* Bo góc container */
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Đổ bóng cho container */
-  backdrop-filter: blur(10px); /* Làm mờ nền phía sau */
-  transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển đổi mượt mà */
+.add-product-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
 }
 
-.add-product-header {
-  text-align: center; /* Căn giữa tiêu đề */
-  color: #2c3e50; /* Màu chữ */
-  margin-bottom: 30px; /* Khoảng cách bên dưới tiêu đề */
-  font-size: 2em; /* Kích thước chữ */
-  font-weight: 700; /* Độ đậm chữ */
-  background: linear-gradient(45deg, #0f9b0f, #00b09b); /* Đặt gradient màu xanh lá cây cho chữ */
-  -webkit-background-clip: text; /* Dùng nền gradient cho chữ */
-  color: transparent; /* Làm cho phần chữ trở nên trong suốt */
+.add-product-modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  max-width: 700px;
+  width: 100%;
+  animation: fadeInScale 0.5s ease-out;
 }
 
-.add-product-form {
-  margin-bottom: 20px; /* Khoảng cách bên dưới form */
+.add-product-modal-title {
+  text-align: center;
+  color: #2e7d32; /* Consistent with modal example */
+  font-size: 33px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-transform: uppercase;
 }
 
 .add-product-form-group {
-  margin-bottom: 20px; /* Khoảng cách bên dưới mỗi nhóm form */
+  margin-bottom: 20px;
 }
 
 .add-product-label {
-  display: block; /* Hiển thị dưới dạng khối */
-  margin-bottom: 10px; /* Khoảng cách bên dưới nhãn */
-  color: #2c3e50; /* Màu chữ */
-  font-weight: 600; /* Độ đậm chữ */
+  display: block;
+  color: #0e5111; /* Consistent with modal example */
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .add-product-input,
 .add-product-textarea {
-  width: 100%; /* Chiếm toàn bộ chiều rộng */
-  padding: 10px; /* Khoảng cách bên trong */
-  border-radius: 10px; /* Bo góc */
-  border: 1px solid #ddd; /* Đường viền */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
-  transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển đổi mượt mà */
-  font-size: 1em; /* Kích thước chữ */
-  width: 750px;
+  width: 95%;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease;
 }
 
 .add-product-input:focus,
 .add-product-textarea:focus {
-  border-color: #0f9b0f; /* Đổi màu viền khi focus */
-  box-shadow: 0 4px 12px rgba(0, 155, 15, 0.4); /* Đổ bóng khi focus */
-  outline: none; /* Loại bỏ viền outline */
-}
-
-.add-product-button {
-  display: inline-block; /* Hiển thị dưới dạng khối */
-  padding: 10px 20px; /* Khoảng cách bên trong */
-  border: none; /* Loại bỏ đường viền */
-  border-radius: 50px; /* Bo góc nút */
-  background: linear-gradient(45deg, #0f9b0f, #00b09b); /* Gradient màu xanh lá cây */
-  color: white; /* Màu chữ */
-  font-size: 1em; /* Kích thước chữ */
-  font-weight: 600; /* Độ đậm chữ */
-  cursor: pointer; /* Con trỏ chuột khi hover */
-  transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển đổi mượt mà */
-}
-
-.add-product-button:hover {
-  background: linear-gradient(45deg, #00b09b, #0f9b0f); /* Gradient màu xanh lá cây khi hover */
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Đổ bóng khi hover */
-}
-
-.add-product-button:active {
-  transform: translateY(2px); /* Dịch chuyển xuống dưới khi click */
+  border-color: #4caf50; /* Consistent focus color */
+  outline: none;
+  box-shadow: inset 0 3px 6px rgba(0, 128, 0, 0.2);
 }
 
 .add-product-images {
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 10px; /* Khoảng cách bên dưới nhóm hình ảnh */
+  gap: 15px;
 }
 
 .add-product-image-container {
-  display: inline-block; /* Hiển thị dưới dạng khối */
-  margin-right: 10px; /* Khoảng cách bên phải container */
-  margin-bottom: 10px; /* Khoảng cách bên dưới container */
-  text-align: center; /* Căn giữa nội dung */
+  position: relative;
+  display: inline-block;
 }
 
 .add-product-image {
-  width: 100px; /* Chiều rộng của hình ảnh */
-  height: 100px; /* Chiều cao của hình ảnh */
-  border-radius: 10px; /* Bo góc hình ảnh */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Đổ bóng cho hình ảnh */
-  margin-bottom: 5px; /* Khoảng cách bên dưới hình ảnh */
-  cursor: pointer; /* Thay đổi con trỏ chuột thành dạng pointer khi hover */
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 .add-product-remove-button {
-  background: #e74c3c; /* Màu nền cho nút Remove */
-  border: none; /* Loại bỏ đường viền */
-  padding: 5px 10px; /* Khoảng cách bên trong nút */
-  border-radius: 5px; /* Bo góc nút */
-  color: white; /* Màu chữ */
-  cursor: pointer; /* Con trỏ chuột khi hover */
-  transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển đổi mượt mà */
-}
-
-.add-product-remove-button:hover {
-  background: #c0392b; /* Màu nền khi hover cho nút Remove */
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #d32f2f; /* Red color similar to modal */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
 }
 
 .add-product-file-label {
   display: inline-block;
-  padding: 10px 20px; /* Khoảng cách bên trong nhãn */
-  border-radius: 50px; /* Bo góc nhãn */
-  background: linear-gradient(45deg, #0f9b0f, #00b09b); /* Gradient màu xanh lá cây */
-  color: white; /* Màu chữ */
-  font-size: 1em; /* Kích thước chữ */
-  font-weight: 600; /* Độ đậm chữ */
-  cursor: pointer; /* Con trỏ chuột khi hover */
-  transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển đổi mượt mà */
-  text-align: center; /* Căn giữa chữ trong nhãn */
-  margin-top: 10px; /* Khoảng cách bên trên nhãn */
-}
-
-.add-product-file-label:hover {
-  background: linear-gradient(45deg, #00b09b, #0f9b0f); /* Gradient màu xanh lá cây khi hover */
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Đổ bóng khi hover */
+  background-color: #4caf50; /* Green color consistent with modal example */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
 }
 
 .add-product-file-input {
-  display: none; /* Ẩn input file thực sự */
+  display: none;
+}
+
+.add-product-button {
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  background-color: #4caf50; /* Green color consistent with modal */
+  color: #fff;
+  font-size: 15px;
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.add-product-button:hover {
+  background-color: #388e3c; /* Darker green on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(56, 142, 60, 0.5);
+}
+
+.add-product-button-danger {
+  background-color: #e57373; /* Red color for cancel button */
+  color: #fff;
+}
+
+.add-product-button-danger:hover {
+  background-color: #d32f2f; /* Darker red on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(211, 47, 47, 0.5);
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

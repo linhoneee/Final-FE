@@ -6,21 +6,23 @@
 }
 
 .location-icon {
-    width: 24px; /* Đặt kích thước icon */
-    height: 24px;
-    margin-right: 8px; /* Khoảng cách giữa icon và tên địa điểm */
+    width: 35px; /* Đặt kích thước icon */
+    height: 35px;
+    margin: 8px; /* Khoảng cách giữa icon và tên địa điểm */
 }
+
+
 
 .weather-container {
     position: fixed;
-    top: 0;
+    top: 90px;
     right: 0;
-    width: 350px;
+    width: 200px;
     height: 100vh;
-    background-color: #87ceeb;
+    background-color: #065a11;
     color: #fff;
     padding: 20px;
-    display: flex;
+    /* display: flex; */
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -61,11 +63,7 @@
     margin: 0 10px;
 }
 
-.current-weather p {
-    font-size: 16px;
-    margin-top: 10px;
-    text-transform: capitalize;
-}
+
 
 .forecast {
     display: flex;
@@ -73,7 +71,7 @@
     margin-top: 20px;
     width: 100%;
     padding: 10px 0;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(220, 229, 245, 0.2);
     border-radius: 8px;
 }
 
@@ -93,11 +91,7 @@
     color: #fff;
 }
 
-.ad-section {
-    margin-top: 20px;
-    text-align: center;
-    color: #fff;
-}
+
 
 .ad-image {
     width: 100%;
@@ -105,31 +99,3 @@
     margin-top: 10px;
 }
 
-.ad-section h3 {
-    font-size: 18px;
-    margin-top: 10px;
-}
-
-.ad-section ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 10px 0;
-}
-
-.ad-section li {
-    font-size: 14px;
-    margin: 5px 0;
-}
-
-.weather-type-icon {
-    width: 60px;
-    height: 60px;
-    margin-right: 10px;
-}
-
-.temperature {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 15px 0;
-}

@@ -203,13 +203,13 @@ useEffect(() => {
                                     {/* Đoạn đường từ Warehouse đến Current Shipment Location với màu nhạt */}
                                     <Polyline
                                         positions={route.slice(0, route.findIndex(point => point[0] === closestPoint[0] && point[1] === closestPoint[1]) + 1)}
-                                        color="lightblue"
+                                        color="#fc5d14"
                                     />
                                     
                                     {/* Đoạn đường từ Current Shipment Location đến Receiver với màu đậm hơn */}
                                     <Polyline
                                         positions={route.slice(route.findIndex(point => point[0] === closestPoint[0] && point[1] === closestPoint[1]))}
-                                        color="blue"
+                                        color="#f40331"
                                     />
                                 </>
                             )}

@@ -1,59 +1,113 @@
+/* Định dạng container chính */
 .gallery-container {
     text-align: center;
-    padding: 50px 20px;
-    background-color: #f4f4f4;
+    padding: 60px 20px;
+    background-color: #edf7ed; /* Light green for a fresh, eco-friendly background */
+    font-family: 'Roboto', sans-serif;
 }
 
 .gallery-container h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-}
-
-.gallery {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.gallery-item {
-    width: 30%; /* Chiều rộng mỗi phần tử chiếm 30% chiều rộng container */
-    background-color: white;
-    border: 1px solid #ddd;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.gallery-item img {
-    width: 100%; /* Đảm bảo ảnh chiếm toàn bộ chiều rộng khung */
-    height: 200px; /* Chiều cao cố định */
-    object-fit: cover; /* Đảm bảo ảnh được cắt gọn để vừa với khung mà không bị méo */
-}
-
-.gallery-text {
-    text-align: left;
-    margin-top: 20px;
-}
-
-.gallery-text h3 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #3a9a5f; /* Deep green for a natural, calming effect */
+    margin-bottom: 30px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
 }
 
+/* Định dạng gallery */
+.gallery {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 15px;
+    scroll-behavior: smooth;
+}
+
+.gallery::-webkit-scrollbar {
+    height: 8px;
+}
+
+.gallery::-webkit-scrollbar-thumb {
+    background-color: #3a9a5f; /* Green scrollbar for eco-friendly touch */
+    border-radius: 4px;
+}
+
+.gallery::-webkit-scrollbar-track {
+    background: #e0e0e0;
+}
+
+/* Định dạng từng item trong gallery */
+.gallery-item {
+    min-width: 300px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 6px 14px rgba(34, 139, 34, 0.1);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.gallery-item:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 10px 20px rgba(34, 139, 34, 0.2);
+}
+
+/* Overlay cho hình ảnh */
+.gallery-item img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: transform 0.4s ease;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.08); /* Slightly enhanced zoom for interactivity */
+}
+
+/* Định dạng phần văn bản */
+.gallery-text {
+    text-align: left;
+    margin-top: 15px;
+}
+
+.gallery-text h3 {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #3a9a5f; /* Consistent green accent */
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
 .gallery-text p {
-    font-size: 0.9rem;
+    font-size: 1rem;
+    color: #495057; /* Darker grey for contrast and readability */
     margin-bottom: 15px;
-    color: #666;
+    line-height: 1.6;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
 
 .gallery-text a {
-    color: black;
+    color: #3a9a5f; /* Green link color for consistency */
     text-decoration: none;
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 1rem;
     display: inline-block;
+    transition: color 0.3s ease;
 }
 
 .gallery-text a:hover {
+    color: #2e7d32; /* Slightly darker green for hover effect */
     text-decoration: underline;
 }

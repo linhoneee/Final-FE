@@ -172,18 +172,19 @@ const ProductList = () => {
                   ))}
                 </td>
                 <td className="product-list-actions">
-                  <button onClick={() => deleteProduct(product.id)}>Delete</button>
-                  <button onClick={() => updateProduct(product.id)}>Update</button>
-                  {!getDiscountedPrice(product.id) ? (
-                    <button onClick={() => openAddModal(product)}>Add Discount</button>
-                  ) : (
-                    <>
-                      <button onClick={() => openEditModal(product)}>Edit Discount</button>
-                      <button onClick={() => deleteDiscount(product.id)}>Delete Discount</button>
-                    </>
-                  )}
-                  {!inStock && <p style={{ color: 'red' }}>Sản phẩm đã hết hàng</p>}
-                </td>
+  <button onClick={() => deleteProduct(product.id)} className="product-list-button product-list-button-danger">Delete</button>
+  <button onClick={() => updateProduct(product.id)} className="product-list-button product-list-button-info">Update</button>
+  {!getDiscountedPrice(product.id) ? (
+    <button onClick={() => openAddModal(product)} className="product-list-button product-list-button-primary">Add Discount</button>
+  ) : (
+    <>
+      <button onClick={() => openEditModal(product)} className="product-list-button product-list-button-info">Edit Discount</button>
+      <button onClick={() => deleteDiscount(product.id)} className="product-list-button product-list-button-danger">Delete Discount</button>
+    </>
+  )}
+  {!inStock && <p style={{ color: 'red' }}>Sản phẩm đã hết hàng</p>}
+</td>
+
               </tr>
             );
           })}

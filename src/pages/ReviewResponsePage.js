@@ -82,17 +82,23 @@ const ReviewResponsePage = () => {
             )}
             
             {selectedReview && (
-                <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal-content">
-                    <h3>Respond to Review</h3>
-                    <p><strong>{selectedReview.comment}</strong></p>
-                    <textarea 
-                        value={response}
-                        onChange={(e) => setResponse(e.target.value)}
-                        placeholder="Write your response..."
-                    ></textarea>
-                    <button onClick={submitResponse}>Submit Response</button>
-                    <button onClick={closeModal}>Close</button>
-                </Modal>
+<Modal
+    isOpen={modalIsOpen}
+    onRequestClose={closeModal}
+    className="review-response-modal-content" // Nội dung modal
+    overlayClassName="review-response-modal-overlay" // Lớp phủ nền modal
+>
+    <h3>Respond to Review</h3>
+    <p><strong>{selectedReview.comment}</strong></p>
+    <textarea 
+        value={response}
+        onChange={(e) => setResponse(e.target.value)}
+        placeholder="Write your response..."
+    ></textarea>
+    <button onClick={submitResponse}>Submit Response</button>
+    <button onClick={closeModal}>Close</button>
+</Modal>
+
             )}
         </div>
     );

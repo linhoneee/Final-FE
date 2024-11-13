@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import ProductService from '../../services/ProductService';
 import InventoryService from '../../services/InventoryService';
 import Select from 'react-select';
-import './AddProductModal.css'; // Import CSS
+import './AddProductModal.css';
 
-const AddProduct = ({ warehouseId, closeModal }) => {
+const AddProductModal = ({ warehouseId, closeModal }) => {
   const [newProduct, setNewProduct] = useState({
     productId: '',
     quantity: '',
@@ -75,7 +75,7 @@ const AddProduct = ({ warehouseId, closeModal }) => {
     InventoryService.addProductToWarehouse(warehouseId, product)
       .then(() => {
         alert('Product added to warehouse successfully!');
-        closeModal(); // Đóng modal sau khi thêm sản phẩm thành công
+        closeModal(); 
       })
       .catch((error) => {
         console.error('Error adding product to warehouse:', error);
@@ -117,44 +117,47 @@ const AddProduct = ({ warehouseId, closeModal }) => {
   }));
 
   return (
-    <div className="add-product-modal">
-      <h2>Add Product to Warehouse</h2>
-      <form>
-        <label>
-          Select Product:
-          <Select
-            name="productId"
-            value={options.find(option => option.value === newProduct.productId)}
-            onChange={handleProductSelect}
-            options={options}
-            styles={customStyles}
-            formatOptionLabel={formatOptionLabel}
-          />
-        </label>
-        <br />
-        {selectedProduct && (
-          <div>
-            <h3>Selected Product Details</h3>
-            <p><strong>Name:</strong> {selectedProduct.productName}</p>
-            <p><strong>Description:</strong> {selectedProduct.descriptionDetails}</p>
-            <img
-              src={selectedProduct.primaryImage}
-              alt={selectedProduct.productName}
-              style={{ width: '100px', height: '100px' }}
+    <div className="add-product-modal-container">
+      <div className="add-product-modal-content">
+        <h2 className="add-product-modal-header">Add Product to Warehouse</h2>
+        <form className="add-product-modal-form">
+          <label className="add-product-modal-label">
+            Select Product:
+            <Select
+              name="productId"
+              value={options.find(option => option.value === newProduct.productId)}
+              onChange={handleProductSelect}
+              options={options}
+              styles={customStyles}
+              formatOptionLabel={formatOptionLabel}
+              className="add-product-modal-select"
             />
+          </label>
+          {selectedProduct && (
+            <div className="add-product-modal-selected-product">
+              <h3>Selected Product Details</h3>
+              <p><strong>Name:</strong> {selectedProduct.productName}</p>
+              <p><strong>Description:</strong> {selectedProduct.descriptionDetails}</p>
+              <img
+                src={selectedProduct.primaryImage}
+                alt={selectedProduct.productName}
+                className="add-product-modal-image"
+              />
+            </div>
+          )}
+          <label className="add-product-modal-label">
+            Quantity:
+            <input type="text" name="quantity" value={newProduct.quantity} onChange={handleInputChange} className="add-product-modal-input" />
+          </label>
+          {errors.quantity && <p className="add-product-modal-error">{errors.quantity}</p>}
+          <div className="add-product-modal-buttons">
+            <button type="button" onClick={handleAddProduct} className="add-product-modal-button add-product-modal-button-primary">Add Product</button>
+            <button type="button" onClick={closeModal} className="add-product-modal-button add-product-modal-button-secondary">Cancel</button>
           </div>
-        )}
-        <label>
-          Quantity:
-          <input type="text" name="quantity" value={newProduct.quantity} onChange={handleInputChange} />
-        </label>
-        {errors.quantity && <p style={{ color: 'red' }}>{errors.quantity}</p>}
-        <br />
-        <button type="button" onClick={handleAddProduct}>Add Product</button>
-        <button type="button" onClick={closeModal} className="cancel-button">Cancel</button>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };
 
-export default AddProduct;
+export default AddProductModal;

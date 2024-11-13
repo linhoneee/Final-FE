@@ -23,6 +23,7 @@ import { useSelector } from 'react-redux';
 import MessageService from '../../services/MessageService';
 import './MessagesComponent.css';
 import showCustomToast from './showCustomToast';
+import AttachFileIcon from '@material-ui/icons/AttachFile';
 
 const MessagesComponent = ({ open, onClose, initialMessages }) => {
   const userID = useSelector((state) => state.auth.userID);
@@ -53,10 +54,18 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
       });
     }
   }, []);
-
   const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile); // Lưu trữ thông tin media đã chọn
+    }
   };
+  
+  const handleClearMedia = () => {
+    setFile(null); // Xóa media đã chọn
+    if (fileInputRef.current) fileInputRef.current.value = ''; // Reset input file
+  };
+  
 
   const handleStartRecording = async () => {
     setOpenRecordingModal(true);
@@ -75,11 +84,25 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
     }
   };
 
+  const [recordingTime, setRecordingTime] = useState(0);
+
+  useEffect(() => {
+    let timer;
+    if (isRecording) {
+      timer = setInterval(() => setRecordingTime((prev) => prev + 1), 1000);
+    } else {
+      clearInterval(timer);
+    }
+    return () => clearInterval(timer);
+  }, [isRecording]);
+  const [finalRecordingTime, setFinalRecordingTime] = useState(null);
+
   const handleStopRecording = () => {
     mediaRecorderRef.current.stop();
     setIsRecording(false);
+    setFinalRecordingTime(recordingTime); // Lưu thời gian ghi âm cuối cùng
   };
-
+  
   const handleSend = async () => {
     if (isSending) return;
 
@@ -150,16 +173,35 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
       console.error('Room ID is undefined');
       return;
     }
-
+  
+    let heartbeatInterval; // Khai báo biến heartbeatInterval
+  
     const socket = new SockJS('http://localhost:6010/ws');
     const client = new Client({
       webSocketFactory: () => socket,
       debug: console.log,
       onConnect: () => {
+        // Gửi heartbeat ngay lập tức khi kết nối thành công
+        client.publish({
+          destination: '/app/chat.heartbeat',
+          body: JSON.stringify(userID), // Gửi ID người dùng làm heartbeat
+        });
+        console.log('Initial heartbeat sent for user:', userID); // Log xác nhận gửi heartbeat đầu tiên
+  
+        // Thiết lập gửi heartbeat mỗi 30 giây sau đó
+        heartbeatInterval = setInterval(() => {
+          client.publish({
+            destination: '/app/chat.heartbeat',
+            body: JSON.stringify(userID),
+          });
+          console.log('Heartbeat sent for user:', userID); // Log xác nhận gửi heartbeat tiếp theo
+        }, 30000);
+  
+        // Đăng ký để nhận tin nhắn mới trong phòng chat
         client.subscribe(`/topic/room/${roomId}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
           const isDuplicate = messages.some((msg) => msg.id === receivedMessage.id);
-
+  
           if (!isDuplicate) {
             if (open) {
               setMessages((prevMessages) => [...prevMessages, receivedMessage]);
@@ -171,7 +213,7 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
                 navigator.serviceWorker.ready.then((registration) => {
                   registration.showNotification(`Tin nhắn mới từ ${receivedMessage.username}`, {
                     body: receivedMessage.text,
-                    icon: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png'
+                    icon: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
                   });
                 });
               }
@@ -179,24 +221,30 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
             }
           }
         });
-      }
+      },
     });
-
+  
     client.activate();
     stompClient.current = client;
-
+  
+    // Fetch tin nhắn từ room ngay khi component mở
     MessageService.getMessagesByRoomId(roomId)
-      .then(response => {
+      .then((response) => {
         setMessages(response.data);
       })
-      .catch(error => {
-        console.error("Error fetching messages: ", error);
+      .catch((error) => {
+        console.error('Error fetching messages: ', error);
       });
-
+  
     return () => {
-      client.deactivate();
+      // Cleanup: Ngừng gửi heartbeat và ngắt kết nối WebSocket khi component bị huỷ
+      if (heartbeatInterval) {
+        clearInterval(heartbeatInterval); // Dọn dẹp heartbeatInterval
+      }
+      client.deactivate(); // Dọn dẹp kết nối WebSocket
     };
-  }, [roomId, open]);
+  }, [roomId, open, userID]);
+  
 
   useEffect(() => {
     if (open) {
@@ -206,10 +254,25 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
     }
   }, [open, messages]);
 
+  const handleCloseRecordingModal = () => {
+    setOpenRecordingModal(false);
+    setRecordingBlob(null);
+    setRecordingTime(0);
+    setFinalRecordingTime(null);
+  };
+  
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>Messages</DialogTitle>
-      <DialogContent>
+  <DialogTitle className="custom-chat-header">
+    <div className="admin-info-container">
+      <img src="/admin_logo.png" alt="Admin Logo" className="admin-logo" />
+      <div>
+        <Typography variant="h6" className="admin-name">Hỗ trợ khách hàng - Admin</Typography>
+        <Typography variant="body2" className="admin-status">Trực tuyến • Sẵn sàng hỗ trợ bạn</Typography>
+      </div>
+    </div>
+  </DialogTitle>      <DialogContent>
         <List className="custom-messages-list">
           {messages.map((msg, index) => (
             <ListItem key={index} className={`custom-message-item ${String(msg.userId) === String(userID) ? 'custom-message-right' : 'custom-message-left'}`}>
@@ -246,50 +309,85 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
           ))}
           <div ref={messagesEndRef} />
         </List>
-
         <div className="custom-message-input-container">
-          <input type="file" onChange={handleFileChange} ref={fileInputRef} style={{ marginBottom: '10px' }} />
-          <TextField placeholder="Type a message" value={message} onChange={(e) => setMessage(e.target.value)} fullWidth inputRef={inputRef} className="custom-message-input" />
-          <IconButton onClick={() => setOpenRecordingModal(true)}>
-            <MicIcon />
-          </IconButton>
-          <IconButton onClick={handleSend} disabled={isSending || (!message.trim() && !file && !recordingBlob)} className="custom-message-send-button">
-            {isSending ? <CircularProgress size={24} /> : <SendIcon />}
-          </IconButton>
-        </div>
+  {!file && (
+    <>
+      <IconButton onClick={() => fileInputRef.current.click()} className="custom-message-media-button">
+        <AttachFileIcon fontSize="large" />
+      </IconButton>
+      <input type="file" onChange={handleFileChange} ref={fileInputRef} style={{ display: 'none' }} />
+      <IconButton onClick={() => setOpenRecordingModal(true)} className="custom-message-record-button">
+        <MicIcon />
+      </IconButton>
+    </>
+  )}
+  {file && (
+    <div className="selected-media-info">
+      <Typography variant="body2">{file.name} ({(file.size / 1024).toFixed(2)} KB)</Typography>
+      <IconButton onClick={handleClearMedia} className="clear-media-button">
+        <CloseIcon />
+      </IconButton>
+    </div>
+  )}
+  <TextField
+    placeholder="Type a message"
+    value={message}
+    onChange={(e) => setMessage(e.target.value)}
+    fullWidth
+    inputRef={inputRef}
+    className="custom-message-input"
+    disabled={!!file} // Disable input when media is selected
+  />
+  <IconButton
+    onClick={handleSend}
+    disabled={isSending || (!message.trim() && !file && !recordingBlob)}
+    className="custom-message-send-button"
+  >
+    {isSending ? <CircularProgress size={24} /> : <SendIcon />}
+  </IconButton>
+</div>
+
+
+                         
       </DialogContent>
 
-      <Dialog open={openRecordingModal} onClose={() => setOpenRecordingModal(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>
-          <IconButton onClick={() => setOpenRecordingModal(false)} style={{ position: 'absolute', right: '8px', top: '8px' }}>
+      <Dialog open={openRecordingModal} onClose={handleCloseRecordingModal} maxWidth="sm" fullWidth className="recording-modal">
+      <DialogTitle>
+          <IconButton onClick={handleCloseRecordingModal} style={{ position: 'absolute', right: '8px', top: '8px' }}>
             <CloseIcon />
           </IconButton>
           Record Audio
         </DialogTitle>
         <DialogContent>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {!isRecording ? (
-              <IconButton onClick={handleStartRecording}>
-                <MicIcon fontSize="large" />
-              </IconButton>
-            ) : (
-              <IconButton onClick={handleStopRecording}>
-                <StopIcon fontSize="large" />
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+            {/* Hiển thị thời gian ghi âm */}
+            <Typography variant="body2" className="recording-time">
+              Thời gian ghi: {recordingBlob ? `${Math.floor(finalRecordingTime / 60)}:${finalRecordingTime % 60 < 10 ? `0${finalRecordingTime % 60}` : finalRecordingTime % 60}` : `${Math.floor(recordingTime / 60)}:${recordingTime % 60 < 10 ? `0${recordingTime % 60}` : recordingTime % 60}`}
+            </Typography>
+
+            {/* Hiển thị nút bắt đầu/dừng ghi âm */}
+            {!recordingBlob && (
+              <IconButton onClick={!isRecording ? handleStartRecording : handleStopRecording} className="recording-button">
+                {isRecording ? <StopIcon fontSize="large" /> : <MicIcon fontSize="large" />}
               </IconButton>
             )}
           </div>
+
+          {/* Hiển thị bản ghi âm sau khi dừng */}
           {recordingBlob && (
             <>
               <audio controls src={URL.createObjectURL(recordingBlob)} style={{ marginTop: '10px', width: '100%' }} />
               <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
-                <IconButton onClick={handleSend} color="primary">
-                  <SendIcon fontSize="large" /> Send
+                <IconButton onClick={handleSend} color="primary" className="send-audio-button">
+                  <SendIcon fontSize="large" /> Gửi
                 </IconButton>
               </div>
             </>
           )}
         </DialogContent>
       </Dialog>
+
+
     </Dialog>
   );
 };

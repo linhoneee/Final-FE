@@ -1,98 +1,117 @@
-/* Container của biểu đồ */
+/* Chart Container */
 .chart-container {
-    width: 690px;
+    width: 100%;
     height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    padding-right: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #edf7ed; /* Light green for eco-friendly feel */
+    border-radius: 12px;
+    box-sizing: border-box; /* Ensures padding doesn’t cause overflow */
+    overflow: hidden; /* Prevents content overflow */
+    box-shadow: 0 6px 16px rgba(34, 139, 34, 0.1);
+    transition: box-shadow 0.3s ease;
 }
 
-/* Tiêu đề biểu đồ */
+.chart-container:hover {
+    box-shadow: 0 8px 18px rgba(34, 139, 34, 0.2);
+}
+
+/* Chart Header */
 .chart-header {
     color: #3a7765;
-    font-size: 22px;
-    font-weight: bold;
+    font-size: 1.6rem;
+    font-weight: 700;
     text-align: center;
     margin-bottom: 10px;
+    letter-spacing: 0.5px;
 }
 
-/* ResponsiveContainer để biểu đồ điều chỉnh kích thước */
+/* Responsive Bar Chart */
 .responsive-bar-chart {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 40px); /* Adjust for header height */
     flex-grow: 1;
 }
 
-/* CSS cho lưới và trục của biểu đồ */
+/* Grid Lines */
 .recharts-cartesian-grid line {
     stroke-width: 1px;
     stroke: #e0e0e0;
 }
 
-/* CSS tùy chỉnh cho trục X và Y */
+/* Axis Styling */
 .axis-text {
-    font-size: 12px; /* Giảm kích thước chữ */
-    color: #3a7765; /* Thay đổi màu chữ để đồng bộ với tiêu đề */
-    font-weight: 500;
-    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: #3a7765;
+    font-weight: 600;
     text-transform: uppercase;
+    font-family: 'Arial', sans-serif;
 }
 
-/* CSS cho các thanh của biểu đồ */
+/* Bars Styling */
 .bar-this-period {
     fill: url(#gradientThisPeriod);
     stroke: #3a7765;
     stroke-width: 1.5px;
+    transition: transform 0.3s ease;
 }
 
 .bar-last-period {
     fill: url(#gradientLastPeriod);
     stroke: #d2691e;
     stroke-width: 1.5px;
+    transition: transform 0.3s ease;
 }
 
-/* Định dạng cho tooltip */
+.bar-this-period:hover, .bar-last-period:hover {
+    transform: scaleY(1.05);
+}
+
+/* Tooltip Styling */
 .recharts-tooltip-label {
     color: #3a7765;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 0.95rem;
 }
 
 .recharts-tooltip-item {
     color: #333;
-    font-size: 13px;
+    font-size: 0.85rem;
 }
 
-/* Nút chọn biểu đồ */
+/* Chart Toggle Buttons */
 .chart-buttons {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
     margin-bottom: 15px;
 }
 
 .chart-button {
-    padding: 8px 15px;
-    font-size: 14px;
-    font-weight: bold;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: 700;
     color: #ffffff;
     background-color: #5a9c8a;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .chart-button:hover {
     background-color: #3a7765;
-    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(34, 139, 34, 0.15);
+    transform: translateY(-2px);
 }
 
 .chart-button.active {
     background-color: #3a7765;
     color: #ffffff;
+    box-shadow: 0 4px 8px rgba(34, 139, 34, 0.2);
 }

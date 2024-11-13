@@ -1,0 +1,115 @@
+/* AddShipping.css */
+
+.add-shipping-modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+}
+
+.add-shipping-modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  max-width: 600px;
+  width: 100%;
+  animation: add-shipping-fadeInScale 0.5s ease-out;
+}
+
+.add-shipping-modal-header {
+  text-align: center;
+  color: #2e7d32;
+  font-size: 33px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+}
+
+.add-shipping-modal-form-group {
+  margin-bottom: 20px;
+}
+
+.add-shipping-modal-label {
+  display: block;
+  color: #0e5111;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.add-shipping-modal-input {
+  width: 95%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease;
+}
+
+.add-shipping-modal-input:focus {
+  border-color: #4caf50;
+  outline: none;
+  box-shadow: inset 0 3px 6px rgba(0, 128, 0, 0.2);
+}
+
+.add-shipping-modal-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.add-shipping-modal-btn {
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-size: 15px;
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  width: 100%;
+  text-align: center;
+}
+
+.add-shipping-modal-btn-primary {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.add-shipping-modal-btn-primary:hover {
+  background-color: #388e3c;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(56, 142, 60, 0.5);
+}
+
+.add-shipping-modal-btn-danger {
+  background-color: #e57373;
+  color: #fff;
+}
+
+.add-shipping-modal-btn-danger:hover {
+  background-color: #d32f2f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(211, 47, 47, 0.5);
+}
+
+@keyframes add-shipping-fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

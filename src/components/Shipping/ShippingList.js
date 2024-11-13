@@ -1,33 +1,50 @@
 import { useEffect, useState } from "react";
 import ShippingService from "../../services/ShippingService";
-import { useNavigate } from "react-router-dom";
+import AddShipping from "./AddShipping";
+import UpdateShipping from "./UpdateShipping";
+import './ShippingList.css';
 
 const ShippingList = () => {
   const [shippings, setShippings] = useState([]);
-  const navigate = useNavigate();
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedShipping, setSelectedShipping] = useState(null);
 
   useEffect(() => {
+    fetchShippings();
+  }, []);
+
+  const fetchShippings = () => {
     ShippingService.getAllShipping()
       .then((response) => {
         setShippings(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.error('Error fetching shipping data:', error);
       });
-  }, []);
-
-  const addShipping = () => {
-    navigate("/addshipping");
   };
 
-  const updateShipping = (id) => {
-    navigate(`/updateshipping/${id}`);
+  const openAddModal = () => {
+    setShowAddModal(true);
+  };
+
+  const openEditModal = (shipping) => {
+    setSelectedShipping(shipping);
+    setShowEditModal(true);
+  };
+
+  const closeAddModal = () => {
+    setShowAddModal(false);
+  };
+
+  const closeEditModal = () => {
+    setShowEditModal(false);
+    setSelectedShipping(null);
   };
 
   const deleteShipping = (id) => {
     ShippingService.deleteShippingById(id)
-      .then((response) => {
+      .then(() => {
         setShippings(shippings.filter((shipping) => shipping.id !== id));
       })
       .catch((error) => {
@@ -36,18 +53,17 @@ const ShippingList = () => {
   };
 
   return (
-    <div>
-      <button onClick={addShipping}>Add</button>
-
-      <h2>List Shipping Type</h2>
-      <table>
+    <div className="shipping-list-container">
+      <h2 className="shipping-list-title">Danh sách loại vận chuyển</h2>
+      <button onClick={openAddModal} className="shipping-list-btn shipping-list-btn-primary">Thêm loại vận chuyển</button>
+      <table className="shipping-list-table shipping-list-table-striped">
         <thead>
           <tr>
-            <th>id</th>
-            <th>name</th>
+            <th>ID</th>
+            <th>Tên</th>
             <th>Giá theo km</th>
-            <th>giá theo kg</th>
-            <th>hành động</th>
+            <th>Giá theo kg</th>
+            <th>Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -58,13 +74,33 @@ const ShippingList = () => {
               <td>{shipping.pricePerKm}</td>
               <td>{shipping.pricePerKg}</td>
               <td>
-                <button onClick={() => updateShipping(shipping.id)}>Update</button>
-                <button onClick={() => deleteShipping(shipping.id)}>Delete</button>
+                <button onClick={() => openEditModal(shipping)} className="shipping-list-btn shipping-list-btn-info">Chỉnh sửa</button>
+                <button onClick={() => deleteShipping(shipping.id)} className="shipping-list-btn shipping-list-btn-danger">Xóa</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {showAddModal && (
+        <div className="modal-overlay" onClick={closeAddModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <AddShipping closeModal={closeAddModal} fetchShippings={fetchShippings} />
+          </div>
+        </div>
+      )}
+
+      {showEditModal && selectedShipping && (
+        <div className="modal-overlay" onClick={closeEditModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <UpdateShipping
+              shipping={selectedShipping}
+              closeModal={closeEditModal}
+              fetchShippings={fetchShippings}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

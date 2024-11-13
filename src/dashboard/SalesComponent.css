@@ -1,49 +1,65 @@
+/* Report Analysis Container */
 .report-analysis {
-  width: 100%;                 /* Chiếm toàn bộ chiều rộng của component cha */
-  height: 100%;                /* Chiếm toàn bộ chiều cao của component cha */
+  width: 100%;
+  height: 100%;
   display: flex;
-  justify-content: center;     /* Căn giữa theo chiều ngang */
-  align-items: center;         /* Căn giữa theo chiều dọc */
-  box-sizing: border-box;      /* Đảm bảo padding không làm tăng kích thước */
-  padding: 20px;               /* Khoảng cách bên trong component */
-  background-color: #f5f5f5;   /* Màu nền nhẹ */
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;            /* Ẩn phần bị tràn ra ngoài */
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 20px;
+  background-color: #edf7ed; /* Light eco-friendly green background */
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(34, 139, 34, 0.1);
+  overflow: hidden;
 }
 
+/* Stats Container */
 .stats {
-  width: 100%;                 /* Đảm bảo các stats chiếm toàn bộ chiều rộng */
+  width: 100%;
   display: flex;
-  justify-content: space-between; /* Căn đều các phần tử con theo chiều ngang */
-  gap: 10px;                   /* Khoảng cách giữa các stat */
+  justify-content: space-between;
+  gap: 15px;
 }
 
+/* Individual Stat Block */
 .stat {
-  flex: 1;                     /* Đảm bảo các stat chia đều không gian */
-  min-width: 0;                /* Đảm bảo các stat không bị quá nhỏ để xuống dòng */
-  max-width: 250px;            /* Đặt chiều rộng tối đa để giữ cân đối */
+  flex: 1;
+  min-width: 0;
+  max-width: 250px;
   text-align: center;
-  padding: 15px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(34, 139, 34, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.stat:hover {
+  transform: translateY(-5px); /* Lift effect for interactivity */
+  box-shadow: 0 6px 16px rgba(34, 139, 34, 0.15);
+}
+
+/* Stat Heading */
 .stat h3 {
-  font-size: 16px;
+  font-size: 1rem;
   margin: 0;
-  color: #333;
+  color: #3a9a5f; /* Green for consistency with GreenHome theme */
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 10px;
 }
 
+/* Stat Value */
 .stat .value {
-  font-size: 24px;
+  font-size: 1.8rem;
   font-weight: bold;
-  color: #4CAF50;              /* Màu nổi bật cho giá trị */
+  color: #4CAF50; /* Highlighted green for emphasis */
   margin: 10px 0;
 }
 
+/* Subtext (Growth Rate) */
 .stat .sub {
-  font-size: 14px;
+  font-size: 0.9rem;
   color: #888;
+  font-style: italic;
 }

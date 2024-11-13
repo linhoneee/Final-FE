@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import './ImageSlider.css';  // Import file CSS
+import './ImageSlider.css';
 
 const ImageSlider = () => {
     const slides = [
@@ -21,37 +21,39 @@ const ImageSlider = () => {
     ];
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [progress, setProgress] = useState(0); // State để theo dõi thanh tiến trình
+    const [progress, setProgress] = useState(0);
 
-    // Sử dụng useCallback để ổn định hàm
     const nextImage = useCallback(() => {
         setCurrentImageIndex((prevIndex) =>
             prevIndex === slides.length - 1 ? 0 : prevIndex + 1
         );
-        setProgress(0); // Reset thanh tiến trình mỗi khi chuyển ảnh
+        setProgress(0);
     }, [slides.length]);
 
     const prevImage = useCallback(() => {
         setCurrentImageIndex((prevIndex) =>
             prevIndex === 0 ? slides.length - 1 : prevIndex - 1
         );
-        setProgress(0); // Reset thanh tiến trình khi người dùng chuyển ảnh thủ công
+        setProgress(0);
     }, [slides.length]);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setProgress(prev => (prev >= 100 ? 0 : prev + 1)); // Cập nhật thanh tiến trình
-            if (progress >= 100) nextImage(); // Chuyển ảnh khi thanh tiến trình đạt 100%
-        }, 40); // Tốc độ cập nhật thanh tiến trình để hoàn thành sau 4 giây
+            setProgress((prev) => {
+                if (prev >= 100) {
+                    nextImage();
+                    return 0;
+                }
+                return prev + 0.5;
+            });
+        }, 20); // Cập nhật nhanh để thanh tiến trình mượt hơn
 
-        return () => clearInterval(interval); // Xóa interval khi component unmount
+        return () => clearInterval(interval);
     }, [progress, nextImage]);
 
     return (
         <div className="slider">
-            <button className="prevButton" onClick={prevImage}>
-                &#60;
-            </button>
+            <button className="prevButton" onClick={prevImage}>&#60;</button>
             <div className="slide">
                 <img src={slides[currentImageIndex].src} alt="Poster" className="image" />
                 <div className="text-overlay">
@@ -62,9 +64,7 @@ const ImageSlider = () => {
                     <div className="progress" style={{ width: `${progress}%` }}></div>
                 </div>
             </div>
-            <button className="nextButton" onClick={nextImage}>
-                &#62;
-            </button>
+            <button className="nextButton" onClick={nextImage}>&#62;</button>
         </div>
     );
 };

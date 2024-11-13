@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserService from '../../services/UserService';
-
+import './UserList.css';
+import AddUser from "./AddUser";
 const UserList = () => {
     const [users, setUsers] = useState([]);
     const navigate = useNavigate();
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
 
     useEffect(() => {
         fetchUsers();
@@ -30,7 +33,7 @@ const UserList = () => {
     const deleteUser = async (id) => {
         try {
             await UserService.deleteUser(id);
-            fetchUsers(); // Refresh the user list after deletion
+            fetchUsers();
         } catch (error) {
             console.error('Failed to delete user:', error);
         }
@@ -39,7 +42,7 @@ const UserList = () => {
     const blockUser = async (id) => {
         try {
             await UserService.blockUser(id);
-            fetchUsers(); // Refresh the user list after blocking/unblocking
+            fetchUsers();
         } catch (error) {
             console.error('Failed to block/unblock user:', error);
         }
@@ -50,10 +53,10 @@ const UserList = () => {
     };
 
     return (
-        <div>
-            <h2>Users List</h2>
-            <button onClick={addUser}>Add User</button>
-            <table>
+        <div className="user-list-container">
+            <h2 className="user-list-title">Users List</h2>
+            <button onClick={() => setShowAddModal(true)} className="category-list-btn category-list-btn-primary">Add user</button>
+            <table className="user-list-table user-list-table-striped">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -79,9 +82,9 @@ const UserList = () => {
                             <td>{user.roles}</td>
                             <td>{user.blocked ? 'Blocked' : 'Active'}</td>
                             <td>
-                                <button onClick={() => editUser(user.id)}>Edit</button>
-                                <button onClick={() => deleteUser(user.id)}>Delete</button>
-                                <button onClick={() => blockUser(user.id)}>
+                                <button onClick={() => editUser(user.id)} className="user-list-btn user-list-btn-info">Edit</button>
+                                <button onClick={() => deleteUser(user.id)} className="user-list-btn user-list-btn-danger">Delete</button>
+                                <button onClick={() => blockUser(user.id)} className="user-list-btn user-list-btn-info">
                                     {user.blocked ? 'Unblock' : 'Block'}
                                 </button>
                             </td>
@@ -89,6 +92,8 @@ const UserList = () => {
                     ))}
                 </tbody>
             </table>
+            {showAddModal && <AddUser onClose={() => setShowAddModal(false)} />}
+
         </div>
     );
 };

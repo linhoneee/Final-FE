@@ -1,23 +1,111 @@
-/* Avatar của phòng */
-.room-avatar {
-  margin-right: 20px !important;
-  background-color: #4CAF50 !important;
-  color: white !important;
-  font-size: 24px !important;
-  width: 60px !important;
-  height: 60px !important;
+/* Danh sách phòng chat */
+.room-list {
+  max-width: 400px;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  padding: 15px;
+  overflow-y: auto;
+  max-height: 500px;
 }
 
-/* Danh sách phòng chat */
+/* Mỗi mục phòng */
 .room-list-item {
-  transition: background-color 0.3s ease;
+  padding: 15px 20px;
+  border-radius: 10px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: #fafafa;
+}
+
+.room-list-item:hover {
+  background-color: #e0f7e0;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transform: translateY(-3px);
 }
 
 .room-list-item.selected-room {
-  background-color: #d0e8d8 !important; /* Màu nền khi phòng được chọn */
+  background-color: #c8e6c9 !important;
+  border-left: 4px solid #388e3c;
 }
 
-/* Thêm các hiệu ứng hover nếu muốn */
-.room-list-item:hover {
-  background-color: #e0f7fa;
+/* Avatar của phòng với border */
+.avatar-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.room-avatar {
+  background-color: #4CAF50 !important;
+  color: white !important;
+  font-size: 20px !important;
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50%;
+  border: 3px solid #c8e6c9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* Thông tin phòng chat */
+.room-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.room-info .MuiListItemText-primary {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.3;
+}
+
+/* Sắp xếp tin nhắn, badge số chưa đọc, và trạng thái online */
+.message-and-unread {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.room-info .MuiListItemText-secondary {
+  font-size: 0.9rem;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+/* Badge số lượng tin nhắn chưa đọc */
+.unread-count-badge {
+  background-color: #ff5722;
+  color: white;
+  font-size: 0.75rem;
+  min-width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  padding: 0 6px;
+  margin-left: 5px; /* Khoảng cách giữa tin nhắn và badge */
+}
+
+/* Trạng thái "Đang online" với điều chỉnh vị trí */
+.online-status {
+  font-size: 0.8rem;
+  color: #388e3c;
+  margin-left: auto;
+  font-weight: 500;
+  white-space: nowrap;
+  position: relative;
+  top: 10px; /* Di chuyển xuống dưới 3px */
 }

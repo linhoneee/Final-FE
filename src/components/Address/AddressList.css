@@ -1,0 +1,151 @@
+/* Container và Tiêu đề */
+.address-list-container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 30px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    background: linear-gradient(145deg, #aae7bf, #ffffff);
+  }
+  
+  .address-list-container h2 {
+    text-align: center;
+    color: #2e7d32;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+  }
+  
+  /* Button Styling */
+  .address-list-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .address-list-buttons button {
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    color: #fff;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Primary Button */
+  .address-list-buttons button:first-child {
+    background-color: #4caf50;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+  }
+  
+  .address-list-buttons button:first-child:hover {
+    background-color: #388e3c;
+    box-shadow: 0 6px 16px rgba(56, 142, 60, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  /* Secondary Button */
+  .address-list-buttons button:last-child {
+    background-color: #66bb6a;
+    box-shadow: 0 4px 12px rgba(102, 187, 106, 0.4);
+  }
+  
+  .address-list-buttons button:last-child:hover {
+    background-color: #43a047;
+    box-shadow: 0 6px 16px rgba(67, 160, 71, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  /* Table Styling */
+  .address-list-table {
+    width: 100%;
+    margin-top: 30px;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .address-list-table th,
+  .address-list-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+    font-size: 16px;
+  }
+  
+  .address-list-table th {
+    background-color: #a5d6a7;
+    font-weight: 700;
+    color: #1b5e20;
+    text-transform: uppercase;
+  }
+  
+  .address-list-table tbody tr:nth-of-type(odd) {
+    background-color: #e8f5e9;
+  }
+  
+  .address-list-table tbody tr:nth-of-type(even) {
+    background-color: #ffffff;
+  }
+  
+  .address-list-table tbody tr:hover {
+    background-color: #c8e6c9;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Action Buttons */
+  .action-button {
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 0 5px;
+    border: none;
+    transition: all 0.3s ease;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Edit Button */
+  .action-button.edit-button {
+    background-color: #66bb6a;
+    box-shadow: 0 4px 12px rgba(102, 187, 106, 0.4);
+  }
+  
+  .action-button.edit-button:hover {
+    background-color: #43a047;
+    box-shadow: 0 6px 16px rgba(67, 160, 71, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  /* Delete Button */
+  .action-button.delete-button {
+    background-color: #e57373;
+    box-shadow: 0 4px 12px rgba(229, 115, 115, 0.4);
+  }
+  
+  .action-button.delete-button:hover {
+    background-color: #d32f2f;
+    box-shadow: 0 6px 16px rgba(211, 47, 47, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  /* Set Primary Button */
+  .action-button.primary-button {
+    background-color: #4caf50;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+  }
+  
+  .action-button.primary-button:hover {
+    background-color: #388e3c;
+    box-shadow: 0 6px 16px rgba(56, 142, 60, 0.5);
+    transform: translateY(-2px);
+  }
+  

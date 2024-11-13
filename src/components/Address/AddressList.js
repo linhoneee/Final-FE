@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import AddressService from '../../services/AddressService';
 import AddAddressPlusModal from './AddAddressPlusModal'; 
-
+import './AddressList.css';
 const AddressList = () => {
   const [addresses, setAddresses] = useState([]);
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
@@ -58,9 +58,10 @@ const AddressList = () => {
     <div className="address-list-container">
       <h2>Address List</h2>
       <div className="address-list-buttons">
-        <button onClick={() => navigate(`/user/${userID}/add-address`)}>Add Address</button> {/* Existing Add Address button */}
-        <button onClick={handleShowModal}>Select Address</button> {/* New button to show modal */}
-      </div>
+  <button onClick={() => navigate(`/user/${userID}/add-address`)} className="address-list-button address-list-button-primary">Add Address</button>
+  <button onClick={handleShowModal} className="address-list-button address-list-button-secondary">Select Address</button>
+</div>
+
       <table>
         <thead>
           <tr>
@@ -88,13 +89,13 @@ const AddressList = () => {
               <td>{address.isPrimary ? 'Mặc định' : ' '}</td>
               {/* <td>{address.latitude}</td>
               <td>{address.longitude}</td> */}
-              <td>
-                <button className="action-button" onClick={() => navigate(`/user/${userID}/edit-address/${address.id}`)}>Edit</button>
-                <button className="action-button" onClick={() => deleteAddress(address.id)}>Delete</button>
-                {!address.isPrimary && (
-                  <button className="action-button" onClick={() => setPrimaryAddress(address.id)}>Thiết lập mặc định</button>
-                )}
-              </td>
+    <td>
+  <button className="action-button edit-button" onClick={() => navigate(`/user/${userID}/edit-address/${address.id}`)}>Edit</button>
+  <button className="action-button delete-button" onClick={() => deleteAddress(address.id)}>Delete</button>
+  {!address.isPrimary && (
+    <button className="action-button primary-button" onClick={() => setPrimaryAddress(address.id)}>Thiết lập mặc định</button>
+  )}
+</td>
             </tr>
           ))}
         </tbody>

@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import CategoryService from '../../services/CategoryService';
+import './CategoryList.css';
+import AddCategory from "./AddCategory";
+import EditCategory from "./EditCategory";
 
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
-  const navigate = useNavigate();
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [categoryToEdit, setCategoryToEdit] = useState(null);
 
   useEffect(() => {
     CategoryService.getAllCategories().then((response) => {
@@ -18,16 +22,21 @@ const CategoryList = () => {
     });
   };
 
+  const handleEditClick = (category) => {
+    setCategoryToEdit(category); // Pass the whole category object
+    setShowEditModal(true);
+  };
+
   return (
-    <div className="container">
-      <h2 className="text-center">Category List</h2>
-      <button onClick={() => navigate('/add-category')} className="btn btn-primary mb-2">Add Category</button>
-      <table className="table table-striped">
+    <div className="category-list-container">
+      <h2 className="category-list-title">Danh sách danh mục</h2>
+      <button onClick={() => setShowAddModal(true)} className="category-list-btn category-list-btn-primary">Thêm danh mục</button>
+      <table className="category-list-table category-list-table-striped">
         <thead>
           <tr>
             <th>ID</th>
-            <th>Name</th>
-            <th>Actions</th>
+            <th>Tên</th>
+            <th>Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -36,13 +45,21 @@ const CategoryList = () => {
               <td>{category.id}</td>
               <td>{category.name}</td>
               <td>
-                <button onClick={() => navigate(`/edit-category/${category.id}`)} className="btn btn-info">Edit</button>
-                <button onClick={() => deleteCategory(category.id)} className="btn btn-danger">Delete</button>
+                <button onClick={() => handleEditClick(category)} className="category-list-btn category-list-btn-info">Chỉnh sửa</button>
+                <button onClick={() => deleteCategory(category.id)} className="category-list-btn category-list-btn-danger">Xóa</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      
+      {showAddModal && <AddCategory onClose={() => setShowAddModal(false)} />}
+      {showEditModal && (
+        <EditCategory
+          category={categoryToEdit} // Pass categoryToEdit as a prop
+          onClose={() => setShowEditModal(false)}
+        />
+      )}
     </div>
   );
 };

@@ -1,51 +1,121 @@
-/* src/components/Message/MessagesComponent.css */
-/* CSS cho message của user chỉnh sang được bên phải  */
+/* Dialog cho MessagesComponent */
+.messages-component-dialog {
+  max-width: 80%;
+  width: 100%;
+}
+
+.messages-component-dialog .MuiDialogTitle-root {
+  background-color: #e6f7e9;
+  font-size: 24px;
+  font-weight: bold;
+  color: #388e3c;
+}
+
+/* List tin nhắn */
+.custom-messages-list {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 10px 20px;
+}
+
+/* Tin nhắn bên phải (user) */
 .custom-message-item.custom-message-right {
   flex-direction: row-reverse;
+  text-align: right;
+  margin-bottom: 15px;
 }
 
-/* CSS cho message bên trái  */
-.custom-message-item.custom-message-left .custom-message-text-container {
-  background-color: #f1f1f1; /* Background màu trắng nhạt */
+.custom-message-item.custom-message-right .custom-message-text-container {
+  background: linear-gradient(135deg, #b2f9b4, #62c462);
+  color: white;
   padding: 18px;
-  border-radius: 8px;
-  max-width: 50%;
+  border-radius: 18px 18px 4px 18px;
+  max-width: 60%;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Tin nhắn bên trái (đối tác) */
+.custom-message-item.custom-message-left {
+  flex-direction: row;
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+.custom-message-item.custom-message-left .custom-message-text-container {
+  background-color: #f5f7fa;
+  color: #333;
+  padding: 18px;
+  border-radius: 18px 18px 18px 4px;
+  max-width: 60%;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Avatar cho user */
+.custom-message-item .MuiListItemAvatar-root {
+  padding: 10px;
+}
+
+.custom-message-item .MuiAvatar-root {
+  width: 50px;
+  height: 50px;
+  font-size: 20px;
+}
+
+/* Username styling */
+.custom-message-username {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #4caf50;
+}
+
+.custom-message-username.custom-message-info-right {
+  color: #ffffff;
+}
+
+/* Message text styling */
+.custom-message-text {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.custom-message-text.custom-message-info-right {
+  color: #ffffff;
+}
+
+/* Thời gian tin nhắn */
 .custom-message-time {
   display: block;
+  font-size: 12px;
+  color: #99a3b2;
   text-align: right;
   margin-top: 5px;
-}
-
-/* CSS cho message bên phải  */
-.custom-message-item.custom-message-right .custom-message-text-container {
-  background-color: #f1f1f1; /* Background màu trắng nhạt */
-  padding: 18px;
-  border-radius: 8px;
-  max-width: 50%;
-  text-align: right;
 }
 
 .custom-message-time-right {
   display: block;
+  font-size: 12px;
+  color: #d6ffe4;
   text-align: left;
   margin-top: 5px;
+  opacity: 0.8;
 }
+/* Enhanced Styles for Icons in Message Input Bar */
 
-/* CSS for the message input container */
+/* General Container for Message Input */
 .custom-message-input-container {
   display: flex;
   align-items: center;
-  padding: 10px;
-  background-color: #f8f8f8; /* Light gray background for the input area */
-  border-top: 1px solid #e0e0e0; /* Add a top border to separate from the message list */
-  box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.1); /* Add a slight shadow for depth */
+  padding: 12px;
+  background-color: #e6f7e9;
+  border-top: 1px solid #c5e3cd;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+  gap: 8px;
 }
 
-/* CSS for the send button */
-.custom-message-send-button {
-  background-color: #007bff;
+/* Attach File Icon */
+.custom-message-media-button {
+  background: linear-gradient(135deg, #a5d6a7, #81c784);
   color: white;
   border-radius: 50%;
   width: 45px;
@@ -53,5 +123,297 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Add a shadow for the button */
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.custom-message-media-button:hover {
+  background: linear-gradient(135deg, #66bb6a, #338a3e);
+  transform: scale(1.1);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+/* Record Button */
+.custom-message-record-button {
+  background: linear-gradient(135deg, #a5d6a7, #81c784);
+  color: white;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.custom-message-record-button:hover {
+  background: linear-gradient(135deg, #66bb6a, #338a3e);
+  transform: scale(1.1);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+/* Send Button */
+.custom-message-send-button {
+  background: linear-gradient(135deg, #66bb6a, #388e3c);
+  color: white;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.custom-message-send-button:hover {
+  background: linear-gradient(135deg, #338a3e, #1b5e20);
+  transform: scale(1.1);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* Close (Clear Media) Button */
+.clear-media-button {
+  background: linear-gradient(135deg, #ef9a9a, #e57373);
+  color: white;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  margin-left: 8px;
+}
+
+.clear-media-button:hover {
+  background: linear-gradient(135deg, #e57373, #c62828);
+  transform: scale(1.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.custom-message-send-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+/* Recording dialog */
+.messages-component-recording-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.messages-component-recording-dialog .MuiDialogTitle-root {
+  position: relative;
+  font-size: 20px;
+  font-weight: bold;
+  color: #388e3c;
+}
+
+.messages-component-recording-dialog .MuiIconButton-root {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+}
+
+.messages-component-recording-dialog audio {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.messages-component-recording-dialog .send-audio-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+/* Thông tin media đã chọn */
+.selected-media-info {
+  display: flex;
+  align-items: center;
+  background-color: #e0f7fa; /* Background màu xanh nhạt */
+  padding: 8px;
+  border-radius: 8px;
+  margin-right: 8px;
+  color: #00796b; /* Màu xanh đậm */
+  font-weight: bold;
+}
+
+.clear-media-button {
+  color: #d32f2f; /* Màu đỏ cho nút xóa */
+  margin-left: 8px;
+}
+
+.clear-media-button:hover {
+  color: #f44336; /* Màu đỏ đậm khi hover */
+}
+/* Tùy chỉnh thanh cuộn cho danh sách tin nhắn */
+.custom-messages-list {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 10px 20px;
+  scroll-behavior: smooth;
+}
+
+/* Tùy chỉnh thanh cuộn (dành cho trình duyệt WebKit như Chrome và Safari) */
+.custom-messages-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-messages-list::-webkit-scrollbar-track {
+  background: #f0f0f0; /* Nền thanh cuộn */
+  border-radius: 10px;
+}
+
+.custom-messages-list::-webkit-scrollbar-thumb {
+  background: #a3d9a5; /* Màu thanh cuộn */
+  border-radius: 10px;
+  border: 2px solid #f0f0f0; /* Tạo khoảng cách giữa thanh cuộn và track */
+}
+
+.custom-messages-list::-webkit-scrollbar-thumb:hover {
+  background: #82c084; /* Màu thanh cuộn khi hover */
+}
+
+/* Tùy chỉnh thanh cuộn (dành cho Firefox) */
+.custom-messages-list {
+  scrollbar-width: thin;
+  scrollbar-color: #a3d9a5 #f0f0f0;
+}
+/* CSS cho modal ghi âm với phong cách hiện đại */
+.recording-modal .MuiDialogTitle-root {
+  font-size: 22px;
+  font-weight: bold;
+  color: #1b5e20;
+  text-align: center;
+  padding: 15px 0;
+  border-bottom: 2px solid #e0f2f1;
+  background: linear-gradient(135deg, #e8f5e9, #a5d6a7);
+  border-radius: 10px 10px 0 0;
+}
+
+.recording-modal .MuiDialogContent-root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 30px;
+  background-color: #f1f8f6;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.recording-modal .recording-time {
+  font-size: 18px;
+  font-weight: bold;
+  color: #d32f2f;
+  margin-bottom: 20px;
+  background: #ffebee;
+  padding: 10px 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.recording-modal .recording-button {
+  background: linear-gradient(135deg, #66bb6a, #388e3c);
+  color: white;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  margin-top: 15px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.recording-modal .recording-button:hover {
+  transform: scale(1.15);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.recording-modal .stop-recording-button {
+  background: linear-gradient(135deg, #e57373, #d32f2f);
+}
+
+.recording-modal .stop-recording-button:hover {
+  transform: scale(1.15);
+  background: linear-gradient(135deg, #ef5350, #c62828);
+}
+
+.recording-modal audio {
+  margin-top: 25px;
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.recording-modal .send-audio-button {
+  color: #1e88e5;
+  font-weight: bold;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 20px;
+  background: linear-gradient(135deg, #bbdefb, #90caf9);
+  padding: 10px 25px;
+  border-radius: 25px;
+  transition: background 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.recording-modal .send-audio-button:hover {
+  background: linear-gradient(135deg, #64b5f6, #42a5f5);
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+/* Tiêu đề chứa thông tin admin */
+.custom-chat-header {
+  background-color: #e6f7e9;
+  padding: 15px;
+  border-bottom: 2px solid #4caf50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-info-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-logo {
+  width: 70px;
+  height: 70px;
+}
+
+.admin-name {
+  font-size: 20px;
+  font-weight: bold;
+  color: #388e3c;
+}
+
+.admin-status {
+  font-size: 14px;
+  color: #66bb6a;
+  margin-top: 2px;
 }

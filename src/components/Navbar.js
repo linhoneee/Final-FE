@@ -39,9 +39,7 @@ const Navbar = () => {
             <li className="navbar-component-item">
               <Link to="/productaddcart">Products</Link>
             </li>
-            <li className="navbar-component-item">
-              <Link to={`/user/${userID}/addresses`}>List addresses</Link>
-            </li>
+
             <li className="navbar-component-item">
               <Link to={`/cart/${userID}`} className="cart-link">
                 Cart {cartItemCount > 0 && <span className="navbar-component-cart-count">{cartItemCount}</span>}

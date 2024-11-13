@@ -1,180 +1,166 @@
-/* Import a beautiful Google Font */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
-
-/* Container Styling */
+/* Container and Header Styling */
 .product-list-container {
-  font-family: 'Montserrat', sans-serif; /* Sử dụng font chữ Montserrat */
-  background: rgba(255, 255, 255, 0.7); /* Đặt nền mờ với hiệu ứng glassmorphism */
-  backdrop-filter: blur(20px); /* Làm mờ nền phía sau */
-  padding: 40px; /* Khoảng cách bên trong container */
-  border-radius: 20px; /* Bo góc container */
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Đổ bóng cho container */
-  margin: 40px auto; /* Căn giữa container và tạo khoảng cách trên dưới */
-  max-width: 1200px; /* Đặt chiều rộng tối đa cho container */
-  transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển đổi mượt mà */
-  border: 1px solid rgba(255, 255, 255, 0.3); /* Đường viền mờ */
-  animation: fadeInContainer 1s ease-in-out; /* Hiệu ứng fade in khi tải trang */
+  max-width: 1200px;
+  margin: auto;
+  padding: 30px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  background: linear-gradient(145deg, #aae7bf, #ffffff);
 }
 
-@keyframes fadeInContainer {
-  from {
-    opacity: 0;
-    transform: translateY(20px); /* Bắt đầu từ trạng thái dịch chuyển xuống dưới */
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0); /* Trở về vị trí ban đầu */
-  }
-}
-
-.product-list-container:hover {
-  transform: translateY(-5px); /* Dịch chuyển lên trên khi hover */
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2); /* Đổ bóng đậm hơn khi hover */
-}
-
-/* Header Styling */
 .product-list-header {
-  text-align: center; /* Căn giữa tiêu đề */
-  color: #2c3e50; /* Màu chữ */
-  margin-bottom: 30px; /* Khoảng cách bên dưới tiêu đề */
-  font-size: 2.8em; /* Kích thước chữ */
-  font-weight: 700; /* Độ đậm chữ */
-  text-transform: uppercase; /* Chuyển tất cả chữ thành chữ in hoa */
-  letter-spacing: 2px; /* Khoảng cách giữa các chữ */
-  background: linear-gradient(45deg, #0f9b0f, #00b09b); /* Đặt gradient màu xanh lá cây cho chữ */
-  -webkit-background-clip: text; /* Dùng nền gradient cho chữ */
-  color: transparent; /* Làm cho phần chữ trở nên trong suốt */
-  animation: fadeInHeader 1.5s ease-in-out; /* Hiệu ứng fade in khi tải trang */
-}
-
-@keyframes fadeInHeader {
-  from {
-    opacity: 0;
-    transform: translateY(-20px); /* Bắt đầu từ trạng thái dịch chuyển lên trên */
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0); /* Trở về vị trí ban đầu */
-  }
+  text-align: center;
+  color: #2e7d32;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-transform: uppercase;
 }
 
 /* Table Styling */
 .product-list-table {
-  width: 100%; /* Chiếm toàn bộ chiều rộng container */
-  border-collapse: collapse; /* Gộp các đường viền bảng */
-  margin-top: 20px; /* Khoảng cách bên trên bảng */
-  background-color: rgba(255, 255, 255, 0.9); /* Nền mờ cho bảng */
-  border-radius: 15px; /* Bo góc bảng */
-  overflow: hidden; /* Ẩn phần thừa của bảng */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Đổ bóng cho bảng */
-  backdrop-filter: blur(10px); /* Làm mờ nền phía sau bảng */
+  width: 100%;
+  margin-top: 30px;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .product-list-table th,
 .product-list-table td {
-  padding: 10px; /* Giảm khoảng cách bên trong ô bảng */
-  text-align: left; /* Căn trái nội dung trong ô */
-  border-bottom: 1px solid rgba(255, 255, 255, 0.6); /* Đường viền dưới cho ô bảng */
-  transition: background-color 0.3s, color 0.3s; /* Hiệu ứng chuyển đổi màu nền và chữ */
-  font-size: 0.9em; /* Giảm kích thước chữ */
+  padding: 20px 25px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  font-size: 16px;
 }
 
 .product-list-table th {
-  background-color: #0f9b0f; /* Màu nền cho tiêu đề bảng */
-  color: #fff; /* Màu chữ cho tiêu đề bảng */
-  font-weight: 600; /* Độ đậm chữ cho tiêu đề bảng */
-  text-transform: uppercase; /* Chuyển chữ thành chữ in hoa */
+  background-color: #a5d6a7;
+  font-weight: 700;
+  color: #1b5e20;
+  text-transform: uppercase;
 }
 
-.product-list-table tr {
-  transition: background-color 0.3s; /* Hiệu ứng chuyển đổi màu nền */
+.product-list-table tbody tr:nth-of-type(odd) {
+  background-color: #e8f5e9;
 }
 
-.product-list-table tr:hover {
-  background-color: rgba(175, 255, 175, 0.7); /* Màu nền khi hover */
+.product-list-table tbody tr:nth-of-type(even) {
+  background-color: #ffffff;
 }
 
-.product-list-table tr:nth-child(even) {
-  background-color: rgba(245, 245, 245, 0.7); /* Màu nền cho các hàng chẵn */
+.product-list-table tbody tr:hover {
+  background-color: #c8e6c9;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-/* Button Styling */
-.product-list-actions button {
-  background: linear-gradient(45deg, #0f9b0f, #00b09b); /* Gradient màu xanh lá cây cho nút */
-  color: white; /* Màu chữ */
-  border: none; /* Loại bỏ đường viền */
-  padding: 10px 20px; /* Giảm khoảng cách bên trong nút */
-  margin: 5px; /* Khoảng cách bên ngoài nút */
-  border-radius: 50px; /* Bo góc nút */
-  cursor: pointer; /* Con trỏ chuột khi hover */
-  font-weight: 600; /* Độ đậm chữ */
-  transition: background 0.3s, transform 0.3s, box-shadow 0.3s; /* Hiệu ứng chuyển đổi màu nền, dịch chuyển và đổ bóng */
-  position: relative; /* Định vị tương đối */
-  overflow: hidden; /* Ẩn phần thừa */
-  z-index: 1; /* Thiết lập độ sâu */
-  font-size: 0.9em; /* Giảm kích thước chữ */
-}
-
-.product-list-actions button::before {
-  content: ''; /* Nội dung trống */
-  position: absolute; /* Định vị tuyệt đối */
-  top: 50%;
-  left: 50%;
-  width: 300%;
-  height: 300%;
-  background: rgba(255, 255, 255, 0.1); /* Nền mờ */
-  transition: all 0.3s; /* Hiệu ứng chuyển đổi */
-  border-radius: 50%; /* Bo góc */
-  z-index: -1; /* Đặt sau nội dung */
-  transform: translate(-50%, -50%) scale(0); /* Dịch chuyển và thu nhỏ */
-}
-
-.product-list-actions button:hover::before {
-  transform: translate(-50%, -50%) scale(1); /* Dịch chuyển và phóng to khi hover */
-}
-
-.product-list-actions button:hover {
-  background: linear-gradient(45deg, #00b09b, #0f9b0f); /* Gradient màu xanh lá cây khi hover */
-  transform: translateY(-3px); /* Dịch chuyển lên trên khi hover */
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Đổ bóng khi hover */
-}
-
-.product-list-actions button:active {
-  transform: translateY(0); /* Trả về vị trí ban đầu khi active */
+.product-list-table .product-list-out-of-stock {
+  background-color: lightgrey;
 }
 
 /* Image Styling */
-.product-list-images {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px; /* Khoảng cách giữa các hình ảnh */
-}
-
 .product-list-images img {
-  width: calc(33.33% - 10px); /* Chiều rộng của hình ảnh */
-  height: 80px; /* Chiều cao của hình ảnh */
-  margin: 5px 0; /* Khoảng cách bên ngoài hình ảnh */
-  border-radius: 15px; /* Bo góc hình ảnh */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.3); /* Đổ bóng cho hình ảnh */
-  transition: transform 0.3s, box-shadow 0.3s; /* Hiệu ứng chuyển đổi dịch chuyển và đổ bóng */
-  cursor: pointer; /* Thay đổi con trỏ chuột thành dạng pointer khi hover */
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
 }
 
 .product-list-images img:hover {
-  transform: scale(1.1); /* Phóng to khi hover */
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4); /* Đổ bóng khi hover */
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
+
+/* Button Styling */
+.product-list-button {
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0 5px;
+  border: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.product-list-button-primary {
+  background-color: #4caf50;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+.product-list-button-primary:hover {
+  background-color: #388e3c;
+  box-shadow: 0 6px 16px rgba(56, 142, 60, 0.5);
+  transform: translateY(-2px);
+}
+
+.product-list-button-info {
+  background-color: #66bb6a;
+  box-shadow: 0 4px 12px rgba(102, 187, 106, 0.4);
+}
+
+.product-list-button-info:hover {
+  background-color: #43a047;
+  box-shadow: 0 6px 16px rgba(67, 160, 71, 0.5);
+  transform: translateY(-2px);
+}
+
+.product-list-button-danger {
+  background-color: #e57373;
+  box-shadow: 0 4px 12px rgba(229, 115, 115, 0.4);
+}
+
+.product-list-button-danger:hover {
+  background-color: #d32f2f;
+  box-shadow: 0 6px 16px rgba(211, 47, 47, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Modal Styling */
 .modal-overlay {
-  position: fixed; /* Định vị cố định */
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Màu nền mờ */
-  display: flex; /* Dùng flexbox để căn giữa */
-  justify-content: center;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
   align-items: center;
-  z-index: 1000; /* Đặt trên cùng */
-  opacity: 0; /* Bắt đầu với độ mờ */
-  animation: fadeIn 0.5s forwards; /* Hiệu ứng fade in */
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  animation: fadeInScale 0.5s ease-out;
+}
+
+.modal-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

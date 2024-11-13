@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { List, ListItem, ListItemText, Avatar, Badge } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useSelector } from 'react-redux'; 
@@ -7,34 +8,42 @@ import MessageService from '../../services/MessageService';
 import UserService from '../../services/UserService';
 import './RoomList.css';
 
+
+const StyledBadge = withStyles((theme) => ({
+  badge: {
+    backgroundColor: '#44b700',
+    color: '#44b700',
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    width: '12px',
+    height: '12px',
+    borderRadius: '50%',
+    bottom: '5px', // Dịch lên trên 1px bằng cách tăng giá trị bottom
+    right: '8px',  // Dịch sang trái 4px bằng cách tăng giá trị right
+  },
+}))(Badge);
+
+
+
 const RoomList = ({ onRoomSelect }) => {
   const [rooms, setRooms] = useState([]);
+  const [onlineUserIds, setOnlineUserIds] = useState([]);
   const [selectedRoomId, setSelectedRoomId] = useState(null);
   const stompClient = useRef(null);
-
   const userID = useSelector(state => state.auth.userID);
 
   const fetchRoomData = useCallback(async () => {
     if (!userID) return;
     try {
       const messageResponse = await MessageService.getLatestMessagesForAllRooms(userID);
-
       const roomsWithUsers = await Promise.all(
         messageResponse.data.map(async (room) => {
           const chatMessage = room.chatMessage;
-
-          if (!chatMessage.roomId) {
-            console.error('Room ID is undefined for room:', room);
-            return { ...room, user: null };
-          }
+          if (!chatMessage.roomId) return { ...room, user: null };
 
           try {
             const userResponse = await UserService.getUserById(chatMessage.roomId);
             const user = userResponse.data;
-            return {
-              ...room,
-              user: user || {},
-            };
+            return { ...room, user: user || {} };
           } catch (error) {
             console.error(`Error fetching user for room ${chatMessage.roomId}:`, error);
             return { ...room, user: null };
@@ -54,6 +63,20 @@ const RoomList = ({ onRoomSelect }) => {
     }
   }, [userID]);
 
+  const fetchOnlineUsers = useCallback(() => {
+    MessageService.getOnlineStatus().then((response) => {
+      setOnlineUserIds(response.data); // Cập nhật danh sách userId online
+    }).catch((error) => {
+      console.error('Error fetching online users:', error);
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchRoomData();
+    fetchOnlineUsers(); // Lấy danh sách userId đang online
+    initializeWebSocket();
+  }, [fetchRoomData, fetchOnlineUsers]);
+
   const initializeWebSocket = useCallback(() => {
     const socket = new SockJS('http://localhost:6010/ws');
     const client = new Client({
@@ -61,9 +84,7 @@ const RoomList = ({ onRoomSelect }) => {
       debug: console.log,
       onConnect: () => {
         client.subscribe(`/topic/latestMessages/${userID}`, (message) => {
-
           const receivedMessage = JSON.parse(message.body);
-
           setRooms((prevRooms) => {
             const updatedRooms = prevRooms.map((room) => 
               room.chatMessage.roomId === receivedMessage.chatMessage.roomId 
@@ -88,11 +109,6 @@ const RoomList = ({ onRoomSelect }) => {
     };
   }, []);
 
-  useEffect(() => {
-    fetchRoomData();
-    initializeWebSocket();
-  }, [fetchRoomData, initializeWebSocket]);
-
   const handleRoomSelect = (roomId) => {
     setSelectedRoomId(roomId);
     onRoomSelect(roomId);
@@ -108,28 +124,38 @@ const RoomList = ({ onRoomSelect }) => {
           disabled={!room.user}
           className={`room-list-item ${selectedRoomId === room.chatMessage.roomId ? 'selected-room' : ''}`}
         >
-          <Avatar 
-            className="room-avatar"
-            src={room.user && room.user.picture ? `http://localhost:8080${room.user.picture}` : null} 
+          <StyledBadge
+            overlap="circular"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            variant="dot"
+            invisible={!onlineUserIds.includes(room.chatMessage.roomId)}
           >
-            {room.user && room.user.username ? 
-              room.user.username.charAt(0) : 
-              '?'}
-          </Avatar>
+            <Avatar 
+              className="room-avatar"
+              src={room.user && room.user.picture ? `http://localhost:8080${room.user.picture}` : null} 
+            >
+              {room.user && room.user.username ? 
+                room.user.username.charAt(0) : 
+                '?'}
+            </Avatar>
+          </StyledBadge>
           <ListItemText 
             primary={room.user && room.user.username ? 
               room.user.username : 
               'Unknown User'}
             secondary={
-              <>
-                {room.chatMessage.text}
+              <div className="message-and-unread">
+                <span className="MuiListItemText-secondary">{room.chatMessage.text}</span>
                 {room.unreadCount > 0 && (
-                  <Badge badgeContent={room.unreadCount} color="secondary" className="unread-count-badge" />
+                  <span className="unread-count-badge">{room.unreadCount}</span>
                 )}
-              </>
+              </div>
             }
             className="room-info"
           />
+          {onlineUserIds.includes(room.chatMessage.roomId) && (
+            <span className="online-status">Đang online</span>
+          )}
         </ListItem>
       ))}
     </List>

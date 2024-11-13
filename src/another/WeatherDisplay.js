@@ -9,6 +9,7 @@ const WeatherDisplay = () => {
     const [adImage, setAdImage] = useState('/1.jpg');
     const [weatherIcon, setWeatherIcon] = useState('/cloudy.png'); // Biểu tượng thời tiết mặc định
     const [productSuggestions, setProductSuggestions] = useState([]);
+    const [isLocationDenied, setIsLocationDenied] = useState(false); // Trạng thái từ chối truy cập vị trí
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(
@@ -18,7 +19,12 @@ const WeatherDisplay = () => {
                     longitude: pos.coords.longitude,
                 });
             },
-            (err) => console.error('Geolocation error:', err),
+            (err) => {
+                console.error('Geolocation error:', err);
+                if (err.code === err.PERMISSION_DENIED) {
+                    setIsLocationDenied(true); // Thiết lập từ chối truy cập vị trí
+                }
+            },
             { enableHighAccuracy: true }
         );
     }, []);
@@ -76,46 +82,29 @@ const WeatherDisplay = () => {
         if (temperature > 30) {
             setWeatherIcon('/hot.png'); // Biểu tượng cho trời nóng
             setAdImage('/1.jpg');
-            products = [
-                'Quạt năng lượng mặt trời',
-                'Máy lạnh hiệu suất cao (Inverter)',
-                'Máy lọc nước công nghệ RO tái tạo nước thải',
-                'Tủ lạnh Inverter',
-                'Máy phun sương sử dụng nước từ bể chứa tái chế',
-            ];
+
         } else if (temperature >= 20 && temperature <= 30) {
             setWeatherIcon('/cloudy.png'); // Biểu tượng cho trời mát
             setAdImage('/2.jpg');
-            products = [
-                'Máy lọc không khí HEPA kết hợp với năng lượng mặt trời',
-                'Máy pha cà phê có chế độ tiết kiệm năng lượng',
-                'Loa Bluetooth năng lượng mặt trời',
-                'Đèn LED thông minh',
-            ];
+
         } else if (temperature < 20) {
             setWeatherIcon('/cold.png'); // Biểu tượng cho trời lạnh
             setAdImage('/3.jpg');
-            products = [
-                'Máy sưởi hồng ngoại tiết kiệm điện',
-                'Chăn sưởi sử dụng công nghệ tiết kiệm điện',
-                'Máy giặt kết hợp sấy hiệu suất cao',
-                'Bình đun nước siêu tốc sử dụng vật liệu cách nhiệt tốt',
-            ];
+
         }
 
         if (description.includes('rain') || description.includes('drizzle')) {
             setWeatherIcon('/raining.png'); // Biểu tượng cho trời mưa
             setAdImage('/4.jpg');
-            products = [
-                'Máy hút ẩm sử dụng công nghệ màng lọc',
-                'Máy sấy quần áo tiết kiệm năng lượng',
-                'Đèn LED sạc bằng năng lượng mặt trời',
-                'Ô dù tái chế, áo mưa sinh thái',
-            ];
         }
 
         setProductSuggestions(products);
     };
+
+    // Chỉ hiển thị component nếu người dùng cho phép truy cập vị trí
+    if (isLocationDenied) {
+        return <></>
+    }
 
     return (
         <div className="weather-container">
@@ -158,12 +147,7 @@ const WeatherDisplay = () => {
 
                     <div className="ad-section">
                         <img src={adImage} alt="Weather Ad" className="ad-image" />
-                        <h3>Gợi ý sản phẩm:</h3>
-                        <ul>
-                            {productSuggestions.map((product, index) => (
-                                <li key={index}>{product}</li>
-                            ))}
-                        </ul>
+
                     </div>
                 </div>
             ) : (

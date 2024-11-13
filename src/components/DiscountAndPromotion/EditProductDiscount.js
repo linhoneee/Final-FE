@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ProductDiscountService from '../../services/ProductDiscountService';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import './EditProductDiscount.css';
 
 const EditProductDiscount = ({ product, closeModal, setProductDiscounts, productDiscounts }) => {
   const [newPrice, setNewPrice] = useState('');
@@ -19,43 +20,53 @@ const EditProductDiscount = ({ product, closeModal, setProductDiscounts, product
   const updateProductDiscount = (e) => {
     e.preventDefault();
     const productDiscount = { productId: product.id, newPrice, startDate, endDate };
-    ProductDiscountService.updateProductDiscount(productDiscount, product.id).then(() => {
-      setProductDiscounts(productDiscounts.map(discount => 
-        discount.productId === product.id ? productDiscount : discount
-      ));
-      closeModal();
-    }).catch(err => {
-      console.error("Error updating product discount:", err);
-    });
+    ProductDiscountService.updateProductDiscount(productDiscount, product.id)
+      .then(() => {
+        setProductDiscounts(
+          productDiscounts.map((discount) =>
+            discount.productId === product.id ? productDiscount : discount
+          )
+        );
+        closeModal();
+      })
+      .catch((err) => {
+        console.error("Error updating product discount:", err);
+      });
   };
 
   return (
-    <div>
-      <h2>Edit Discount for {product.productName}</h2>
-      <form>
-        <div>
-          <label>New Price</label>
-          <input type="text" value={newPrice} onChange={(e) => setNewPrice(e.target.value)} />
+    <div className="edit-product-discount-container">
+      <div className="edit-product-discount-form">
+      <h2 className="edit-product-discount-header">Edit Discount for {product.productName}</h2>
+      <form >
+        <div className="edit-product-discount-form-group">
+          <label className="edit-product-discount-label">New Price</label>
+          <input type="text" value={newPrice} onChange={(e) => setNewPrice(e.target.value)} className="edit-product-discount-input" />
         </div>
-        <div>
-          <label>Start Date</label>
+        <div className="edit-product-discount-form-group">
+          <label className="edit-product-discount-label">Start Date</label>
           <DatePicker
             selected={startDate}
             onChange={(date) => setStartDate(date)}
             minDate={new Date()}
+            className="edit-product-discount-input"
           />
         </div>
-        <div>
-          <label>End Date</label>
+        <div className="edit-product-discount-form-group">
+          <label className="edit-product-discount-label">End Date</label>
           <DatePicker
             selected={endDate}
             onChange={(date) => setEndDate(date)}
             minDate={new Date()}
+            className="edit-product-discount-input"
           />
         </div>
-        <button type="button" onClick={updateProductDiscount}>Update</button>
-        <button type="button" onClick={closeModal}>Cancel</button>
+        <div className="edit-product-discount-buttons">
+          <button type="button" onClick={updateProductDiscount} className="edit-product-discount-button edit-product-discount-button-primary">Update</button>
+          <button type="button" onClick={closeModal} className="edit-product-discount-button edit-product-discount-button-danger">Cancel</button>
+        </div>
       </form>
+    </div>
     </div>
   );
 };

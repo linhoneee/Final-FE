@@ -1,23 +1,139 @@
- .warehouse-list-table td, .warehouse-list-table th {
-    position: relative;
-    transition: transform 0.3s ease-out;
-  }
-  
-  .warehouse-list-table td:hover::after, .warehouse-list-table th:hover::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 2px;
-    background-color: #036b52; /* Màu xanh đậm */
-    animation: expandLine 0.3s forwards;
-  }
-  
-  @keyframes expandLine {
-    from { width: 0; }
-    to { width: 100%; }
-  }
-  
+.warehouse-list-container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 30px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  background: linear-gradient(145deg, #aae7bf, #ffffff);
+}
 
-  
+.warehouse-list-title {
+  text-align: center;
+  color: #2e7d32;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+}
+
+.warehouse-list-add-btn {
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  display: inline-block;
+  margin-bottom: 20px;
+  background-color: #4caf50;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+  transition: all 0.3s ease;
+}
+
+.warehouse-list-add-btn:hover {
+  background-color: #388e3c;
+  box-shadow: 0 6px 16px rgba(56, 142, 60, 0.5);
+  transform: translateY(-2px);
+}
+
+.warehouse-list-table {
+  width: 100%;
+  margin-top: 30px;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.warehouse-list-table th,
+.warehouse-list-table td {
+  padding: 20px 25px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  font-size: 16px;
+}
+
+.warehouse-list-table th {
+  background-color: #a5d6a7;
+  font-weight: 700;
+  color: #1b5e20;
+  text-transform: uppercase;
+}
+
+.warehouse-list-table tbody tr:nth-of-type(odd) {
+  background-color: #e8f5e9;
+}
+
+.warehouse-list-table tbody tr:nth-of-type(even) {
+  background-color: #ffffff;
+}
+
+.warehouse-list-table tbody tr:hover {
+  background-color: #c8e6c9;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.warehouse-list-action-btn {
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0 5px;
+  border: none;
+  transition: all 0.3s ease;
+  background-color: #66bb6a;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(102, 187, 106, 0.4);
+}
+
+.warehouse-list-action-btn:hover {
+  background-color: #43a047;
+  box-shadow: 0 6px 16px rgba(67, 160, 71, 0.5);
+  transform: translateY(-2px);
+}
+
+.warehouse-list-delete-btn {
+  background-color: #e57373;
+  box-shadow: 0 4px 12px rgba(229, 115, 115, 0.4);
+}
+
+.warehouse-list-delete-btn:hover {
+  background-color: #d32f2f;
+  box-shadow: 0 6px 16px rgba(211, 47, 47, 0.5);
+}
+
+/* Modal Styling */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  animation: fadeInScale 0.5s ease-out;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

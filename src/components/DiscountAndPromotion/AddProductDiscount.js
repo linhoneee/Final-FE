@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ProductDiscountService from '../../services/ProductDiscountService';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import './AddProductDiscount.css';
 
 const AddProductDiscount = ({ product, closeModal, setProductDiscounts, productDiscounts }) => {
   const [newPrice, setNewPrice] = useState('');
@@ -11,43 +12,49 @@ const AddProductDiscount = ({ product, closeModal, setProductDiscounts, productD
   const saveProductDiscount = (e) => {
     e.preventDefault();
     const productDiscount = { productId: product.id, newPrice, startDate, endDate };
-    ProductDiscountService.createProductDiscount(productDiscount).then(() => {
-      setProductDiscounts([...productDiscounts, productDiscount]);
-      closeModal();
-    }).catch(err => {
-      console.error("Error creating product discount:", err);
-    });
+    ProductDiscountService.createProductDiscount(productDiscount)
+      .then(() => {
+        setProductDiscounts([...productDiscounts, productDiscount]);
+        closeModal();
+      })
+      .catch(err => {
+        console.error("Error creating product discount:", err);
+      });
   };
 
   return (
-    <div>
-      <h2>Add Discount for {product.productName}</h2>
-      <form>
-        <div>
-          <label>New Price</label>
-          <input type="text" value={newPrice} onChange={(e) => setNewPrice(e.target.value)} />
-        </div>
-        <div>
-          <label>Start Date</label>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            minDate={new Date()}
-          />
-        </div>
-        <div>
-          <label>End Date</label>
-          <DatePicker
-            selected={endDate}
-            onChange={(date) => setEndDate(date)}
-            minDate={new Date()}
-          />
-        </div>
-        <div>
-          <button type="button" onClick={saveProductDiscount}>Save</button>
-          <button type="button" onClick={closeModal}>Cancel</button>
-        </div>
-      </form>
+    <div className="add-product-discount-container">
+      <div className="add-product-discount-form">
+        <h2 className="add-product-discount-header">Thêm giảm giá cho {product.productName}</h2>
+        <form>
+          <div className="add-product-discount-form-group">
+            <label className="add-product-discount-label">Giá mới</label>
+            <input type="text" value={newPrice} onChange={(e) => setNewPrice(e.target.value)} className="add-product-discount-input" />
+          </div>
+          <div className="add-product-discount-form-group">
+            <label className="add-product-discount-label">Ngày bắt đầu</label>
+            <DatePicker
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              minDate={new Date()}
+              className="add-product-discount-input"
+            />
+          </div>
+          <div className="add-product-discount-form-group">
+            <label className="add-product-discount-label">Ngày kết thúc</label>
+            <DatePicker
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+              minDate={new Date()}
+              className="add-product-discount-input"
+            />
+          </div>
+          <div className="add-product-discount-buttons">
+            <button type="button" onClick={saveProductDiscount} className="add-product-discount-button add-product-discount-button-primary">Lưu</button>
+            <button type="button" onClick={closeModal} className="add-product-discount-button add-product-discount-button-danger">Hủy</button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

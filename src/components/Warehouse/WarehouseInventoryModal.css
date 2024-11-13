@@ -1,61 +1,105 @@
+/* Container for inventory details table */
 .warehouse-inventory-table {
   width: 100%;
   margin-top: 20px;
   border-collapse: collapse;
-  background-color: #ffffff;
   border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .warehouse-inventory-table th,
 .warehouse-inventory-table td {
-  padding: 20px 25px;
-  text-align: left;
+  padding: 15px 20px;
   border-bottom: 1px solid #ddd;
+  text-align: left;
   font-size: 16px;
-  color: #333333;
 }
 
 .warehouse-inventory-table th {
-  background-color: #a5d6a7; /* Màu xanh lá cây nhạt */
+  background-color: #a5d6a7;
   font-weight: 700;
-  color: #1b5e20; /* Màu xanh lá cây đậm */
+  color: #1b5e20;
   text-transform: uppercase;
 }
 
-.warehouse-inventory-table img {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  border-radius: 5px;
+.warehouse-inventory-table tbody tr:nth-of-type(odd) {
+  background-color: #e8f5e9;
+}
+
+.warehouse-inventory-table tbody tr:nth-of-type(even) {
+  background-color: #ffffff;
+}
+
+.warehouse-inventory-table tbody tr:hover {
+  background-color: #c8e6c9;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 0.3s ease;
+}
+
+.warehouse-inventory-table img {
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
 }
 
 .warehouse-inventory-table img:hover {
   transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
+/* Modal styling */
+.modal-content {
+  position: relative;
+  max-width: 600px;
+  width: 90%;
+  margin: auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-
-
+.modal-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  margin-bottom: 20px;
+}
 
 .modal-close-button {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background-color: #d32f2f;
-  color: white;
-  border: none;
-  padding: 12px 18px;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: 600;
   cursor: pointer;
-  border-radius: 50%;
-  transition: background-color 0.3s ease;
+  background-color: #e57373;
+  color: #fff;
+  border: none;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .modal-close-button:hover {
-  background-color: #b71c1c;
+  background-color: #d32f2f;
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Overlay styling for modal */
+.ReactModal__Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

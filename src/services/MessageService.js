@@ -30,7 +30,14 @@ class MessageService {
       },
     });
   }
+
+  // Phương thức kiểm tra trạng thái online của người dùng
+  getOnlineStatus() {
+    return axios.get(`${API_URL}/online-status`);
+  }
+
 }
+
 
 
 const instance = new MessageService();
