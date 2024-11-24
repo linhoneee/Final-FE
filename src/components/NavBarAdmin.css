@@ -14,6 +14,7 @@
     top: 0;
     z-index: 1000;
     transition: all 0.4s ease;
+    min-width: 250px;
 }
 
 /* Styling for the logo within the navbar */
@@ -154,10 +155,10 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: 250px;
+    width: 250px !important;
     padding: 20px;
     background: linear-gradient(135deg, #2e7d32 0%, #4caf50 50%, #66bb6a 100%);
-    height: 677px !important; /* Bao phủ toàn bộ chiều cao màn hình */
+    height: 728px  !important; /* Bao phủ toàn bộ chiều cao màn hình */
     box-sizing: border-box; /* Đảm bảo padding không làm tăng chiều cao tổng */
     overflow-y: auto !important; /* Cho phép cuộn nếu nội dung vượt quá chiều cao màn hình */
     transition: all 0.4s ease;

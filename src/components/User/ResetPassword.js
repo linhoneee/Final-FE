@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import UserService from '../../services/UserService';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import '../../Css/ModalResetPass.css';
 
 const ResetPassword = ({ open, handleClose, email }) => {
   const [otp, setOtp] = useState('');

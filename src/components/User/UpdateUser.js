@@ -1,116 +1,99 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import ProductService from '../../services/ProductService';
+import UserService from '../../services/UserService';
+import './UpdateUser.css';
 
-const UpdateProduct = () => {
-    const { id } = useParams();
-    const [productName, setProductName] = useState('');
-    const [descriptionDetails, setDescriptionDetails] = useState('');
-    const [price, setPrice] = useState('');
-    const [weight, setWeight] = useState('');
-    const [newImages, setNewImages] = useState([]);
-    const [existingImages, setExistingImages] = useState([]);
-    const navigate = useNavigate();
+const UpdateUser = ({ user, onClose, onUpdate }) => {
+  const [updatedUser, setUpdatedUser] = useState(user);
 
-    useEffect(() => {
-        ProductService.GetProductById(id).then((response) => {
-            setProductName(response.data.productName);
-            setDescriptionDetails(response.data.descriptionDetails);
-            setPrice(response.data.price);
-            setWeight(response.data.weight);
-            setExistingImages(response.data.images || []);
-        }).catch(err => {
-            console.error("There was an error fetching the product!", err);
-        });
-    }, [id]);
+  useEffect(() => {
+    setUpdatedUser(user);
+  }, [user]);
 
-    const handleImageChange = (event) => {
-        const files = Array.from(event.target.files);
-        setNewImages([...newImages, ...files]);
-    };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUpdatedUser({ ...updatedUser, [name]: value });
+  };
 
-    const handleDeleteImage = (imageId) => {
-        ProductService.DeleteProductImage(imageId).then(() => {
-            setExistingImages(existingImages.filter(image => image.id !== imageId));
-        }).catch(err => {
-            console.error("There was an error deleting the image!", err);
-        });
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await UserService.updateUser(updatedUser, updatedUser.id);
+      alert('User updated successfully!');
+      onUpdate(); // Refresh the user list after update
+      onClose(); // Close the modal
+    } catch (error) {
+      console.error('Error updating user:', error);
+      alert('Failed to update user.');
+    }
+  };
 
-    const updateProduct = (e) => {
-        e.preventDefault();
-        const product = { productName, descriptionDetails, price, weight };
-        ProductService.UpdateProduct(product, id).then(() => {
-            const formData = new FormData();
-            newImages.forEach((image) => {
-                formData.append("images", image);
-            });
-            ProductService.UploadProductImages(id, formData).then(() => {
-                navigate('/products');
-            }).catch(err => {
-                console.error("There was an error uploading the product image!", err);
-            });
-        }).catch(err => {
-            console.error("There was an error updating the product!", err);
-        });
-    };
+  return (
+    <div className="update-user-modal-container">
+      <div className="update-user-modal-content">
+        <h2 className="update-user-modal-header">Update User</h2>
+        <form className="update-user-modal-form" onSubmit={handleSubmit}>
+          <div className="update-user-modal-form-group">
+            <label className="update-user-modal-label">Username</label>
+            <input
+              type="text"
+              className="update-user-modal-input"
+              name="username"
+              value={updatedUser?.username || ''}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="update-user-modal-form-group">
+            <label className="update-user-modal-label">Email</label>
+            <input
+              type="email"
+              className="update-user-modal-input"
+              name="email"
+              value={updatedUser?.email || ''}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="update-user-modal-form-group">
+            <label className="update-user-modal-label">Phone Number</label>
+            <input
+              type="text"
+              className="update-user-modal-input"
+              name="phoneNumber"
+              value={updatedUser?.phoneNumber || ''}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="update-user-modal-form-group">
+            <label className="update-user-modal-label">Roles</label>
+            <select
+              className="update-user-modal-input"
+              name="roles"
+              value={updatedUser?.roles || ''}
+              onChange={handleChange}
+              required
+            >
+              <option value="USER">USER</option>
+              <option value="ADMIN">ADMIN</option>
+            </select>
+          </div>
+          <div className="update-user-modal-buttons">
+            <button type="submit" className="update-user-modal-btn update-user-modal-btn-primary">
+              Save Changes
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="update-user-modal-btn update-user-modal-btn-secondary"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
 
-    return (
-        <div>
-            <h2>Update Product</h2>
-            <form onSubmit={updateProduct}>
-                <div>
-                    <label>Product Name:</label>
-                    <input 
-                        type="text" 
-                        value={productName} 
-                        onChange={(e) => setProductName(e.target.value)} 
-                    />
-                </div>
-                <div>
-                    <label>Description:</label>
-                    <textarea 
-                        value={descriptionDetails} 
-                        onChange={(e) => setDescriptionDetails(e.target.value)} 
-                    />
-                </div>
-                <div>
-                    <label>Price:</label>
-                    <input 
-                        type="number" 
-                        value={price} 
-                        onChange={(e) => setPrice(e.target.value)} 
-                    />
-                </div>
-                <div>
-                    <label>Weight:</label>
-                    <input 
-                        type="number" 
-                        value={weight} 
-                        onChange={(e) => setWeight(e.target.value)} 
-                    />
-                </div>
-                <div>
-                    <label>Existing Images:</label>
-                    {existingImages.map((image) => (
-                        <div key={image.id}>
-                            <img src={image.url} alt="Product" width="100" />
-                            <button type="button" onClick={() => handleDeleteImage(image.id)}>X</button>
-                        </div>
-                    ))}
-                </div>
-                <div>
-                    <label>New Images:</label>
-                    <input 
-                        type="file" 
-                        multiple 
-                        onChange={handleImageChange} 
-                    />
-                </div>
-                <button type="submit">Update</button>
-            </form>
-        </div>
-    );
-}
-
-export default UpdateProduct;
+export default UpdateUser;

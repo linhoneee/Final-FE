@@ -3,7 +3,6 @@
   max-width: 400px;
   background-color: #ffffff;
   border-radius: 15px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   padding: 15px;
   overflow-y: auto;
   max-height: 500px;
@@ -61,7 +60,7 @@
 }
 
 .room-info .MuiListItemText-primary {
-  font-size: 1.05rem;
+  font-size: 18px;
   font-weight: 600;
   color: #333;
   line-height: 1.3;
@@ -76,7 +75,7 @@
 }
 
 .room-info .MuiListItemText-secondary {
-  font-size: 0.9rem;
+  font-size: 17px;
   color: #666;
   white-space: nowrap;
   overflow: hidden;
@@ -86,18 +85,35 @@
 
 /* Badge số lượng tin nhắn chưa đọc */
 .unread-count-badge {
-  background-color: #ff5722;
-  color: white;
-  font-size: 0.75rem;
-  min-width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 11px;
-  padding: 0 6px;
-  margin-left: 5px; /* Khoảng cách giữa tin nhắn và badge */
+  background-color: #e53935; /* Màu nền đỏ đậm */
+  color: white; /* Màu chữ trắng */
+  padding: 2px 8px; /* Khoảng cách bên trong */
+  border-radius: 50%; /* Bo tròn hoàn toàn */
+  font-size: 13px; /* Kích thước chữ */
+  font-weight: bold; /* Độ đậm chữ */
+  margin-left: 8px; /* Khoảng cách bên trái số lượng */
+  display: flex; /* Để căn chỉnh nội dung */
+  align-items: center; /* Căn giữa dọc */
+  justify-content: center; /* Căn giữa ngang */
+  position: relative; /* Đảm bảo giữ đúng vị trí */
+  animation: color-flash-animation 1s infinite; /* Thêm hiệu ứng đổi màu */
 }
+
+@keyframes color-flash-animation {
+  0% {
+    background-color: #e53935; /* Đỏ đậm */
+  }
+  50% {
+    background-color: #ff9800; /* Cam */
+  }
+  100% {
+    background-color: #e53935; /* Quay lại đỏ đậm */
+  }
+}
+
+
+
+
 
 /* Trạng thái "Đang online" với điều chỉnh vị trí */
 .online-status {

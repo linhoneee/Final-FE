@@ -2,7 +2,7 @@
 
 .slider {
     position: relative;
-    width: 100%;
+    width: 100hv;
     height: 450px;
     overflow: hidden;
     display: flex;
@@ -16,19 +16,21 @@
     position: relative;
     width: 100%;
     height: 100%;
+    display: flex; /* Sử dụng flexbox để căn chỉnh */
+    justify-content: center; /* Đặt hình ảnh ở giữa ngang */
+    align-items: center; /* Đặt hình ảnh ở giữa dọc */
+    overflow: hidden; /* Cắt phần hình ảnh thừa */
 }
 
-.image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 8px;
-    transition: transform 0.5s ease; /* Smooth transition */
+.image-slice {
+    min-width: 100%; /* Đảm bảo chiều rộng hình ảnh tối thiểu bằng chiều rộng container */
+    min-height: 100%; /* Đảm bảo chiều cao hình ảnh tối thiểu bằng chiều cao container */
+    object-fit: cover; /* Cắt và phóng to hình ảnh để phù hợp */
+    object-position: center; /* Căn giữa hình ảnh */
+    transition: transform 0.5s ease; /* Hiệu ứng mượt khi hover */
 }
 
-.image:hover {
-    transform: scale(1.05); /* Slight zoom on hover */
-}
+
 
 .text-overlay {
     position: absolute;

@@ -1,19 +1,22 @@
-// AddCategory.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import CategoryService from '../../services/CategoryService';
 import './AddCategory.css';
 
-const AddCategory = () => {
+const AddCategory = ({ onClose, onCategoryAdded }) => {
   const [name, setName] = useState('');
-  const navigate = useNavigate();
+  const [description, setDescription] = useState('');
 
   const saveCategory = (e) => {
     e.preventDefault();
-    const category = { name };
-    CategoryService.createCategory(category).then(() => {
-      navigate('/categories');
-    });
+    const category = { name, description };
+    CategoryService.createCategory(category)
+      .then((response) => {
+        onCategoryAdded(response.data); // Thêm danh mục mới vào danh sách
+        onClose(); // Đóng modal
+      })
+      .catch((error) => {
+        console.error('Error adding category:', error);
+      });
   };
 
   return (
@@ -29,9 +32,16 @@ const AddCategory = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
+            <label className="add-category-modal-label">Mô tả danh mục</label>
+            <input
+              type="text"
+              className="add-category-modal-input"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
           </div>
           <button onClick={saveCategory} className="add-category-modal-btn add-category-modal-btn-primary">Lưu</button>
-          <button onClick={() => navigate('/categories')} className="add-category-modal-btn add-category-modal-btn-secondary">Hủy</button>
+          <button onClick={onClose} className="add-category-modal-btn add-category-modal-btn-secondary">Hủy</button>
         </form>
       </div>
     </div>

@@ -1,105 +1,146 @@
 .customer-coupon-list-container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 30px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-    border-radius: 12px;
-    background: linear-gradient(145deg, #aae7bf, #ffffff);
-  }
-  
+  max-width: 1200px; /* Tăng giới hạn chiều rộng cho màn hình lớn */
+  margin: auto;
+  padding: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  background: linear-gradient(145deg, #aae7bf, #ffffff);
+  overflow-x: auto; /* Thêm cuộn ngang nếu cần */
+}
+
+.customer-coupon-list-title {
+  text-align: center;
+  color: #2e7d32;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.customer-coupon-list-add-btn {
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  margin-bottom: 20px;
+  background-color: #4caf50;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+  transition: all 0.3s ease;
+}
+
+.customer-coupon-list-add-btn:hover {
+  background-color: #388e3c;
+  box-shadow: 0 6px 16px rgba(56, 142, 60, 0.5);
+  transform: translateY(-2px);
+}
+
+.customer-coupon-list-table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.customer-coupon-list-table th,
+.customer-coupon-list-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.customer-coupon-list-table th {
+  background-color: #a5d6a7;
+  font-weight: 700;
+  color: #1b5e20;
+  text-transform: uppercase;
+}
+
+.customer-coupon-list-table tbody tr:nth-of-type(odd) {
+  background-color: #e8f5e9;
+}
+
+.customer-coupon-list-table tbody tr:nth-of-type(even) {
+  background-color: #ffffff;
+}
+
+.customer-coupon-list-table tbody tr:hover {
+  background-color: #c8e6c9;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.customer-coupon-list-action-btn {
+  padding: 8px 14px; /* Giảm kích thước để nút gọn hơn */
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0 4px;
+  border: none;
+  background-color: #66bb6a;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(102, 187, 106, 0.4);
+  transition: all 0.3s ease;
+}
+
+.customer-coupon-list-action-btn:hover {
+  background-color: #43a047;
+  box-shadow: 0 6px 16px rgba(67, 160, 71, 0.5);
+  transform: translateY(-2px);
+}
+
+.customer-coupon-list-delete-btn {
+  background-color: #e57373;
+  margin-top: 10px;
+  box-shadow: 0 4px 12px rgba(229, 115, 115, 0.4);
+}
+
+.customer-coupon-list-delete-btn:hover {
+  background-color: #d32f2f;
+  box-shadow: 0 6px 16px rgba(211, 47, 47, 0.5);
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
   .customer-coupon-list-title {
-    text-align: center;
-    color: #2e7d32;
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 30px;
-    text-transform: uppercase;
+    font-size: 1.8rem;
   }
-  
+
   .customer-coupon-list-add-btn {
-    padding: 12px 24px;
-    border-radius: 50px;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    display: inline-block;
-    margin-bottom: 20px;
-    background-color: #4caf50;
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
-    transition: all 0.3s ease;
+    width: 100%; /* Nút thêm sẽ chiếm toàn bộ chiều rộng màn hình */
+    padding: 12px;
+    margin-bottom: 15px;
   }
-  
-  .customer-coupon-list-add-btn:hover {
-    background-color: #388e3c;
-    box-shadow: 0 6px 16px rgba(56, 142, 60, 0.5);
-    transform: translateY(-2px);
-  }
-  
-  .customer-coupon-list-table {
-    width: 100%;
-    margin-top: 30px;
-    border-collapse: collapse;
-    border-radius: 12px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
+
   .customer-coupon-list-table th,
   .customer-coupon-list-table td {
-    padding: 20px 25px;
-    border-bottom: 1px solid #ddd;
-    text-align: left;
-    font-size: 16px;
+    padding: 10px;
+    font-size: 0.9rem;
   }
-  
+
+  .customer-coupon-list-table,
+  .customer-coupon-list-table th,
+  .customer-coupon-list-table td {
+    display: block; /* Hiển thị dạng khối trên màn hình nhỏ */
+  }
+
+  .customer-coupon-list-table tr {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+
   .customer-coupon-list-table th {
-    background-color: #a5d6a7;
-    font-weight: 700;
-    color: #1b5e20;
-    text-transform: uppercase;
-  }
-  
-  .customer-coupon-list-table tbody tr:nth-of-type(odd) {
-    background-color: #e8f5e9;
-  }
-  
-  .customer-coupon-list-table tbody tr:nth-of-type(even) {
-    background-color: #ffffff;
-  }
-  
-  .customer-coupon-list-table tbody tr:hover {
     background-color: #c8e6c9;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    text-align: center;
   }
-  
+
   .customer-coupon-list-action-btn {
-    padding: 8px 16px;
-    border-radius: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    margin: 0 5px;
-    border: none;
-    background-color: #66bb6a;
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(102, 187, 106, 0.4);
-    transition: all 0.3s ease;
+    width: 100%; /* Nút sẽ chiếm toàn bộ chiều rộng trong từng hàng */
+    margin: 5px 0;
   }
-  
-  .customer-coupon-list-action-btn:hover {
-    background-color: #43a047;
-    box-shadow: 0 6px 16px rgba(67, 160, 71, 0.5);
-    transform: translateY(-2px);
-  }
-  
-  .customer-coupon-list-delete-btn {
-    background-color: #e57373;
-    box-shadow: 0 4px 12px rgba(229, 115, 115, 0.4);
-  }
-  
-  .customer-coupon-list-delete-btn:hover {
-    background-color: #d32f2f;
-    box-shadow: 0 6px 16px rgba(211, 47, 47, 0.5);
-  }
-  
+}

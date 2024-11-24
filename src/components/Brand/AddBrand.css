@@ -43,6 +43,8 @@
   margin-bottom: 10px; /* Khoảng cách phía dưới label để tách biệt với input */
   text-transform: uppercase; /* Chuyển đổi văn bản thành chữ hoa */
   letter-spacing: 1px; /* Khoảng cách giữa các chữ cái, tăng độ rõ ràng và tính thẩm mỹ */
+  margin-top: 15px;
+
 }
 
 .brand-add-modal-input {

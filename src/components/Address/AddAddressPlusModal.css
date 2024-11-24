@@ -67,7 +67,7 @@
 /* Định dạng cho phần hiển thị tọa độ */
 .add-address-plus-modal .coordinates {
   background-color: #f1f1f1; /* Màu nền xám nhạt */
-  padding: 10px; /* Thêm khoảng cách bên trong */
+  padding: 5px; /* Thêm khoảng cách bên trong */
   text-align: center; /* Căn giữa nội dung bên trong */
   border-top: 1px solid #ddd; /* Thêm đường viền trên để tách biệt với bản đồ */
   border-radius: 12px; /* Bo tròn các góc của phần tọa độ */

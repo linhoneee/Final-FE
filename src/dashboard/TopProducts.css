@@ -5,17 +5,13 @@
     padding: 20px;
     background-color: #edf7ed;    /* Light, eco-friendly background */
     border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(34, 139, 34, 0.15);
     margin: 0;                    /* Ensure no outside margin */
     box-sizing: border-box;       /* Include padding in width and height */
     overflow: hidden;             /* Prevent content from overflowing */
     font-family: 'Roboto', sans-serif;
-    transition: box-shadow 0.3s ease;
 }
 
-.top-products-container:hover {
-    box-shadow: 0 10px 20px rgba(34, 139, 34, 0.2);
-}
+
 
 /* Title Styling */
 .top-products-title {

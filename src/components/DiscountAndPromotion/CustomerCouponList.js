@@ -21,6 +21,7 @@ const CustomerCouponList = () => {
   const fetchCustomerCoupons = () => {
     CustomerCouponService.getAllCustomerCoupons().then((response) => {
       setCustomerCoupons(response.data);
+      console.log(response);
     });
   };
 
@@ -53,40 +54,39 @@ const CustomerCouponList = () => {
       <h2 className="customer-coupon-list-title">Customer Coupon List</h2>
       <button onClick={openAddModal} className="customer-coupon-list-add-btn">Add Customer Coupon</button>
       <table className="customer-coupon-list-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Code</th>
-            <th>Description</th>
-            <th>Discount Percentage</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Max Usage</th>
-            <th>Minimum Order Value</th>
-            <th>Discount Type</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {customerCoupons.map((coupon) => (
-            <tr key={coupon.id}>
-              <td>{coupon.id}</td>
-              <td>{coupon.code}</td>
-              <td>{coupon.description}</td>
-              <td>{coupon.discountPercentage}</td>
-              <td>{coupon.startDate}</td>
-              <td>{coupon.endDate}</td>
-              <td>{coupon.maxUsage}</td>
-              <td>{coupon.minimumOrderValue}</td>
-              <td>{coupon.discountType}</td>
-              <td>
-                <button onClick={() => openEditModal(coupon)} className="customer-coupon-list-action-btn">Edit</button>
-                <button onClick={() => deleteCustomerCoupon(coupon.id)} className="customer-coupon-list-action-btn customer-coupon-list-delete-btn">Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Description</th>
+      <th>Discount Percentage</th>
+      <th>Valid Period</th> {/* Cột mới */}
+      <th>Max Usage</th>
+      <th>Current Usage</th>
+      <th>Minimum Order Value</th>
+      <th>Discount Type</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {customerCoupons.map((coupon) => (
+      <tr key={coupon.id}>
+        <td>{coupon.code}</td>
+        <td>{coupon.description}</td>
+        <td>{coupon.discountPercentage}</td>
+        <td>{`${new Date(coupon.startDate).toLocaleDateString()} - ${new Date(coupon.endDate).toLocaleDateString()}`}</td> {/* Gộp ngày */}
+        <td>{coupon.maxUsage}</td>
+        <td>{coupon.currentUsage}</td>
+        <td>{coupon.minimumOrderValue}</td>
+        <td>{coupon.discountType}</td>
+        <td>
+          <button onClick={() => openEditModal(coupon)} className="customer-coupon-list-action-btn">Edit</button>
+          <button onClick={() => deleteCustomerCoupon(coupon.id)} className="customer-coupon-list-action-btn customer-coupon-list-delete-btn">Delete</button>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
 
       {/* Modal for Adding Customer Coupon */}
       <Modal

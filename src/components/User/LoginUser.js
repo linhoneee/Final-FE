@@ -32,10 +32,15 @@ const LoginUser = () => {
       dispatch(login(token, userEmail, username, roles, UserID));
 
       alert('Đăng nhập thành công');
+    // Điều hướng dựa trên vai trò
+    if (roles === 'USER') {
       navigate('/');
-    } catch (error) {
-      handleLoginError(error);
+    } else if (roles === 'ADMIN') {
+      navigate('/dashboard');
     }
+  } catch (error) {
+    handleLoginError(error);
+  }
   };
 
   const handleGoogleLogin = () => {

@@ -1,0 +1,7 @@
+html, body {
+    margin: 0; /* Loại bỏ margin mặc định */
+    padding: 0; /* Loại bỏ padding mặc định */
+    width: 100%; /* Đảm bảo chiếm toàn bộ chiều rộng */
+    height: 100%; /* Đảm bảo chiếm toàn bộ chiều cao */
+    box-sizing: border-box; /* Đảm bảo padding và border được tính vào kích thước */
+}

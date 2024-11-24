@@ -4,19 +4,16 @@ import './ImageSlider.css';
 const ImageSlider = () => {
     const slides = [
         {
-            src: '/1.jpg',
-            title: '2024 YEAR-END EVENT',
-            description: 'Visit your local dealer to celebrate another great riding season.',
+            src: '/11.png',
+
         },
         {
-            src: '/2.jpg',
-            title: 'HERITAGE CLASSIC',
-            description: 'A quintessential American cruiser with vintage details and pure rock ‘n’ roll style.',
+            src: '/12.png',
+
         },
         {
-            src: '/3.jpg',
-            title: 'PAN AMERICA™ 1250 SPECIAL',
-            description: 'Designed for on- and off-road adventure touring, engineered to explore and endure.',
+            src: '/13.png',
+
         }
     ];
 
@@ -55,11 +52,8 @@ const ImageSlider = () => {
         <div className="slider">
             <button className="prevButton" onClick={prevImage}>&#60;</button>
             <div className="slide">
-                <img src={slides[currentImageIndex].src} alt="Poster" className="image" />
-                <div className="text-overlay">
-                    <h2>{slides[currentImageIndex].title}</h2>
-                    <p>{slides[currentImageIndex].description}</p>
-                </div>
+                <img src={slides[currentImageIndex].src} alt="Poster" className="image-slice" />
+
                 <div className="progress-bar">
                     <div className="progress" style={{ width: `${progress}%` }}></div>
                 </div>

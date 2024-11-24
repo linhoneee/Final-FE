@@ -75,17 +75,25 @@
   transition: background-color 0.3s ease;
 }
 
+/* Actions Buttons Styling */
+.warehouse-list-actions {
+  display: flex; /* Sắp xếp các nút theo hàng ngang */
+  flex-wrap: nowrap; /* Không cho phép xuống dòng */
+  gap: 8px; /* Khoảng cách giữa các nút */
+  align-items: center; /* Căn giữa các nút theo chiều dọc */
+}
+
 .warehouse-list-action-btn {
   padding: 8px 16px;
   border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
-  margin: 0 5px;
   border: none;
   transition: all 0.3s ease;
   background-color: #66bb6a;
   color: #fff;
   box-shadow: 0 4px 12px rgba(102, 187, 106, 0.4);
+  text-align: center;
 }
 
 .warehouse-list-action-btn:hover {

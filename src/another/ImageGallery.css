@@ -2,14 +2,14 @@
 .gallery-container {
     text-align: center;
     padding: 60px 20px;
-    background-color: #edf7ed; /* Light green for a fresh, eco-friendly background */
+    background-color: #edf7ed; /* Màu nền xanh nhạt */
     font-family: 'Roboto', sans-serif;
 }
 
 .gallery-container h2 {
     font-size: 2.4rem;
     font-weight: 700;
-    color: #3a9a5f; /* Deep green for a natural, calming effect */
+    color: #3a9a5f; /* Xanh lá đậm */
     margin-bottom: 30px;
     letter-spacing: 1.5px;
     text-transform: uppercase;
@@ -31,7 +31,7 @@
 }
 
 .gallery::-webkit-scrollbar-thumb {
-    background-color: #3a9a5f; /* Green scrollbar for eco-friendly touch */
+    background-color: #3a9a5f; /* Thanh cuộn màu xanh lá */
     border-radius: 4px;
 }
 
@@ -53,9 +53,21 @@
     overflow: hidden;
 }
 
-.gallery-item:hover {
-    transform: translateY(-8px) scale(1.03);
-    box-shadow: 0 10px 20px rgba(34, 139, 34, 0.2);
+
+/* Đường màu xanh lá bên dưới khi hover */
+.gallery-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background-color: #3a9a5f; /* Xanh lá đậm */
+    transition: width 0.3s ease;
+}
+
+.gallery-item:hover::after {
+    width: 100%; /* Khi hover, đường xanh xuất hiện bên dưới */
 }
 
 /* Overlay cho hình ảnh */
@@ -68,7 +80,7 @@
 }
 
 .gallery-item:hover img {
-    transform: scale(1.08); /* Slightly enhanced zoom for interactivity */
+    transform: scale(1.08); /* Zoom nhẹ khi hover */
 }
 
 /* Định dạng phần văn bản */
@@ -80,7 +92,7 @@
 .gallery-text h3 {
     font-size: 1.3rem;
     font-weight: bold;
-    color: #3a9a5f; /* Consistent green accent */
+    color: #3a9a5f; /* Xanh lá đậm */
     text-transform: uppercase;
     margin-bottom: 10px;
     letter-spacing: 1px;
@@ -88,7 +100,7 @@
 
 .gallery-text p {
     font-size: 1rem;
-    color: #495057; /* Darker grey for contrast and readability */
+    color: #495057; /* Xám đậm */
     margin-bottom: 15px;
     line-height: 1.6;
     overflow: hidden;
@@ -99,7 +111,7 @@
 }
 
 .gallery-text a {
-    color: #3a9a5f; /* Green link color for consistency */
+    color: #3a9a5f; /* Xanh lá */
     text-decoration: none;
     font-weight: bold;
     font-size: 1rem;
@@ -108,6 +120,6 @@
 }
 
 .gallery-text a:hover {
-    color: #2e7d32; /* Slightly darker green for hover effect */
+    color: #2e7d32; /* Xanh lá đậm hơn khi hover */
     text-decoration: underline;
 }

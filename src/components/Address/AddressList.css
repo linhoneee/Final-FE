@@ -140,6 +140,8 @@
   /* Set Primary Button */
   .action-button.primary-button {
     background-color: #4caf50;
+    margin-top: 10px;
+
     box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
   }
   

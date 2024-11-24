@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import CategoryService from '../../services/CategoryService';
 import './CategoryList.css';
-import AddCategory from "./AddCategory";
-import EditCategory from "./EditCategory";
+import AddCategory from './AddCategory';
+import EditCategory from './EditCategory';
 
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
@@ -23,8 +23,20 @@ const CategoryList = () => {
   };
 
   const handleEditClick = (category) => {
-    setCategoryToEdit(category); // Pass the whole category object
+    setCategoryToEdit(category);
     setShowEditModal(true);
+  };
+
+  const handleCategoryAdded = (newCategory) => {
+    setCategories((prevCategories) => [...prevCategories, newCategory]);
+  };
+
+  const handleCategoryUpdated = (updatedCategory) => {
+    setCategories((prevCategories) =>
+      prevCategories.map((category) =>
+        category.id === updatedCategory.id ? updatedCategory : category
+      )
+    );
   };
 
   return (
@@ -36,6 +48,7 @@ const CategoryList = () => {
           <tr>
             <th>ID</th>
             <th>Tên</th>
+            <th>Mô Tả</th>
             <th>Hành động</th>
           </tr>
         </thead>
@@ -44,6 +57,7 @@ const CategoryList = () => {
             <tr key={category.id}>
               <td>{category.id}</td>
               <td>{category.name}</td>
+              <td>{category.description}</td>
               <td>
                 <button onClick={() => handleEditClick(category)} className="category-list-btn category-list-btn-info">Chỉnh sửa</button>
                 <button onClick={() => deleteCategory(category.id)} className="category-list-btn category-list-btn-danger">Xóa</button>
@@ -53,11 +67,17 @@ const CategoryList = () => {
         </tbody>
       </table>
       
-      {showAddModal && <AddCategory onClose={() => setShowAddModal(false)} />}
+      {showAddModal && (
+        <AddCategory
+          onClose={() => setShowAddModal(false)}
+          onCategoryAdded={handleCategoryAdded} // Truyền hàm này
+        />
+      )}
       {showEditModal && (
         <EditCategory
-          category={categoryToEdit} // Pass categoryToEdit as a prop
+          category={categoryToEdit}
           onClose={() => setShowEditModal(false)}
+          onCategoryUpdated={handleCategoryUpdated} // Truyền hàm này
         />
       )}
     </div>

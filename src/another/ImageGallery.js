@@ -3,14 +3,14 @@ import './ImageGallery.css'; // Import file CSS để định dạng
 
 const ImageGallery = () => {
     const images = [
-        { src: '/1.jpg', title: 'STREET GLIDE™', description: 'Equipped with the Milwaukee-Eight™ 117 engine, the 2024 Street Glide delivers more displacement, torque, and horsepower than ever before.', linkText: 'SEE THE BIKE' },
-        { src: '/2.jpg', title: 'HERITAGE CLASSIC', description: 'A quintessential American cruiser, the 2024 Heritage Classic 114 has showstopping vintage details and pure rock ‘n’ roll style.', linkText: 'SEE THE BIKE' },
-        { src: '/3.jpg', title: 'PAN AMERICA™ 1250 SPECIAL', description: 'Designed for both on- and off-road Adventure Touring, the Pan America1250 Special is engineered to explore and endure.', linkText: 'SEE THE BIKE' }
+        { src: '/111.jpg', title: 'SẢN PHẨM A', description: 'Động cơ mạnh mẽ, thiết kế hiện đại. Dành cho những ai yêu thích tốc độ và phong cách cá nhân.', linkText: 'XEM CHI TIẾT' },
+        { src: '/222.png', title: 'SẢN PHẨM B', description: 'Phong cách cổ điển kết hợp với sự tinh tế. Một lựa chọn hoàn hảo cho những người yêu thích sự hoài niệm.', linkText: 'XEM CHI TIẾT' },
+        { src: '/333.png', title: 'SẢN PHẨM C', description: 'Được thiết kế để khám phá mọi hành trình. Đảm bảo độ bền và hiệu suất vượt trội.', linkText: 'XEM CHI TIẾT' }
     ];
 
     return (
         <div className="gallery-container">
-            <h2>Explore the 2024 motorcycle lineup</h2>
+            <h2>Khám phá các sản phẩm nổi bật 2024</h2>
             <div className="gallery">
                 {images.map((image, index) => (
                     <div className="gallery-item" key={index}>

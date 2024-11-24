@@ -19,12 +19,14 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   max-width: 700px;
   width: 100%;
+  max-height: 90vh; /* Giới hạn chiều cao của modal */
+  overflow-y: auto; /* Cuộn khi nội dung quá dài */
   animation: fadeInScale 0.5s ease-out;
 }
 
 .add-product-modal-title {
   text-align: center;
-  color: #2e7d32; /* Consistent with modal example */
+  color: #2e7d32;
   font-size: 33px;
   font-weight: 700;
   margin-bottom: 30px;
@@ -37,7 +39,7 @@
 
 .add-product-label {
   display: block;
-  color: #0e5111; /* Consistent with modal example */
+  color: #0e5111;
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 10px;
@@ -54,13 +56,6 @@
   font-size: 16px;
   box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
   transition: border-color 0.3s ease;
-}
-
-.add-product-input:focus,
-.add-product-textarea:focus {
-  border-color: #4caf50; /* Consistent focus color */
-  outline: none;
-  box-shadow: inset 0 3px 6px rgba(0, 128, 0, 0.2);
 }
 
 .add-product-images {
@@ -85,7 +80,7 @@
   position: absolute;
   top: -5px;
   right: -5px;
-  background-color: #d32f2f; /* Red color similar to modal */
+  background-color: #d32f2f;
   color: white;
   border: none;
   border-radius: 50%;
@@ -97,7 +92,7 @@
 
 .add-product-file-label {
   display: inline-block;
-  background-color: #4caf50; /* Green color consistent with modal example */
+  background-color: #4caf50;
   color: white;
   padding: 10px 20px;
   border-radius: 8px;
@@ -115,25 +110,25 @@
   font-weight: 600;
   cursor: pointer;
   border: none;
-  background-color: #4caf50; /* Green color consistent with modal */
+  background-color: #4caf50;
   color: #fff;
   font-size: 15px;
   transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
 }
 
 .add-product-button:hover {
-  background-color: #388e3c; /* Darker green on hover */
+  background-color: #388e3c;
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(56, 142, 60, 0.5);
 }
 
 .add-product-button-danger {
-  background-color: #e57373; /* Red color for cancel button */
+  background-color: #e57373;
   color: #fff;
 }
 
 .add-product-button-danger:hover {
-  background-color: #d32f2f; /* Darker red on hover */
+  background-color: #d32f2f;
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(211, 47, 47, 0.5);
 }

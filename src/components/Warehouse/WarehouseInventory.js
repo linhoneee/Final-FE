@@ -80,7 +80,7 @@ const WarehouseInventory = ({ warehouseId }) => {
             <th>Updated At</th>
             <th>Product Name</th>
             <th>Price</th>
-            <th>Weight</th>
+            {/* <th>Weight</th> */}
             <th>Description Details</th>
             <th>Images</th>
           </tr>
@@ -104,7 +104,7 @@ const WarehouseInventory = ({ warehouseId }) => {
                 <>
                   <td>{productDetails[item.productId].product.productName}</td>
                   <td>{productDetails[item.productId].product.price}</td>
-                  <td>{productDetails[item.productId].product.weight}</td>
+                  {/* <td>{productDetails[item.productId].product.weight}</td> */}
                   <td>{productDetails[item.productId].product.descriptionDetails}</td>
                   <td>
                     {productDetails[item.productId].productImages.map((image) => (

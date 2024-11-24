@@ -2,21 +2,28 @@ import React, { useEffect, useState } from 'react';
 import CategoryService from '../../services/CategoryService';
 import './EditCategory.css';
 
-const EditCategory = ({ category, onClose }) => {
+const EditCategory = ({ category, onClose, onCategoryUpdated }) => {
   const [name, setName] = useState(category?.name || '');
+  const [description, setDescription] = useState(category?.description || '');
 
   useEffect(() => {
     if (category) {
       setName(category.name);
+      setDescription(category.description);
     }
   }, [category]);
 
   const updateCategory = (e) => {
     e.preventDefault();
-    const updatedCategory = { name };
-    CategoryService.updateCategory(updatedCategory, category.id).then(() => {
-      onClose();
-    });
+    const updatedCategory = { id: category.id, name, description };
+    CategoryService.updateCategory(updatedCategory, category.id)
+      .then(() => {
+        onCategoryUpdated(updatedCategory); // Cập nhật danh mục trong danh sách
+        onClose(); // Đóng modal
+      })
+      .catch((error) => {
+        console.error('Error updating category:', error);
+      });
   };
 
   return (
@@ -31,6 +38,13 @@ const EditCategory = ({ category, onClose }) => {
               className="edit-category-modal-input"
               value={name}
               onChange={(e) => setName(e.target.value)}
+            />
+            <label>Mô tả danh mục</label>
+            <input
+              type="text"
+              className="edit-category-modal-input"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </div>
           <button className="edit-category-modal-btn edit-category-modal-btn-primary" onClick={updateCategory}>Cập nhật</button>

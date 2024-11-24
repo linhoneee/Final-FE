@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import UserService from '../../services/UserService';
 // import { useNavigate } from 'react-router-dom';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
-import '../../Css/ModalResetPass.css';
 
 const ForgotPassword = ({ open, handleClose, handleOpenResetPassword }) => {
   const [email, setEmail] = useState('');

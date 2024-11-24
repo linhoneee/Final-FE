@@ -3,10 +3,12 @@
     grid-template-columns: 2fr 3fr; /* Hai cột đều nhau */
     grid-template-rows: 25vh 75vh; /* Hàng đầu 1/4 chiều cao, hàng thứ hai 3/4 chiều cao */
     gap: 20px;
-    height: 100vh; /* Chiều cao toàn màn hình */
+    height: 97vh; /* Chiều cao toàn màn hình */
     padding: 20px;
     box-sizing: border-box;
     overflow: hidden;
+    background-color: #edf7ed; /* Light green for eco-friendly feel */
+
 }
 
 .salescomponent {

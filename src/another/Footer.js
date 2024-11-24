@@ -6,71 +6,69 @@ const Footer = () => {
         <footer className="footer">
             <div className="footer-container">
                 <div className="footer-column">
-                    <h3>LEARN TO RIDE</h3>
+                    <h3>SẢN PHẨM</h3>
                     <ul>
-                        <li><a href="#">Motorcycle Training</a></li>
+                        <li><a href="#">Tivi</a></li>
+                        <li><a href="#">Tủ lạnh</a></li>
+                        <li><a href="#">Điều hòa</a></li>
+                        <li><a href="#">Máy giặt</a></li>
+                        <li><a href="#">Máy nước nóng</a></li>
+                        <li><a href="#">Các sản phẩm khác</a></li>
                     </ul>
                 </div>
                 <div className="footer-column">
-                    <h3>CUSTOMER SUPPORT</h3>
+                    <h3>DỊCH VỤ & BẢO HÀNH</h3>
                     <ul>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Offers</a></li>
+                        <li><a href="#">Hướng dẫn sử dụng</a></li>
+                        <li><a href="#">Chính sách bảo hành</a></li>
+                        <li><a href="#">Hỗ trợ kỹ thuật</a></li>
+                        <li><a href="#">Sửa chữa sản phẩm</a></li>
                     </ul>
                 </div>
                 <div className="footer-column">
-                    <h3>FINANCING</h3>
+                    <h3>CHÍNH SÁCH HỖ TRỢ</h3>
                     <ul>
-                        <li><a href="#">Apply for Credit</a></li>
-                        <li><a href="#">Payment Estimator</a></li>
-                        <li><a href="#">Financial Services</a></li>
-                        <li><a href="#">Motorcycle Financing</a></li>
+                        <li><a href="#">Hướng dẫn mua hàng</a></li>
+                        <li><a href="#">Chính sách đổi trả</a></li>
+                        <li><a href="#">Chính sách giao hàng</a></li>
+                        <li><a href="#">Chính sách trả góp</a></li>
                     </ul>
                 </div>
                 <div className="footer-column">
-                    <h3>MOTORCYCLE SERVICES</h3>
+                    <h3>HỖ TRỢ KHÁCH HÀNG</h3>
                     <ul>
-                        <li><a href="#">Owner’s Manuals</a></li>
-                        <li><a href="#">Maintenance Schedules</a></li>
-                        <li><a href="#">Authorized Service</a></li>
-                        <li><a href="#">Software Updates</a></li>
+                        <li><a href="#">Liên hệ</a></li>
+                        <li><a href="#">Tổng đài hỗ trợ</a></li>
+                        <li><a href="#">Câu hỏi thường gặp</a></li>
+                        <li><a href="#">Tư vấn mua sắm</a></li>
                     </ul>
                 </div>
                 <div className="footer-column">
-                    <h3>INSURANCE</h3>
+                    <h3>VỀ CHÚNG TÔI</h3>
                     <ul>
-                        <li><a href="#">Insurance Services</a></li>
-                    </ul>
-                </div>
-                <div className="footer-column">
-                    <h3>ABOUT US</h3>
-                    <ul>
-                        <li><a href="#">Our Company</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Investors</a></li>
-                        <li><a href="#">Sustainability</a></li>
-                        <li><a href="#">Become a Dealer</a></li>
-                        <li><a href="#">Factory Tours</a></li>
-                        <li><a href="#">Museum</a></li>
+                        <li><a href="#">Giới thiệu</a></li>
+                        <li><a href="#">Hệ thống cửa hàng</a></li>
+                        <li><a href="#">Tuyển dụng</a></li>
+                        <li><a href="#">Đối tác kinh doanh</a></li>
+                        <li><a href="#">Liên hệ hợp tác</a></li>
                     </ul>
                 </div>
             </div>
 
             <div className="footer-bottom">
                 <ul className="footer-bottom-links">
-                    <li><a href="#">Sitemap</a></li>
-                    <li><a href="#">Disclaimers</a></li>
-                    <li><a href="#">Legal Notice</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Cookie Policy</a></li>
-                    <li><a href="#">Manage Cookie Preferences</a></li>
-                    <li><a href="#">We Care About You</a></li>
+                    <li><a href="#">Sơ đồ trang</a></li>
+                    <li><a href="#">Thông báo pháp lý</a></li>
+                    <li><a href="#">Chính sách bảo mật</a></li>
+                    <li><a href="#">Chính sách cookie</a></li>
+                    <li><a href="#">Quản lý cookie</a></li>
                 </ul>
                 <div className="footer-social">
-                    <a href="#"><i className="fab fa-facebook-f"></i></a>
-                    <a href="#"><i className="fab fa-twitter"></i></a>
-                    <a href="#"><i className="fab fa-instagram"></i></a>
-                    <a href="#"><i className="fab fa-youtube"></i></a>
+                    <a href="#" aria-label="Facebook">F</a>
+                    <a href="#" aria-label="TikTok">T</a>
+                    <a href="#" aria-label="YouTube">Y</a>
+                    <a href="#" aria-label="Instagram">I</a>
+                    <a href="#" aria-label="Twitter">W</a>
                 </div>
             </div>
         </footer>

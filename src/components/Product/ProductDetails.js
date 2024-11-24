@@ -5,7 +5,7 @@ import ReviewService from '../../services/ReviewService';
 import CartService from '../../services/CartService';
 import Modal from 'react-modal';
 import './ProductDetails.css'; // Import the new CSS file
-import '../../Css/AnimationAddToCart.css'; // Import the updated CSS file
+import './AnimationAddToCart.css'; // Import the updated CSS file
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCartItemCount } from '../../store/actions/cartActions';
 

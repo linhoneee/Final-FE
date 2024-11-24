@@ -154,3 +154,46 @@
 .review-response-modal-content button:last-child:hover {
     background-color: red;
 }
+.modal-product-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-product-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 15px;
+    border-radius: 5px;
+}
+/* Styling cho ngôi sao */
+.stars {
+    display: inline-flex;
+    align-items: center;
+    font-size: 20px;
+}
+
+.star {
+    font-size: 24px;
+    margin-right: 2px;
+    transition: transform 0.3s ease;
+}
+
+.gold-star {
+    color: #f1c40f; /* Vàng */
+}
+
+.silver-star {
+    color: #bdc3c7; /* Bạc */
+}
+
+.star:hover {
+    transform: scale(1.2);
+}
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+    font-weight: bold;
+}

@@ -5,7 +5,7 @@
   justify-content: center;
   align-items: flex-start;
   padding: 20px;
-  height: 630px; /* Đảm bảo container bao phủ toàn bộ chiều cao màn hình */
+  height: 720px; /* Đảm bảo container bao phủ toàn bộ chiều cao màn hình */
   overflow: hidden; /* Ngăn chặn cuộn toàn bộ container */
 }
 

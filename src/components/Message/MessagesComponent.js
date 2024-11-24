@@ -276,9 +276,12 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
         <List className="custom-messages-list">
           {messages.map((msg, index) => (
             <ListItem key={index} className={`custom-message-item ${String(msg.userId) === String(userID) ? 'custom-message-right' : 'custom-message-left'}`}>
-              <ListItemAvatar style={{ padding: '10px' }}>
-                <Avatar style={{ width: '60px', height: '60px', fontSize: '24px' }}>{msg.username?.charAt(0) || '?'}</Avatar>
-              </ListItemAvatar>
+<ListItemAvatar className="custom-message-avatar-container">
+  <Avatar className="custom-message-avatar">
+    {msg.username?.charAt(0) || '?'}
+  </Avatar>
+</ListItemAvatar>
+
               <ListItemText
                 primary={
                   <>

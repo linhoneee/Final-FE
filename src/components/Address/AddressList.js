@@ -61,45 +61,50 @@ const AddressList = () => {
   <button onClick={() => navigate(`/user/${userID}/add-address`)} className="address-list-button address-list-button-primary">Add Address</button>
   <button onClick={handleShowModal} className="address-list-button address-list-button-secondary">Select Address</button>
 </div>
+<table className="address-list-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Receiver Name</th>
+      <th>Address</th> {/* Cột mới cho địa chỉ nối lại */}
+      <th>Actions</th> {/* Nút hành động trên cùng một hàng */}
+    </tr>
+  </thead>
+  <tbody>
+    {addresses.map((address) => (
+      <tr key={address.id}>
+        <td>{address.id}</td>
+        <td>{address.receiverName}</td>
+        <td>
+          {`${address.street}, ${address.ward}, ${address.district}, ${address.provinceCity}`}
+        </td> {/* Nối địa chỉ */}
+        <td className="action-buttons">
+          <button
+            className="action-button edit-button"
+            onClick={() => navigate(`/user/${userID}/edit-address/${address.id}`)}
+          >
+            Edit
+          </button>
+          <button
+            className="action-button delete-button"
+            onClick={() => deleteAddress(address.id)}
+          >
+            Delete
+          </button>
+          {!address.isPrimary && (
+            <button
+              className="action-button primary-button"
+              onClick={() => setPrimaryAddress(address.id)}
+            >
+              Set Primary
+            </button>
+          )}
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
 
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Receiver Name</th>
-            <th>Province/City</th>
-            <th>District</th>
-            <th>Ward</th>
-            <th>Street</th>
-            <th>Status</th>
-            {/* <th>Latitude</th>
-            <th>Longitude</th> */}
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {addresses.map((address) => (
-            <tr key={address.id}>
-              <td>{address.id}</td>
-              <td>{address.receiverName}</td>
-              <td>{address.provinceCity}</td>
-              <td>{address.district}</td>
-              <td>{address.ward}</td>
-              <td>{address.street}</td>
-              <td>{address.isPrimary ? 'Mặc định' : ' '}</td>
-              {/* <td>{address.latitude}</td>
-              <td>{address.longitude}</td> */}
-    <td>
-  <button className="action-button edit-button" onClick={() => navigate(`/user/${userID}/edit-address/${address.id}`)}>Edit</button>
-  <button className="action-button delete-button" onClick={() => deleteAddress(address.id)}>Delete</button>
-  {!address.isPrimary && (
-    <button className="action-button primary-button" onClick={() => setPrimaryAddress(address.id)}>Thiết lập mặc định</button>
-  )}
-</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
 
       {showModal && (
         <AddAddressPlusModal

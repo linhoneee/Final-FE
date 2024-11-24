@@ -1,0 +1,116 @@
+.update-user-modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+  }
+  
+  .update-user-modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    max-width: 700px;
+    width: 100%;
+    max-height: 90vh; /* Giới hạn chiều cao modal */
+    overflow-y: auto; /* Thêm thanh cuộn dọc nếu cần */
+    animation: update-user-fadeInScale 0.5s ease-out;
+  }
+  
+  .update-user-modal-header {
+    text-align: center;
+    color: #2e7d32;
+    font-size: 33px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+  }
+  
+  .update-user-modal-form-group {
+    margin-bottom: 20px;
+  }
+  
+  .update-user-modal-label {
+    display: block;
+    color: #0e5111;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .update-user-modal-input {
+    width: 95%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease;
+  }
+  
+  .update-user-modal-input:focus {
+    border-color: #4caf50;
+    outline: none;
+    box-shadow: inset 0 3px 6px rgba(0, 128, 0, 0.2);
+  }
+  
+  .update-user-modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .update-user-modal-btn {
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    font-size: 15px;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .update-user-modal-btn-primary {
+    background-color: #4caf50;
+    color: #fff;
+  }
+  
+  .update-user-modal-btn-primary:hover {
+    background-color: #388e3c;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(56, 142, 60, 0.5);
+  }
+  
+  .update-user-modal-btn-secondary {
+    background-color: #e57373;
+    color: #fff;
+  }
+  
+  .update-user-modal-btn-secondary:hover {
+    background-color: #d32f2f;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(211, 47, 47, 0.5);
+  }
+  
+  @keyframes update-user-fadeInScale {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  

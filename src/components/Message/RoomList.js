@@ -147,7 +147,9 @@ const RoomList = ({ onRoomSelect }) => {
               <div className="message-and-unread">
                 <span className="MuiListItemText-secondary">{room.chatMessage.text}</span>
                 {room.unreadCount > 0 && (
-                  <span className="unread-count-badge">{room.unreadCount}</span>
+                  <span className="unread-count-badge">
+                    {room.unreadCount}
+                    </span>
                 )}
               </div>
             }

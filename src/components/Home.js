@@ -8,7 +8,7 @@ import ImageGallery from '../another/ImageGallery';
 import StoreMap from '../another/StoreMap';
 import RecentlyViewedProducts from '../another/RecentlyViewedProducts';
 // import MatomoDashboard from '../another/MatomoDashboard';
-import WeatherDisplay from '../another/WeatherDisplay';
+// import WeatherDisplay from '../another/WeatherDisplay';
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -52,7 +52,7 @@ const Home = () => {
 
     return (
         <div className="content-wrapper">
-            <h1>Welcome to Home</h1>
+            <h3></h3>
             <ImageSlider />
             <ImageGallery />
             <RecentlyViewedProducts />
@@ -61,7 +61,7 @@ const Home = () => {
             {/* <MatomoDashboard /> */}
 
 
-            <WeatherDisplay />
+            {/* <WeatherDisplay /> */}
 
 
         </div>

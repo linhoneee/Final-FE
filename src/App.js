@@ -5,7 +5,8 @@ import Navbar from './components/Navbar';
 import NavBarAdmin from './components/NavBarAdmin';
 import { Button } from '@material-ui/core';
 import React, { useEffect,useState } from 'react';
-
+import { useSelector } from 'react-redux';
+import "./App.css";
 import LoginUser from './components/User/LoginUser';
 import Home from './components/Home';
 import BrandList from './components/Brand/BrandList';
@@ -36,8 +37,8 @@ import MessagesComponent from './components/Message/MessagesComponent';
 import MessageAdmin from './components/Message/MessagesAdmin';
 import ChatPage from './components/Message/ChatPage';
 
-// import StripePaymentInfo from './components/Payment/StripePaymentInfo';
-// import PaymentSuccess from './components/Payment/PaymentSuccess'; 
+import StripePaymentInfo from './components/Payment/StripePaymentInfo';
+import PaymentSuccess from './components/Payment/PaymentSuccess'; 
 import AddAddress from './components/Address/AddAddress';
 import AddressList from './components/Address/AddressList';
 import EditAddress from './components/Address/EditAddress';
@@ -62,8 +63,12 @@ import OrderList from './components/Order/OrderList';
 import ReviewResponsePage from './pages/ReviewResponsePage';
 import Draggable from 'react-draggable';
 import Dashboard from './dashboard/dashboard';
+import WeatherDisplay from './another/WeatherDisplay';
+import RegisterUser from './components/User/RegisterUser';
 
-function App() {
+function MainApp() {
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const roles = useSelector((state) => state.auth.roles);
 
   const [isMessageModalOpen, setMessageModalOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -123,45 +128,49 @@ function App() {
 
 
   return (
-    <Provider store={store}>
       <Router>
-        {/* <Navbar /> */}
-        <Draggable
-          onStart={() => setIsDragging(false)}
-          onDrag={() => setIsDragging(true)}
-          onStop={() => setTimeout(() => setIsDragging(false), 0)} 
-        >
-<Button 
-    variant="contained" 
-    color="primary" 
-    onClick={handleOpenMessageModal} 
-    style={{
-      position: 'fixed', 
-      bottom: '20px', 
-      right: '20px', 
-      borderRadius: '50%', 
-      width: '60px', 
-      height: '60px',
-      backgroundColor: '#215e24',
-      backgroundImage: 'url("https://cdn-icons-png.flaticon.com/512/6785/6785302.png")',
-      backgroundSize: '40px 40px', 
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-      color: 'white',
-      zIndex: 1000,
-    }}
-  />
-        </Draggable>
-        <MessagesComponent open={isMessageModalOpen} onClose={handleCloseMessageModal} />
+        <Navbar />
+        {/* Button mở MessagesComponent */}
+       {/* Kiểm tra nếu người dùng đã đăng nhập và có roles là 'USER' mới hiển thị Draggable và Button */}
+      {isLoggedIn && roles === 'USER' && (
+        <>
+          <Draggable
+            onStart={() => setIsDragging(false)}
+            onDrag={() => setIsDragging(true)}
+            onStop={() => setTimeout(() => setIsDragging(false), 0)}
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleOpenMessageModal}
+              style={{
+                position: 'fixed',
+                bottom: '20px',
+                right: '300px',
+                borderRadius: '50%',
+                width: '60px',
+                height: '60px',
+                backgroundColor: '#215e24',
+                backgroundImage: 'url("https://cdn-icons-png.flaticon.com/512/6785/6785302.png")',
+                backgroundSize: '40px 40px',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                color: 'white',
+                zIndex: 1000,
+              }}
+            />
+          </Draggable>
+          <MessagesComponent open={isMessageModalOpen} onClose={handleCloseMessageModal} />
+        </>
+      )}
 
-        <div style={{ display: 'flex'}}> {/* Sử dụng Flexbox để bố trí layout */}
-          <NavBarAdmin /> 
-          {/* NavbarAdmin sẽ nằm ở bên trái */}
-          <div style={{ flexGrow: 1, padding: '20px', overflowY: 'auto' }}> {/* Phần này chứa các component router */}
+        <div  style={{ display: 'flex'}}> {/* Sử dụng Flexbox để bố trí layout */}
+  {/* NavBarAdmin cố định bên trái */}
+  <NavBarAdmin />
+          <div style={{ flexGrow: 1, overflowY: 'auto' }}> {/* Phần này chứa các component router */}
             <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />
-
 
           {/* Brand Routes */}
           <Route path="/brands" element={<BrandList />} />
@@ -180,7 +189,7 @@ function App() {
           <Route path="/login" element={<LoginUser />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-
+          <Route path='/register' element={<RegisterUser />} />
           {/* Product Routes */}
           <Route path="/productsadmin" element={<ListProductByAdmin />} />
           <Route path="/addproduct" element={<AddProduct />} />
@@ -199,8 +208,8 @@ function App() {
           <Route path="/checkout/:id" element={<Checkout />} />
 
           {/* Payment Routes */}
-          {/* <Route path="/stripe" element={<StripePaymentInfo />} />
-          <Route path="/stripe/success" element={<PaymentSuccess />} /> */}
+          <Route path="/stripe" element={<StripePaymentInfo />} />
+          <Route path="/stripe/success" element={<PaymentSuccess />} />
 
           {/* Message Routes */}
           <Route path="/message1/:roomId" element={<MessagesComponent />} />
@@ -244,10 +253,18 @@ function App() {
 
         </Routes>
         </div>
+  {/* WeatherDisplay cố định bên phải */}
+  <WeatherDisplay />
+
         </div>
               </Router>
+  );
+}
+function App() {
+  return (
+    <Provider store={store}>
+      <MainApp />
     </Provider>
   );
 }
-
 export default App;

@@ -1,9 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import ProductService from '../../services/ProductService';
 import './AddProduct.css'; // Import CSS file
 
-const AddProduct = () => {
+const AddProduct = ({ onClose }) => {
   const [productName, setProductName] = useState('');
   const [descriptionDetails, setDescriptionDetails] = useState('');
   const [price, setPrice] = useState('');
@@ -11,7 +10,6 @@ const AddProduct = () => {
   const [imageFiles, setImageFiles] = useState([]);
   const [imageUrls, setImageUrls] = useState([]);
   const fileInputRef = useRef(null);
-  const navigate = useNavigate();
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -31,25 +29,29 @@ const AddProduct = () => {
     e.preventDefault();
     const product = { productName, descriptionDetails, price, weight };
 
-    ProductService.CreateProduct(product).then((response) => {
-      const productId = response.data.id;
-      const formData = new FormData();
-      imageFiles.forEach((file) => {
-        formData.append('images', file);
-      });
+    ProductService.CreateProduct(product)
+      .then((response) => {
+        const productId = response.data.id;
+        const formData = new FormData();
+        imageFiles.forEach((file) => {
+          formData.append('images', file);
+        });
 
-      ProductService.UploadProductImages(productId, formData).then(() => {
-        if (fileInputRef.current) {
-          fileInputRef.current.value = '';
-        }
-        setImageFiles([]);
-        navigate('/productsadmin');
-      }).catch(err => {
-        console.error('There was an error uploading the images!', err);
+        ProductService.UploadProductImages(productId, formData)
+          .then(() => {
+            if (fileInputRef.current) {
+              fileInputRef.current.value = '';
+            }
+            setImageFiles([]);
+            onClose(); // Close modal after save
+          })
+          .catch((err) => {
+            console.error('There was an error uploading the images!', err);
+          });
+      })
+      .catch((err) => {
+        console.error('There was an error creating the product!', err);
       });
-    }).catch(err => {
-      console.error('There was an error creating the product!', err);
-    });
   };
 
   return (
@@ -113,7 +115,7 @@ const AddProduct = () => {
             />
           </div>
           <button type="submit" className="add-product-button add-product-button-primary">Save</button>
-          <button type="button" onClick={() => { navigate("/productsadmin") }} className="add-product-button add-product-button-danger">Cancel</button>
+          <button type="button" onClick={onClose} className="add-product-button add-product-button-danger">Cancel</button>
         </form>
       </div>
     </div>

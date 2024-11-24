@@ -9,12 +9,12 @@
     align-items: center;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     color: white;
-    border-radius: 15px;
-    margin-bottom: 25px;
-    /* position: sticky; */
-    top: 0;
-    z-index: 1000;
+    position: sticky; /* Dính vị trí */
+    top: 0; /* Vị trí trên cùng của viewport */
+    z-index: 1000; /* Hiển thị trên các phần tử khác */
+    min-height: 43px;
 }
+
 
 /* Styling for the logo within the navbar */
 .navbar-component-logo {

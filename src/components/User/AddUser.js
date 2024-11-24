@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import UserService from '../../services/UserService';
-import { useNavigate } from 'react-router-dom';
 import './AddUser.css';
 
-const AddUser = () => {
+const AddUser = ({ onClose }) => {
   const [user, setUser] = useState({
     username: '',
     email: '',
@@ -13,7 +12,6 @@ const AddUser = () => {
     phoneNumber: '',
     roles: 'USER'
   });
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,7 +23,7 @@ const AddUser = () => {
     try {
       await UserService.registerUser(user);
       alert('User registered successfully');
-      navigate('/userList');
+      onClose();
     } catch (error) {
       console.error('Error registering user:', error);
       alert('Failed to register user');
@@ -103,19 +101,24 @@ const AddUser = () => {
             />
           </div>
           <div className="add-user-modal-form-group">
-            <label className="add-user-modal-label">Roles</label>
-            <input
-              type="text"
-              className="add-user-modal-input"
-              name="roles"
-              value={user.roles}
-              onChange={handleChange}
-              required
-            />
+            <div className="add-user-modal-form-group">
+  <label className="add-user-modal-label">Roles</label>
+  <select
+    className="add-user-modal-input"
+    name="roles"
+    value={user.roles}
+    onChange={handleChange}
+    required
+  >
+    <option value="USER">USER</option>
+    <option value="ADMIN">ADMIN</option>
+  </select>
+</div>
+
           </div>
           <div className="add-user-modal-buttons">
             <button type="submit" className="add-user-modal-btn add-user-modal-btn-primary">Register</button>
-            <button type="button" onClick={() => navigate('/userList')} className="add-user-modal-btn add-user-modal-btn-secondary">Cancel</button>
+            <button type="button" onClick={onClose} className="add-user-modal-btn add-user-modal-btn-secondary">Cancel</button>
           </div>
         </form>
       </div>
