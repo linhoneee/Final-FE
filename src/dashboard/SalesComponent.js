@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './SalesComponent.css';
+import OrderService from '../services/OrderService';
+import UserService from '../services/UserService';
+
 const ReportAnalysis = () => {
   const [data, setData] = useState({
     totalSales: 0,
@@ -10,43 +13,50 @@ const ReportAnalysis = () => {
   const [dataUser, setDataUser] = useState({
     totalUser: 0,
   });
+
   useEffect(() => {
-    // Hardcoded data from the given JSON
-    const fetchedData = {
-      totalSales: 6907.0,
-      totalOrders: 50,
-      salesGrowthRate: 404.7534429142603,
-      orderGrowthRate: 412.5,
+    const fetchData = async () => {
+      try {
+        // Lấy dữ liệu từ OrderService
+        OrderService.getRateAndTotal().then((response)=>{
+          setData(response.data);
+          console.log(response.data)
+
+        })
+
+
+        UserService.getTotalUser().then((response)=>{
+          setDataUser(response.data);
+          console.log(response.data)
+
+        })
+
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     };
 
-    // Update state with fetched data
-    setData(fetchedData);
-    
-    const fetchedDataUser = {
-      totalUser: 100,
-
-    };
-
-    // Update state with fetched data
-    setDataUser(fetchedDataUser);
-  }, []);
+    // Gọi hàm fetchData
+    fetchData();
+  }, []); // Chạy lần đầu tiên khi component mount
 
   return (
     <div className="report-analysis">
       <div className="stats">
         <div className="stat">
-          <h3>Total Sales</h3>
-          <p className="value">${data.totalSales.toLocaleString()}</p>
-          <p className="sub">{data.salesGrowthRate.toFixed(2)}% ↑ in the last month</p>
+          <h3>Tổng doanh thu</h3>
+          <p className="value">${data.totalSales?.toLocaleString() || 0}</p>
+          <p className="sub">{data.salesGrowthRate?.toFixed(2) || 0}% ↑ trong tháng trước</p>
         </div>
         <div className="stat">
-          <h3>Total Orders</h3>
-          <p className="value">{data.totalOrders}</p>
-          <p className="sub">{data.orderGrowthRate.toFixed(2)}% ↑ in the last month</p>
+          <h3>Tổng số đơn hàng</h3>
+          <p className="value">{data.totalOrders || 0}</p>
+          <p className="sub">{data.orderGrowthRate?.toFixed(2) || 0}% ↑ trong tháng trước</p>
         </div>
         <div className="stat">
-          <h3>Total User</h3>
-          <p className="value">{dataUser.totalUser}</p>
+          <h3>Tổng số người dùng</h3>
+          <p className="value">{dataUser.totalUsers}</p>
         </div>
       </div>
     </div>

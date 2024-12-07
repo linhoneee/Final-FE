@@ -239,3 +239,96 @@
     color: #ff9800;
 }
 
+/* Buttons container */
+.buttons-container {
+    position: absolute; /* Sử dụng absolute để di chuyển tự do trong phần tử cha */
+    right: 200px;        /* Di chuyển sang phải 50px */
+    bottom: 270px;       /* Di chuyển xuống dưới 30px */
+    gap: 10px;          /* Khoảng cách giữa hai nút */
+}
+
+/* Buttons style */
+.buttons-container button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 20px 40px;
+    border-radius: 5px;
+    font-size: 1.2em;
+    margin: 10px 0;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    max-width: 300px;
+    width: 100%;
+}
+
+.buttons-container button:hover {
+    background-color: #388E3C;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+/* Tổng thể container thông tin sản phẩm */
+.product-info {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  /* Style cho mỗi mục thông tin sản phẩm */
+  .product-info-item {
+    background-color: #f0f8ff; /* Nền xanh nhẹ */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.1); /* Hiệu ứng bóng đổ nhẹ */
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Hiệu ứng hover */
+  }
+  
+  /* Hiệu ứng hover cho mỗi mục thông tin */
+  .product-info-item:hover {
+    transform: translateY(-5px); /* Đẩy lên khi hover */
+    box-shadow: 0 10px 25px rgba(0, 123, 255, 0.2); /* Tăng bóng đổ khi hover */
+  }
+  
+  /* Style cho các tiêu đề (strong) */
+  .product-info-item strong {
+    font-size: 1.2rem;
+    color: #388E3C; /* Xanh dương nổi bật */
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  /* Style cho giá trị (span) */
+  .product-info-item span {
+    font-size: 1.1rem;
+    color: #333; /* Màu chữ đậm để dễ đọc */
+    font-weight: 600;
+    margin-top: 5px;
+  }
+  
+  /* Style cho mô tả (p) */
+  .product-info-item p {
+    font-size: 1rem;
+    color: #555; /* Màu chữ xám để không làm mất sự chú ý khỏi tiêu đề */
+    margin-top: 10px;
+    line-height: 1.6;
+    font-style: italic;
+  }
+  
+  /* Cải tiến không gian giữa các mục */
+  .product-info-item:last-child {
+    margin-bottom: 0; /* Không có margin dưới cùng của mục cuối */
+  }
+  
+  /* Đảm bảo text không bị gò bó */
+  .product-info-item span, .product-info-item p {
+    word-wrap: break-word; /* Cho phép chữ không bị tràn ra ngoài */
+  }
+  
+  /* Hiệu ứng transition mượt mà khi hover */
+  .product-info-item {
+    cursor: pointer; /* Thêm con trỏ pointer để người dùng biết rằng phần này có thể click */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Mượt mà khi hover */
+  }
+  

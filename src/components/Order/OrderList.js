@@ -83,36 +83,36 @@ const OrderList = () => {
 
     return (
         <div className="order-list-container">
-            <h1 className="order-list-header">Order History</h1>
+            <h1 className="order-list-header">Lịch Sử Đơn Hàng</h1>
             {currentOrders.length > 0 ? (
                 <div className="order-list">
                     {currentOrders.map((order) => (
                         <div className="order-card" key={order.id}>
                             <div className="order-header">
-                                <h2 className="order-id">Order #{order.id}</h2>
+                                <h2 className="order-id">Đơn Hàng #{order.id}</h2>
                                 <p className="order-date">{new Date(order.createdAt).toLocaleDateString()}</p>
                             </div>
                             <div className="order-body">
                                 <div className="order-info">
-                                    <p><strong>Total:</strong> ${order.total ? order.total.toFixed(2) : 'N/A'}</p>
-                                    <p><strong>Distance:</strong> {order.distanceData.distance} km</p>
-                                    <p><strong>Shipping:</strong> {order.selectedShipping.name}</p>
+                                    <p><strong>Tổng cộng:</strong> ${order.total ? order.total.toFixed(2) : 'N/A'}</p>
+                                    <p><strong>Khoảng cách:</strong> {order.distanceData.distance} km</p>
+                                    <p><strong>Vận chuyển:</strong> {order.selectedShipping.name}</p>
                                 </div>
                                 <div className="order-addresses">
                                     <div className="address">
-                                        <h3>Warehouse Address</h3>
-                                        <p><strong>Name:</strong> {order.distanceData.warehouseName}</p>
-                                        <p><strong>Address:</strong> {`${order.distanceData.warehouseWard}, ${order.distanceData.warehouseDistrict}, ${order.distanceData.warehouseProvinceCity}`}</p>
+                                        <h3>Địa Chỉ Kho</h3>
+                                        <p><strong>Tên:</strong> {order.distanceData.warehouseName}</p>
+                                        <p><strong>Địa chỉ:</strong> {`${order.distanceData.warehouseWard}, ${order.distanceData.warehouseDistrict}, ${order.distanceData.warehouseProvinceCity}`}</p>
                                     </div>
                                     <div className="address">
-                                        <h3>Receiver Address</h3>
-                                        <p><strong>Name:</strong> {order.distanceData.receiverName}</p>
-                                        <p><strong>Address:</strong> {`${order.distanceData.street}, ${order.distanceData.ward}, ${order.distanceData.district}, ${order.distanceData.provinceCity}`}</p>
+                                        <h3>Địa Chỉ Người Nhận</h3>
+                                        <p><strong>Tên:</strong> {order.distanceData.receiverName}</p>
+                                        <p><strong>Địa chỉ:</strong> {`${order.distanceData.street}, ${order.distanceData.ward}, ${order.distanceData.district}, ${order.distanceData.provinceCity}`}</p>
                                     </div>
-                                    <button className="view-location-button" onClick={() => handleViewLocation(order.distanceData)}>View Location</button>
+                                    <button className="view-location-button" onClick={() => handleViewLocation(order.distanceData)}>Xem Vị Trí</button>
                                 </div>
                                 <div className="order-items">
-                                    <h3>Items</h3>
+                                    <h3>Sản Phẩm</h3>
                                     {Array.isArray(order.items) ? (
                                         <ul className="items-list">
                                             {order.items.map((item, index) => (
@@ -124,18 +124,18 @@ const OrderList = () => {
                                                     </div>
                                                     <div className="item-details">
                                                         <p><strong>{item.name}</strong></p>
-                                                        <p>Product ID: {item.productId}</p>
-                                                        <p>Price: ${item.price ? item.price.toFixed(2) : 'N/A'}</p>
-                                                        <p>Quantity: {item.quantity}</p>
+                                                        <p>Mã sản phẩm: {item.productId}</p>
+                                                        <p>Giá: ${item.price ? item.price.toFixed(2) : 'N/A'}</p>
+                                                        <p>Số lượng: {item.quantity}</p>
                                                         {!item.isReviewed && (
-                                                            <button className="review-button" onClick={() => handleReviewClick(order, item)}>Review</button>
+                                                            <button className="review-button" onClick={() => handleReviewClick(order, item)}>Đánh Giá</button>
                                                         )}
                                                     </div>
                                                 </li>
                                             ))}
                                         </ul>
                                     ) : (
-                                        <p>No items found.</p>
+                                        <p>Không tìm thấy sản phẩm nào.</p>
                                     )}
                                 </div>
                             </div>
@@ -147,22 +147,22 @@ const OrderList = () => {
                             disabled={currentPage === 1}
                             className="pagination-button"
                         >
-                            Previous
+                            Trang Trước
                         </button>
                         <span className="pagination-info">
-                            Page {currentPage} of {totalPages}
+                            Trang {currentPage} trên {totalPages}
                         </span>
                         <button
                             onClick={() => paginate(currentPage + 1)}
                             disabled={currentPage === totalPages}
                             className="pagination-button"
                         >
-                            Next
+                            Trang Tiếp
                         </button>
                     </div>
                 </div>
             ) : (
-                <p>No orders found.</p>
+                <p>Không có đơn hàng nào.</p>
             )}
             {selectedProduct && (
                 <ReviewModal
@@ -180,6 +180,7 @@ const OrderList = () => {
                 />
             )}
         </div>
+
     );
 };
 

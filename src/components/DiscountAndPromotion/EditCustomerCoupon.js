@@ -3,6 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import CustomerCouponService from '../../services/CustomerCouponService';
 import './EditCustomerCoupon.css';
+import showGeneralToast from '../toastUtils/showGeneralToast'; // Import toast function
 
 const EditCustomerCoupon = ({ coupon, closeModal, fetchCustomerCoupons }) => {
   const [code, setCode] = useState(coupon.code);
@@ -16,12 +17,44 @@ const EditCustomerCoupon = ({ coupon, closeModal, fetchCustomerCoupons }) => {
 
   const updateCustomerCoupon = (e) => {
     e.preventDefault();
-    const updatedCoupon = { code, description, discountPercentage, startDate, endDate, maxUsage, minimumOrderValue, discountType };
-    CustomerCouponService.updateCustomerCoupon(updatedCoupon, coupon.id).then(() => {
-      fetchCustomerCoupons();
-      closeModal();
-    });
+    
+    // Tạo đối tượng updatedCoupon từ các giá trị đã cập nhật
+    const updatedCoupon = { 
+      code, 
+      description, 
+      discountPercentage, 
+      startDate, 
+      endDate, 
+      maxUsage, 
+      minimumOrderValue, 
+      discountType 
+    };
+    
+    // Gọi API để cập nhật coupon
+    CustomerCouponService.updateCustomerCoupon(updatedCoupon, coupon.id)
+      .then(() => {
+        // Cập nhật lại danh sách customer coupons sau khi cập nhật thành công
+        fetchCustomerCoupons();
+        
+        // Đóng modal
+        closeModal();
+        
+        // Hiển thị thông báo thành công
+        showGeneralToast("Mã giảm giá đã được cập nhật thành công!", "success");
+      })
+      .catch((error) => {
+        console.error('Error updating customer coupon:', error);
+        
+        // Hiển thị thông báo lỗi nếu có
+        if (error.response && error.response.data) {
+          const { message } = error.response.data;
+          showGeneralToast(message, "error");
+        } else {
+          showGeneralToast("Có lỗi xảy ra khi cập nhật mã giảm giá", "error");
+        }
+      });
   };
+  
 
   return (
     <div className="edit-customer-coupon-modal-container">

@@ -6,6 +6,7 @@ import { login } from '../../store/actions/authActions';
 import ForgotPassword from './ForgotPassword';
 import ResetPassword from './ResetPassword';
 import './LoginUser.css'; // Import the specific CSS file
+import showGeneralToast from '../toastUtils/showGeneralToast'; // Import toast function
 
 const LoginUser = () => {
   const [email, setEmail] = useState('');
@@ -23,21 +24,27 @@ const LoginUser = () => {
       const response = await UserService.loginUser({ email, password });
       const { token, email: userEmail, username, roles, UserID } = response.data;
 
-      localStorage.setItem('token', token);
-      localStorage.setItem('username', username);
-      localStorage.setItem('email', userEmail);
-      localStorage.setItem('roles', roles);
-      localStorage.setItem('userID', UserID);
+
+      if (token && username && email && roles && UserID) {
+        // Log the received response
+        console.log('Received response:', {
+            token,
+            username,
+            email,
+            roles,
+            UserID,
+        });
 
       dispatch(login(token, userEmail, username, roles, UserID));
 
-      alert('Đăng nhập thành công');
+      showGeneralToast('Đăng nhập thành công', "success");
     // Điều hướng dựa trên vai trò
+    console.log("role",roles)
     if (roles === 'USER') {
       navigate('/');
     } else if (roles === 'ADMIN') {
       navigate('/dashboard');
-    }
+    }}
   } catch (error) {
     handleLoginError(error);
   }

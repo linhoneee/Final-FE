@@ -54,18 +54,106 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
       });
     }
   }, []);
+
+  useEffect(() => {
+    if (!roomId) {
+      console.error('Room ID is undefined');
+      return;
+    }
+
+    let heartbeatInterval; // Khai báo biến heartbeatInterval
+
+    const socket = new SockJS('http://localhost:6010/ws');
+    const client = new Client({
+      webSocketFactory: () => socket,
+      debug: console.log,
+      onConnect: () => {
+        // Gửi heartbeat ngay lập tức khi kết nối thành công
+        client.publish({
+          destination: '/app/chat.heartbeat',
+          body: JSON.stringify(userID), // Gửi ID người dùng làm heartbeat
+        });
+        console.log('Initial heartbeat sent for user:', userID); // Log xác nhận gửi heartbeat đầu tiên
+
+        // Thiết lập gửi heartbeat mỗi 30 giây sau đó
+        heartbeatInterval = setInterval(() => {
+          client.publish({
+            destination: '/app/chat.heartbeat',
+            body: JSON.stringify(userID),
+          });
+          console.log('Heartbeat sent for user:', userID); // Log xác nhận gửi heartbeat tiếp theo
+        }, 30000);
+
+        // Đăng ký để nhận tin nhắn mới trong phòng chat
+        client.subscribe(`/topic/room/${roomId}`, (message) => {
+          const receivedMessage = JSON.parse(message.body);
+          const isDuplicate = messages.some((msg) => msg.id === receivedMessage.id);
+
+          if (!isDuplicate) {
+            if (open) {
+              setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+            } else if (document.visibilityState === 'visible') {
+              showCustomToast(receivedMessage.username, receivedMessage.text, receivedMessage.createdAt);
+              setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+            } else {
+              if (Notification.permission === 'granted') {
+                console.log(receivedMessage)
+                navigator.serviceWorker.ready.then((registration) => {
+                  registration.showNotification(`Tin nhắn mới từ ${receivedMessage.username}`, {
+                    body: receivedMessage.text,
+                    icon: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
+                  });
+                });
+              }
+              setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+            }
+          }
+        });
+      },
+    });
+
+    client.activate();
+    stompClient.current = client;
+
+    MessageService.getMessagesByRoomId(roomId)
+      .then((response) => {
+        setMessages(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching messages: ', error);
+      });
+
+    return () => {
+      // Cleanup: Ngừng gửi heartbeat và ngắt kết nối WebSocket khi component bị huỷ
+      if (heartbeatInterval) {
+        clearInterval(heartbeatInterval); // Dọn dẹp heartbeatInterval
+      }
+      client.deactivate(); // Dọn dẹp kết nối WebSocket
+    };
+  }, [roomId, open, userID]);
+
+
+  useEffect(() => {
+    if (open) {
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  }, [open, messages]);
+
+
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       setFile(selectedFile); // Lưu trữ thông tin media đã chọn
     }
   };
-  
+
   const handleClearMedia = () => {
     setFile(null); // Xóa media đã chọn
     if (fileInputRef.current) fileInputRef.current.value = ''; // Reset input file
   };
-  
+
 
   const handleStartRecording = async () => {
     setOpenRecordingModal(true);
@@ -102,7 +190,7 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
     setIsRecording(false);
     setFinalRecordingTime(recordingTime); // Lưu thời gian ghi âm cuối cùng
   };
-  
+
   const handleSend = async () => {
     if (isSending) return;
 
@@ -138,8 +226,8 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
 
       try {
         const response = await MessageService.sendMedia(formData);
-        setMessages((prevMessages) => [...prevMessages, response.data]);
         console.log("response message:", response);
+
       } catch (error) {
         console.error('Error sending media:', error);
       } finally {
@@ -168,120 +256,33 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
     }
   };
 
-  useEffect(() => {
-    if (!roomId) {
-      console.error('Room ID is undefined');
-      return;
-    }
-  
-    let heartbeatInterval; // Khai báo biến heartbeatInterval
-  
-    const socket = new SockJS('http://localhost:6010/ws');
-    const client = new Client({
-      webSocketFactory: () => socket,
-      debug: console.log,
-      onConnect: () => {
-        // Gửi heartbeat ngay lập tức khi kết nối thành công
-        client.publish({
-          destination: '/app/chat.heartbeat',
-          body: JSON.stringify(userID), // Gửi ID người dùng làm heartbeat
-        });
-        console.log('Initial heartbeat sent for user:', userID); // Log xác nhận gửi heartbeat đầu tiên
-  
-        // Thiết lập gửi heartbeat mỗi 30 giây sau đó
-        heartbeatInterval = setInterval(() => {
-          client.publish({
-            destination: '/app/chat.heartbeat',
-            body: JSON.stringify(userID),
-          });
-          console.log('Heartbeat sent for user:', userID); // Log xác nhận gửi heartbeat tiếp theo
-        }, 30000);
-  
-        // Đăng ký để nhận tin nhắn mới trong phòng chat
-        client.subscribe(`/topic/room/${roomId}`, (message) => {
-          const receivedMessage = JSON.parse(message.body);
-          const isDuplicate = messages.some((msg) => msg.id === receivedMessage.id);
-  
-          if (!isDuplicate) {
-            if (open) {
-              setMessages((prevMessages) => [...prevMessages, receivedMessage]);
-            } else if (document.visibilityState === 'visible') {
-              showCustomToast(receivedMessage.username, receivedMessage.text, receivedMessage.createdAt);
-              setMessages((prevMessages) => [...prevMessages, receivedMessage]);
-            } else {
-              if (Notification.permission === 'granted') {
-                navigator.serviceWorker.ready.then((registration) => {
-                  registration.showNotification(`Tin nhắn mới từ ${receivedMessage.username}`, {
-                    body: receivedMessage.text,
-                    icon: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
-                  });
-                });
-              }
-              setMessages((prevMessages) => [...prevMessages, receivedMessage]);
-            }
-          }
-        });
-      },
-    });
-  
-    client.activate();
-    stompClient.current = client;
-  
-    // Fetch tin nhắn từ room ngay khi component mở
-    MessageService.getMessagesByRoomId(roomId)
-      .then((response) => {
-        setMessages(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching messages: ', error);
-      });
-  
-    return () => {
-      // Cleanup: Ngừng gửi heartbeat và ngắt kết nối WebSocket khi component bị huỷ
-      if (heartbeatInterval) {
-        clearInterval(heartbeatInterval); // Dọn dẹp heartbeatInterval
-      }
-      client.deactivate(); // Dọn dẹp kết nối WebSocket
-    };
-  }, [roomId, open, userID]);
-  
-
-  useEffect(() => {
-    if (open) {
-      setTimeout(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    }
-  }, [open, messages]);
-
   const handleCloseRecordingModal = () => {
     setOpenRecordingModal(false);
     setRecordingBlob(null);
     setRecordingTime(0);
     setFinalRecordingTime(null);
   };
-  
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-  <DialogTitle className="custom-chat-header">
-    <div className="admin-info-container">
-      <img src="/admin_logo.png" alt="Admin Logo" className="admin-logo" />
-      <div>
-        <Typography variant="h6" className="admin-name">Hỗ trợ khách hàng - Admin</Typography>
-        <Typography variant="body2" className="admin-status">Trực tuyến • Sẵn sàng hỗ trợ bạn</Typography>
-      </div>
-    </div>
-  </DialogTitle>      <DialogContent>
+      <DialogTitle className="custom-chat-header">
+        <div className="admin-info-container">
+          <img src="/admin_logo.png" alt="Admin Logo" className="admin-logo" />
+          <div>
+            <Typography variant="h6" className="admin-name">Hỗ trợ khách hàng - Admin</Typography>
+            <Typography variant="body2" className="admin-status">Trực tuyến • Sẵn sàng hỗ trợ bạn</Typography>
+          </div>
+        </div>
+      </DialogTitle>      
+      <DialogContent>
         <List className="custom-messages-list">
           {messages.map((msg, index) => (
             <ListItem key={index} className={`custom-message-item ${String(msg.userId) === String(userID) ? 'custom-message-right' : 'custom-message-left'}`}>
-<ListItemAvatar className="custom-message-avatar-container">
-  <Avatar className="custom-message-avatar">
-    {msg.username?.charAt(0) || '?'}
-  </Avatar>
-</ListItemAvatar>
-
+              <ListItemAvatar className="custom-message-avatar-container">
+                <Avatar className="custom-message-avatar">
+                  {msg.username?.charAt(0) || '?'}
+                </Avatar>
+              </ListItemAvatar>
               <ListItemText
                 primary={
                   <>
@@ -313,53 +314,53 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
           <div ref={messagesEndRef} />
         </List>
         <div className="custom-message-input-container">
-  {!file && (
-    <>
-      <IconButton onClick={() => fileInputRef.current.click()} className="custom-message-media-button">
-        <AttachFileIcon fontSize="large" />
-      </IconButton>
-      <input type="file" onChange={handleFileChange} ref={fileInputRef} style={{ display: 'none' }} />
-      <IconButton onClick={() => setOpenRecordingModal(true)} className="custom-message-record-button">
-        <MicIcon />
-      </IconButton>
-    </>
-  )}
-  {file && (
-    <div className="selected-media-info">
-      <Typography variant="body2">{file.name} ({(file.size / 1024).toFixed(2)} KB)</Typography>
-      <IconButton onClick={handleClearMedia} className="clear-media-button">
-        <CloseIcon />
-      </IconButton>
-    </div>
-  )}
-  <TextField
-    placeholder="Type a message"
-    value={message}
-    onChange={(e) => setMessage(e.target.value)}
-    fullWidth
-    inputRef={inputRef}
-    className="custom-message-input"
-    disabled={!!file} // Disable input when media is selected
-  />
-  <IconButton
-    onClick={handleSend}
-    disabled={isSending || (!message.trim() && !file && !recordingBlob)}
-    className="custom-message-send-button"
-  >
-    {isSending ? <CircularProgress size={24} /> : <SendIcon />}
-  </IconButton>
-</div>
+          {!file && (
+            <>
+              <IconButton onClick={() => fileInputRef.current.click()} className="custom-message-media-button">
+                <AttachFileIcon fontSize="large" />
+              </IconButton>
+              <input type="file" onChange={handleFileChange} ref={fileInputRef} style={{ display: 'none' }} />
+              <IconButton onClick={() => setOpenRecordingModal(true)} className="custom-message-record-button">
+                <MicIcon />
+              </IconButton>
+            </>
+          )}
+          {file && (
+            <div className="selected-media-info">
+              <Typography variant="body2">{file.name} ({(file.size / 1024).toFixed(2)} KB)</Typography>
+              <IconButton onClick={handleClearMedia} className="clear-media-button">
+                <CloseIcon />
+              </IconButton>
+            </div>
+          )}
+          <TextField
+            placeholder="Type a message"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            fullWidth
+            inputRef={inputRef}
+            className="custom-message-input"
+            disabled={!!file} // Disable input when media is selected
+          />
+          <IconButton
+            onClick={handleSend}
+            disabled={isSending || (!message.trim() && !file && !recordingBlob)}
+            className="custom-message-send-button"
+          >
+            {isSending ? <CircularProgress size={24} /> : <SendIcon />}
+          </IconButton>
+        </div>
 
 
-                         
+
       </DialogContent>
 
       <Dialog open={openRecordingModal} onClose={handleCloseRecordingModal} maxWidth="sm" fullWidth className="recording-modal">
-      <DialogTitle>
+        <DialogTitle>
           <IconButton onClick={handleCloseRecordingModal} style={{ position: 'absolute', right: '8px', top: '8px' }}>
             <CloseIcon />
           </IconButton>
-          Record Audio
+          Ghi âm
         </DialogTitle>
         <DialogContent>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
@@ -389,8 +390,6 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
           )}
         </DialogContent>
       </Dialog>
-
-
     </Dialog>
   );
 };

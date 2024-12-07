@@ -173,7 +173,7 @@ const MessageAdmin = ({ roomId, initialMessages = [] }) => {
 
       try {
         const response = await MessageService.sendMedia(formData);
-        setMessages((prevMessages) => [...prevMessages, response.data]);
+        // setMessages((prevMessages) => [...prevMessages, response.data]);
       } catch (error) {
         console.error('Error sending media:', error);
       } finally {

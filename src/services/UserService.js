@@ -3,52 +3,80 @@ import axios from 'axios';
 const USER_API_BASE_URL = "http://localhost:8080/users";
 
 class UserService {
+    // Hàm lấy token từ localStorage
+    getAuthToken() {
+        return localStorage.getItem('token');  // Hoặc bạn có thể lấy từ Redux store nếu cần
+    }
+
+    // Hàm tạo instance axios với token trong header
+    createAxiosInstance() {
+        const token = this.getAuthToken();
+        return axios.create({
+            baseURL: USER_API_BASE_URL,
+            headers: {
+                'Authorization': token ? `Bearer ${token}` : ''
+            }
+        });
+    }
+
     registerUser(user) {
-        return axios.post(USER_API_BASE_URL + "/register", user);
+        const instance = this.createAxiosInstance();
+        return instance.post("/register", user);
     }
 
     loginUser(user) {
-        return axios.post(USER_API_BASE_URL + "/login", user);
+        const instance = this.createAxiosInstance();
+        return instance.post("/login", user);
     }
 
     getUsers() {
-        return axios.get(USER_API_BASE_URL);
+        const instance = this.createAxiosInstance();
+        return instance.get();
     }
 
     createUser(user) {
-        return axios.post(USER_API_BASE_URL + "/register", user);
+        const instance = this.createAxiosInstance();
+        return instance.post("/register", user);
     }
 
     getUserById(userId) {
-        return axios.get(USER_API_BASE_URL + '/' + userId);
+        const instance = this.createAxiosInstance();
+        return instance.get(`/${userId}`);
     }
 
     updateUser(user, userId) {
-        return axios.put(USER_API_BASE_URL + '/' + userId, user);
+        const instance = this.createAxiosInstance();
+        return instance.put(`/${userId}`, user);
     }
 
     deleteUser(userId) {
-        return axios.delete(USER_API_BASE_URL + '/' + userId);
+        const instance = this.createAxiosInstance();
+        return instance.delete(`/${userId}`);
     }
 
     blockUser(userId) {
-        return axios.put(USER_API_BASE_URL + '/block/' + userId);
+        const instance = this.createAxiosInstance();
+        return instance.put(`/block/${userId}`);
     }
 
     sendOtp(email) {
-        return axios.post(USER_API_BASE_URL + "/forgot-password", { email });
+        const instance = this.createAxiosInstance();
+        return instance.post("/forgot-password", { email });
     }
 
     verifyOtp(email, otp) {
-        return axios.post(USER_API_BASE_URL + "/verify-otp", { email, otp });
+        const instance = this.createAxiosInstance();
+        return instance.post("/verify-otp", { email, otp });
     }
 
     resetPassword(email, newPassword) {
-        return axios.post(USER_API_BASE_URL + "/reset-password", { email, newPassword });
+        const instance = this.createAxiosInstance();
+        return instance.post("/reset-password", { email, newPassword });
     }
 
     checkEmailExists(email) {
-        return axios.post(USER_API_BASE_URL + "/check-email", { email });
+        const instance = this.createAxiosInstance();
+        return instance.post("/check-email", { email });
     }
 
     loginWithGoogle() {
@@ -56,14 +84,21 @@ class UserService {
     }
 
     updateUserPicture(id, picture) {
+        const instance = this.createAxiosInstance();
         const formData = new FormData();
         formData.append('picture', picture);
 
-        return axios.post(`${USER_API_BASE_URL}/${id}/picture`, formData, {
+        return instance.post(`/${id}/picture`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
         });
+    }
+
+    getTotalUser(){
+        const instance = this.createAxiosInstance();
+        return instance.get("/count");
+        
     }
 }
 

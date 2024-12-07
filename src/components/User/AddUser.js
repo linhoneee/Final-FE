@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import UserService from '../../services/UserService';
 import './AddUser.css';
+import showGeneralToast from '../toastUtils/showGeneralToast'; // Import toast
 
-const AddUser = ({ onClose }) => {
+const AddUser = ({ onClose, fetchUsers }) => {
   const [user, setUser] = useState({
     username: '',
     email: '',
@@ -12,6 +13,7 @@ const AddUser = ({ onClose }) => {
     phoneNumber: '',
     roles: 'USER'
   });
+  const [error, setError] = useState(null); // State để lưu lỗi
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,21 +24,29 @@ const AddUser = ({ onClose }) => {
     e.preventDefault();
     try {
       await UserService.registerUser(user);
-      alert('User registered successfully');
+      showGeneralToast('Người dùng đã được đăng ký thành công!', 'success');
       onClose();
+      fetchUsers(); // Gọi lại fetchUsers để cập nhật danh sách người dùng
     } catch (error) {
       console.error('Error registering user:', error);
-      alert('Failed to register user');
+
+      // Hiển thị thông báo lỗi nếu có
+      if (error.response && error.response.data) {
+        const { message } = error.response.data;
+        showGeneralToast(message, 'error');
+      } else {
+        showGeneralToast('Đã xảy ra lỗi khi đăng ký người dùng', 'error');
+      }
     }
   };
 
   return (
     <div className="add-user-modal-container">
       <div className="add-user-modal-content">
-        <h2 className="add-user-modal-header">Register User</h2>
+        <h2 className="add-user-modal-header">Đăng Ký Người Dùng</h2>
         <form className="add-user-modal-form" onSubmit={handleSubmit}>
           <div className="add-user-modal-form-group">
-            <label className="add-user-modal-label">Username</label>
+            <label className="add-user-modal-label">Tên người dùng</label>
             <input
               type="text"
               className="add-user-modal-input"
@@ -58,7 +68,7 @@ const AddUser = ({ onClose }) => {
             />
           </div>
           <div className="add-user-modal-form-group">
-            <label className="add-user-modal-label">Password</label>
+            <label className="add-user-modal-label">Mật khẩu</label>
             <input
               type="password"
               className="add-user-modal-input"
@@ -69,7 +79,7 @@ const AddUser = ({ onClose }) => {
             />
           </div>
           <div className="add-user-modal-form-group">
-            <label className="add-user-modal-label">First Name</label>
+            <label className="add-user-modal-label">Họ</label>
             <input
               type="text"
               className="add-user-modal-input"
@@ -80,7 +90,7 @@ const AddUser = ({ onClose }) => {
             />
           </div>
           <div className="add-user-modal-form-group">
-            <label className="add-user-modal-label">Last Name</label>
+            <label className="add-user-modal-label">Tên</label>
             <input
               type="text"
               className="add-user-modal-input"
@@ -90,7 +100,7 @@ const AddUser = ({ onClose }) => {
             />
           </div>
           <div className="add-user-modal-form-group">
-            <label className="add-user-modal-label">Phone Number</label>
+            <label className="add-user-modal-label">Số điện thoại</label>
             <input
               type="text"
               className="add-user-modal-input"
@@ -101,24 +111,21 @@ const AddUser = ({ onClose }) => {
             />
           </div>
           <div className="add-user-modal-form-group">
-            <div className="add-user-modal-form-group">
-  <label className="add-user-modal-label">Roles</label>
-  <select
-    className="add-user-modal-input"
-    name="roles"
-    value={user.roles}
-    onChange={handleChange}
-    required
-  >
-    <option value="USER">USER</option>
-    <option value="ADMIN">ADMIN</option>
-  </select>
-</div>
-
+            <label className="add-user-modal-label">Vai trò</label>
+            <select
+              className="add-user-modal-input"
+              name="roles"
+              value={user.roles}
+              onChange={handleChange}
+              required
+            >
+              <option value="USER">Người dùng</option>
+              <option value="ADMIN">Quản trị viên</option>
+            </select>
           </div>
           <div className="add-user-modal-buttons">
-            <button type="submit" className="add-user-modal-btn add-user-modal-btn-primary">Register</button>
-            <button type="button" onClick={onClose} className="add-user-modal-btn add-user-modal-btn-secondary">Cancel</button>
+            <button type="submit" className="add-user-modal-btn add-user-modal-btn-primary">Đăng ký</button>
+            <button type="button" onClick={onClose} className="add-user-modal-btn add-user-modal-btn-secondary">Hủy</button>
           </div>
         </form>
       </div>

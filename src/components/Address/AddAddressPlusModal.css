@@ -14,7 +14,7 @@
   top: 50%; /* Căn giữa modal theo chiều dọc */
   left: 50%; /* Căn giữa modal theo chiều ngang */
   transform: translate(-50%, -50%); /* Dịch chuyển modal vào giữa màn hình */
-  z-index: 1000; /* Đặt modal lên trên cùng so với các phần tử khác */
+  z-index: 10000; /* Đặt modal lên trên cùng so với các phần tử khác */
 }
 
 /* Định dạng cho phần header của modal */

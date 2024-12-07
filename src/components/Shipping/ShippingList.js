@@ -3,6 +3,7 @@ import ShippingService from "../../services/ShippingService";
 import AddShipping from "./AddShipping";
 import UpdateShipping from "./UpdateShipping";
 import './ShippingList.css';
+import showGeneralToast from '../toastUtils/showGeneralToast'; // Import toast function
 
 const ShippingList = () => {
   const [shippings, setShippings] = useState([]);
@@ -43,14 +44,30 @@ const ShippingList = () => {
   };
 
   const deleteShipping = (id) => {
-    ShippingService.deleteShippingById(id)
-      .then(() => {
-        setShippings(shippings.filter((shipping) => shipping.id !== id));
-      })
-      .catch((error) => {
-        console.error('Error deleting shipping data:', error);
-      });
+    const confirmDelete = window.confirm("Bạn có chắc muốn xóa shipping này?");
+    if (confirmDelete) {
+      ShippingService.deleteShippingById(id)
+        .then(() => {
+          // Cập nhật lại danh sách shipping sau khi xóa thành công
+          setShippings(shippings.filter((shipping) => shipping.id !== id));
+          
+          // Hiển thị thông báo thành công
+          showGeneralToast("Shipping đã được xóa thành công!", "success");
+        })
+        .catch((error) => {
+          console.error('Error deleting shipping data:', error);
+          
+          // Hiển thị thông báo lỗi nếu có
+          if (error.response && error.response.data) {
+            const { message } = error.response.data;
+            showGeneralToast(message, "error");
+          } else {
+            showGeneralToast("Có lỗi xảy ra khi xóa shipping", "error");
+          }
+        });
+    }
   };
+  
 
   return (
     <div className="shipping-list-container">

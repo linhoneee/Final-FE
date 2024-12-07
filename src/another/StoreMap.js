@@ -2,9 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import './StoreLocator.css';  // Import the CSS file
+import './StoreLocator.css';  // Import file CSS
 
-// Custom icon for store
+// Biểu tượng tùy chỉnh cho cửa hàng
 const storeIcon = new L.Icon({
     iconUrl: 'https://cdn-icons-png.flaticon.com/512/869/869636.png',
     iconSize: [40, 40],
@@ -12,7 +12,7 @@ const storeIcon = new L.Icon({
     popupAnchor: [0, -40],
 });
 
-// Component to fit bounds after map is rendered
+// Thành phần để điều chỉnh bản đồ vừa với tất cả các điểm
 const FitMapBounds = ({ bounds }) => {
     const map = useMap();
     
@@ -29,15 +29,15 @@ const StoreLocator = () => {
     const [stores] = useState([
         {
             id: 1,
-            name: 'Hanoi Store',
+            name: 'Cửa hàng Hà Nội',
             position: [21.028511, 105.804817],
-            address: '123 Old Quarter, Hoan Kiem, Hanoi',
+            address: '123 Phố Cổ, Hoàn Kiếm, Hà Nội',
         },
         {
             id: 2,
-            name: 'Danang Store',
+            name: 'Cửa hàng Đà Nẵng',
             position: [16.047079, 108.206230],
-            address: '456 Beach Road, Son Tra, Danang',
+            address: '456 Đường Biển, Sơn Trà, Đà Nẵng',
         }
     ]);
 
@@ -46,7 +46,7 @@ const StoreLocator = () => {
     const [route, setRoute] = useState([]);
     const mapRef = useRef(null);
 
-    // Fetch route between user position and store using Mapbox Directions API
+    // Lấy tuyến đường giữa vị trí người dùng và cửa hàng sử dụng API Mapbox Directions
     const getRoute = async (userPosition, storePosition) => {
         const API_KEY = 'pk.eyJ1IjoibGluaGVoZWhlaGVoIiwiYSI6ImNtMjQ3b3U2MzBkNXgybnNkNWdsZWFqYWwifQ.xIwS3-5eMZu0w5SsczzNDw'; 
         const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${userPosition[1]},${userPosition[0]};${storePosition[1]},${storePosition[0]}?geometries=geojson&access_token=${API_KEY}`;
@@ -61,7 +61,7 @@ const StoreLocator = () => {
         }
     };
 
-    // Request user location on mount
+    // Yêu cầu vị trí người dùng khi tải trang
     useEffect(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -69,13 +69,13 @@ const StoreLocator = () => {
                     const latitude = position.coords.latitude;
                     const longitude = position.coords.longitude;
         
-                    console.log('Latitude:', latitude);
-                    console.log('Longitude:', longitude);
+                    console.log('Vĩ độ:', latitude);
+                    console.log('Kinh độ:', longitude);
         
                     setUserPosition([latitude, longitude]);
                 },
                 (error) => {
-                    console.error('Error getting user position:', error);
+                    console.error('Lỗi khi lấy vị trí người dùng:', error);
                 },
                 {
                     enableHighAccuracy: true,  // Bật độ chính xác cao
@@ -84,18 +84,18 @@ const StoreLocator = () => {
                 }
             );
         } else {
-            console.error('Geolocation is not supported by this browser.');
+            console.error('Trình duyệt không hỗ trợ định vị.');
         }
     }, []);
 
-    // Automatically calculate and fetch route when user position or store changes
+    // Tự động tính toán và lấy tuyến đường khi vị trí người dùng hoặc cửa hàng thay đổi
     useEffect(() => {
         if (userPosition && selectedStore) {
             getRoute(userPosition, selectedStore.position);
         }
     }, [userPosition, selectedStore]);
 
-    // Calculate bounds to fit all markers and route on the map
+    // Tính toán vùng hiển thị để vừa với tất cả các điểm
     const calculateBounds = () => {
         if (!userPosition || !selectedStore) return null;
         
@@ -113,14 +113,13 @@ const StoreLocator = () => {
     return (
         <div className="store-locator">
             <div className="store-header">
-                <h1>How to find us</h1>
+                <h1>Hành trình xanh, điểm đến GreenHome</h1>
                 <p>
-                    The University of Greenwich is based in London and Medway. You can reach our campuses by car or via public transport 
-                    (including bus and rail), with easy connections from airports in London.
+                GreenHome – nơi hội tụ những thiết bị điện máy thân thiện với môi trường – dễ dàng tìm thấy dù bạn đi bằng ô tô hay phương tiện công cộng. Hãy để hành trình của bạn thêm ý nghĩa với một điểm đến xanh, gần gũi và đầy cảm hứng.
                 </p>
             </div>
 
-            {/* Store selection buttons */}
+            {/* Các nút chọn cửa hàng */} 
             <div className="store-buttons">
                 {stores.map(store => (
                     <button key={store.id} onClick={() => setSelectedStore(store)}>
@@ -129,12 +128,12 @@ const StoreLocator = () => {
                 ))}
             </div>
 
-            {/* Map and store information */}
+            {/* Bản đồ và thông tin cửa hàng */} 
             <div className="store-content">
                 <div className="map-section">
                     <MapContainer
-                        center={userPosition || [21.028511, 105.804817]}  // Default center if userPosition not available
-                        zoom={13}  // Default zoom level
+                        center={userPosition || [21.028511, 105.804817]}  // Trung tâm mặc định nếu chưa có vị trí người dùng
+                        zoom={13}  // Mức zoom mặc định
                         style={{ height: '400px', width: '100%' }}
                         whenCreated={(mapInstance) => mapRef.current = mapInstance}
                     >
@@ -143,36 +142,36 @@ const StoreLocator = () => {
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         />
 
-                        {/* Marker for user position */}
+                        {/* Đánh dấu vị trí người dùng */} 
                         {userPosition && (
                             <Marker position={userPosition}>
-                                <Popup>Your Location</Popup>
+                                <Popup>Vị trí của bạn</Popup>
                             </Marker>
                         )}
 
-                        {/* Marker for selected store */}
+                        {/* Đánh dấu vị trí cửa hàng đã chọn */} 
                         <Marker position={selectedStore.position} icon={storeIcon}>
                             <Popup>{selectedStore.name}</Popup>
                         </Marker>
 
-                        {/* Display route */}
+                        {/* Hiển thị tuyến đường */} 
                         {route && route.length > 0 && (
                             <Polyline positions={route} color="blue" />
                         )}
 
-                        {/* Fit bounds to show all markers and route */}
+                        {/* Điều chỉnh bản đồ vừa với tất cả các điểm */} 
                         {bounds && <FitMapBounds bounds={bounds} />}
                     </MapContainer>
                 </div>
 
-                {/* Store information */}
+                {/* Thông tin cửa hàng */} 
                 <div className="store-info">
                     <h3>{selectedStore.name}</h3>
-                    <p>Address: {selectedStore.address}</p>
+                    <p>Địa chỉ: {selectedStore.address}</p>
                     <div className="transport-links">
-                        <h4>Transport Links</h4>
-                        <p>DLR Cutty Sark (approx. 3 min walk)</p>
-                        <p>Greenwich and Maze Hill (approx. 8 min walk)</p>
+                        <h4>Kết nối giao thông</h4>
+                        <p>DLR Cutty Sark (khoảng 3 phút đi bộ)</p>
+                        <p>Greenwich và Maze Hill (khoảng 8 phút đi bộ)</p>
                     </div>
                 </div>
             </div>

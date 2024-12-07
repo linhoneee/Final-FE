@@ -109,4 +109,16 @@
     opacity: 1;
     transform: scale(1);
   }
+}/* Thêm một số style cho thông báo lỗi */
+.error-toast {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.brand-add-modal-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }

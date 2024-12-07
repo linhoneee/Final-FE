@@ -4,38 +4,63 @@ import { useSelector } from 'react-redux';
 import AddressService from '../../services/AddressService';
 import AddAddressPlusModal from './AddAddressPlusModal'; 
 import './AddressList.css';
+import showGeneralToast from '../toastUtils/showGeneralToast'; // Import toast
+
 const AddressList = () => {
   const [addresses, setAddresses] = useState([]);
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
   const navigate = useNavigate();
   const userID = useSelector(state => state.auth.userID); // Lấy userID từ Redux store
+  const [loading, setLoading] = useState(false);
 
   const fetchAddresses = useCallback(() => {
-    AddressService.getAddressesByUserId(userID).then((response) => {
-      // Sắp xếp danh sách địa chỉ, đưa địa chỉ mặc định lên đầu
-      const sortedAddresses = response.data.sort((a, b) => b.isPrimary - a.isPrimary);
-      setAddresses(sortedAddresses);
-    });
+    setLoading(true);
+    AddressService.getAddressesByUserId(userID)
+      .then((response) => {
+              // Sắp xếp danh sách địa chỉ, đưa địa chỉ mặc định lên đầu
+        const sortedAddresses = response.data.sort((a, b) => b.isPrimary - a.isPrimary);
+        setAddresses(sortedAddresses);
+      })
+      .catch((error) => console.error('Error fetching addresses:', error))
+      .finally(() => setLoading(false));
   }, [userID]);
+  
 
   useEffect(() => {
     fetchAddresses();
   }, [fetchAddresses]);
 
   const deleteAddress = (id) => {
-    AddressService.deleteAddress(id).then(() => {
-      setAddresses(addresses.filter((address) => address.id !== id));
-    });
+    if (window.confirm('Bạn có chắc chắn muốn xóa địa chỉ này?')) {
+      AddressService.deleteAddress(id)
+        .then(() => {
+          setAddresses(addresses.filter((address) => address.id !== id));
+          showGeneralToast('Địa chỉ đã được xóa thành công!', 'success');
+        })
+        .catch((error) => {
+          showGeneralToast('Lỗi khi xóa địa chỉ!', 'error');
+          console.error('Error deleting address:', error);
+        });
+    }
   };
+  
+  
 
   const setPrimaryAddress = (id) => {
     const addressToUpdate = addresses.find(address => address.id === id);
     addressToUpdate.isPrimary = true;
-
-    AddressService.updateAddress(userID, addressToUpdate, id).then(() => {
-      fetchAddresses(); // Fetch updated addresses
-    }).catch(handleError);
+  
+    AddressService.updateAddress(userID, addressToUpdate, id)
+      .then(() => {
+        fetchAddresses();
+        showGeneralToast('Đã đặt địa chỉ này làm địa chỉ chính!', 'success');
+      })
+      .catch((error) => {
+        showGeneralToast('Lỗi khi đặt địa chỉ chính!', 'error');
+        console.error('Error setting primary address:', error);
+      });
   };
+  
 
   const handleError = (error) => {
     console.error('Error:', error);
@@ -56,18 +81,17 @@ const AddressList = () => {
 
   return (
     <div className="address-list-container">
-      <h2>Address List</h2>
+      <h2>Danh Sách Địa Chỉ</h2>
       <div className="address-list-buttons">
-  <button onClick={() => navigate(`/user/${userID}/add-address`)} className="address-list-button address-list-button-primary">Add Address</button>
-  <button onClick={handleShowModal} className="address-list-button address-list-button-secondary">Select Address</button>
+  <button onClick={handleShowModal} className="address-list-button address-list-button-secondary">Thêm Địa Chỉ</button>
 </div>
 <table className="address-list-table">
   <thead>
     <tr>
       <th>ID</th>
-      <th>Receiver Name</th>
-      <th>Address</th> {/* Cột mới cho địa chỉ nối lại */}
-      <th>Actions</th> {/* Nút hành động trên cùng một hàng */}
+      <th>Tên người nhận</th>
+      <th>Địa chỉ</th> {/* Cột mới cho địa chỉ nối lại */}
+      <th>Hành động</th> {/* Nút hành động trên cùng một hàng */}
     </tr>
   </thead>
   <tbody>
@@ -83,20 +107,20 @@ const AddressList = () => {
             className="action-button edit-button"
             onClick={() => navigate(`/user/${userID}/edit-address/${address.id}`)}
           >
-            Edit
+            Sửa
           </button>
           <button
             className="action-button delete-button"
             onClick={() => deleteAddress(address.id)}
           >
-            Delete
+            Xóa
           </button>
           {!address.isPrimary && (
             <button
               className="action-button primary-button"
               onClick={() => setPrimaryAddress(address.id)}
             >
-              Set Primary
+              Đặt làm địa chỉ chính
             </button>
           )}
         </td>
@@ -104,6 +128,7 @@ const AddressList = () => {
     ))}
   </tbody>
 </table>
+
 
 
       {showModal && (

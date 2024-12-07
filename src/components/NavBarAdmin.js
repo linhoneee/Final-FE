@@ -26,7 +26,7 @@ const NavBarAdmin = () => {
       const response = await ReviewService.getReviewsWithoutResponses();
       setUnansweredReviewCount(response.data.length);
     } catch (error) {
-      console.error('Error fetching unanswered review count:', error);
+      console.error('Lỗi khi lấy số lượng đánh giá chưa được phản hồi:', error);
     }
   };
 
@@ -45,52 +45,52 @@ const NavBarAdmin = () => {
           {isLoggedIn ? (
             <>
               <li className="navbar-admin-item navbar-admin-welcome">
-                <Link to={`/userDetails/${userID}`}>Welcome, {username}!</Link>
+                <Link to={`/userDetails/${userID}`}>Chào mừng, {username}!</Link>
               </li>
 
-              {/* Các mục trong Product Management hiển thị trực tiếp */}
+              {/* Các mục trong Quản lý sản phẩm hiển thị trực tiếp */}
               <li className="navbar-admin-item">
-                <Link to="/brands">Brands</Link>
+                <Link to="/brands">Thương hiệu</Link>
               </li>
               <li className="navbar-admin-item">
-                <Link to="/categories">Categories</Link>
+                <Link to="/categories">Danh mục</Link>
               </li>
               <li className="navbar-admin-item">
-                <Link to="/productsadmin">Products Admin</Link>
+                <Link to="/productsadmin">Quản lý sản phẩm</Link>
               </li>
 
               {/* Các mục khác */}
               <li className="navbar-admin-item">
-                <Link to="/userList">List User</Link>
+                <Link to="/userList">Danh sách người dùng</Link>
               </li>
               <li className="navbar-admin-item">
-                <Link to="/shippinglist">List Shipping</Link>
+                <Link to="/shippinglist">Danh sách vận chuyển</Link>
               </li>
               <li className="navbar-admin-item">
-                <Link to="/warehouses">Warehouse List</Link>
+                <Link to="/warehouses">Danh sách kho</Link>
               </li>
 
               <li className="navbar-admin-item">
-                <Link to="/customer-coupons">Customer Coupons List</Link>
+                <Link to="/customer-coupons">Danh sách phiếu giảm giá khách hàng</Link>
               </li>
               <li className="navbar-admin-item">
                 <Link to="/reviews/responses">
-                  Reviews Responses {unansweredReviewCount > 0 && <span className="navbar-admin-cart-count">{unansweredReviewCount}</span>}
+                  Phản hồi đánh giá {unansweredReviewCount > 0 && <span className="navbar-admin-cart-count">{unansweredReviewCount}</span>}
                 </Link>
               </li>
               <li className="navbar-admin-item">
-                <Link to={`/userDetails/${userID}`}>Account Details</Link>
+                <Link to={`/userDetails/${userID}`}>Chi tiết tài khoản</Link>
               </li>
               <li className="navbar-admin-item">
-                <Link to={`/chat/${userID}`}>Chat</Link>
+                <Link to={`/chat/${userID}`}>Trò chuyện</Link>
               </li>
               <li className="navbar-admin-item">
-                <button className="navbar-admin-logout-button" onClick={handleLogout}>Logout</button>
+                <button className="navbar-admin-logout-button" onClick={handleLogout}>Đăng xuất</button>
               </li>
             </>
           ) : (
             <li className="navbar-admin-item">
-              <Link to="/login">Login</Link>
+              <Link to="/login">Đăng nhập</Link>
             </li>
           )}
         </ul>

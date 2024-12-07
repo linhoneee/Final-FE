@@ -1,21 +1,33 @@
 import React, { useState } from 'react';
 import CategoryService from '../../services/CategoryService';
 import './AddCategory.css';
+import showGeneralToast from '../toastUtils/showGeneralToast'; // Import toast
 
 const AddCategory = ({ onClose, onCategoryAdded }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [error, setError] = useState(''); // Thêm state để lưu lỗi
 
   const saveCategory = (e) => {
     e.preventDefault();
+
+    // Kiểm tra nếu người dùng chưa điền đầy đủ thông tin
+    if (!name || !description) {
+      setError('Cả tên và mô tả danh mục đều là bắt buộc!');
+      return; // Dừng lại nếu có trường chưa được điền
+    }
+
     const category = { name, description };
+
     CategoryService.createCategory(category)
       .then((response) => {
         onCategoryAdded(response.data); // Thêm danh mục mới vào danh sách
         onClose(); // Đóng modal
+        showGeneralToast("Danh mục đã được thêm thành công!", "success"); // Thông báo thành công
       })
       .catch((error) => {
         console.error('Error adding category:', error);
+        showGeneralToast("Có lỗi xảy ra khi thêm danh mục", "error"); // Thông báo lỗi
       });
   };
 
@@ -23,6 +35,10 @@ const AddCategory = ({ onClose, onCategoryAdded }) => {
     <div className="add-category-modal-container">
       <div className="add-category-modal-content">
         <h2 className="add-category-modal-title">Thêm danh mục</h2>
+
+        {/* Hiển thị thông báo lỗi nếu có */}
+        {error && <div className="error-toast">{error}</div>}
+
         <form className="add-category-modal-form">
           <div className="add-category-modal-form-group">
             <label className="add-category-modal-label">Tên danh mục</label>

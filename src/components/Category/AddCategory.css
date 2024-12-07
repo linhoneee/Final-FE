@@ -109,3 +109,11 @@
     transform: scale(1);
   }
 }
+/* Thêm một số style cho thông báo lỗi */
+.error-toast {
+  color: red;
+  font-size: 18px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: bold;
+}

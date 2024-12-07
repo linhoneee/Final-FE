@@ -84,7 +84,7 @@ const Cart = () => {
   };
 
   const handleQuantityChange = (productId, newQuantity) => {
-    const quantity = parseInt(newQuantity, 10);
+    const quantity = parseInt(newQuantity, 10);  //Là cơ số của hệ đếm, thường là 10 cho hệ thập phân (decimal), nhưng có thể là 2 cho nhị phân, 8 cho bát phân, 16 cho thập lục phân, v.v.
     if (isNaN(quantity) || quantity <= 0) return;
 
     const currentItem = cartItems.find(item => item.productId === productId);
@@ -257,61 +257,62 @@ const Cart = () => {
   
   return (
     <div className="cart-container">
-      <h2 className="cart-header">Your Cart</h2>
+      <h2 className="cart-header">Giỏ Hàng Của Bạn</h2>
       <div className="cart-items">
         {cartItems.length > 0 ? (
-          <>
-            <div className="select-all">
-              <input
-                type="checkbox"
-                checked={selectedItems.length === cartItems.filter(item => item.inStock).length}
-                onChange={handleSelectAllItems}
-                className="cart-checkbox"
-              /> 
-              <p>Select All</p>
-            </div>
-            {cartItems.map(item => (
-              <div key={item.productId} className={`cart-item ${item.inStock ? '' : 'out-of-stock'}`}>
-                <input
-                  type="checkbox"
-                  checked={selectedItems.includes(item.productId)}
-                  onChange={() => handleSelectItem(item.productId)}
-                  disabled={!item.inStock}
-                  className="cart-checkbox"
-                />
-                <img src={`http://localhost:6001${item.primaryImageUrl}`} alt="Primary" className="product-image" />
-                <div className="product-info">
-                  <h3 onClick={() => handleProductClick(item.productId)} className="product-link">
-                    Name: {item.name}
-                  </h3>
-                  <p>Product ID: {item.productId}</p>
-                  <p>Price: ${item.price}</p>
-                  <p>Weight: {item.weight} g</p>
-                  <p>Warehouse: {item.warehouse}</p>
-                  {!item.inStock && (
-                    <p style={{ color: 'red', fontWeight: 'bold' }}>Sản phẩm đã hết hàng</p>
-                  )}
-                </div>
-                <div className="quantity-control">
-                  <button onClick={() => handleDecreaseItem(item.productId)} className="quantity-button" disabled={!item.inStock}>-</button>
-                  <input
-                    type="number"
-                    value={item.quantity}
-                    onChange={(e) => handleQuantityChange(item.productId, e.target.value)}
-                    min="1"
-                    className="quantity-input"
-                    disabled={!item.inStock}
-                  />
-                  <button onClick={() => handleAddItem(item.productId)} className="quantity-button" disabled={!item.inStock}>+</button>
-                </div>
-                <button onClick={() => handleRemoveItem(item.productId)} className="remove-button">Remove</button>
-              </div>
-            ))}
-            <h3 className="total">Total: ${total}</h3>
-            <button onClick={handleCheckout} className="checkout-button" disabled={selectedItems.length === 0}>Proceed to Checkout</button>
-          </>
+ <>
+ <div className="select-all">
+   <input
+     type="checkbox"
+     checked={selectedItems.length === cartItems.filter(item => item.inStock).length}
+     onChange={handleSelectAllItems}
+     className="cart-checkbox"
+   /> 
+   <p>Chọn tất cả</p>
+ </div>
+ {cartItems.map(item => (
+   <div key={item.productId} className={`cart-item ${item.inStock ? '' : 'out-of-stock'}`}>
+     <input
+       type="checkbox"
+       checked={selectedItems.includes(item.productId)}
+       onChange={() => handleSelectItem(item.productId)}
+       disabled={!item.inStock}
+       className="cart-checkbox"
+     />
+     <img src={`http://localhost:6001${item.primaryImageUrl}`} alt="Primary" className="product-image" />
+     <div className="product-info">
+       <h3 onClick={() => handleProductClick(item.productId)} className="product-link">
+         Tên: {item.name}
+       </h3>
+       <p>ID sản phẩm: {item.productId}</p>
+       <p>Giá: ${item.price}</p>
+       <p>Cân nặng: {item.weight} g</p>
+       <p>Kho: {item.warehouse}</p>
+       {!item.inStock && (
+         <p style={{ color: 'red', fontWeight: 'bold' }}>Sản phẩm đã hết hàng</p>
+       )}
+     </div>
+     <div className="quantity-control">
+       <button onClick={() => handleDecreaseItem(item.productId)} className="quantity-button" disabled={!item.inStock}>-</button>
+       <input
+         type="number"
+         value={item.quantity}
+         onChange={(e) => handleQuantityChange(item.productId, e.target.value)}
+         min="1"
+         className="quantity-input"
+         disabled={!item.inStock}
+       />
+       <button onClick={() => handleAddItem(item.productId)} className="quantity-button" disabled={!item.inStock}>+</button>
+     </div>
+     <button onClick={() => handleRemoveItem(item.productId)} className="remove-button">Xóa</button>
+   </div>
+ ))}
+ <h3 className="total">Tổng cộng: ${total}</h3>
+ <button onClick={handleCheckout} className="checkout-button" disabled={selectedItems.length === 0}>Tiến hành thanh toán</button>
+</>
+
         ) : (
-          <p className="empty-cart">Your cart is empty.</p>
+          <p className="empty-cart">Giỏ hàng trống.</p>
         )}
       </div>
 
@@ -330,15 +331,16 @@ const Cart = () => {
                 <div key={index} className="custom-modal-group">
                   <h3>Đơn hàng {index + 1}</h3>
                   <table className="custom-modal-table">
-                    <thead>
-                      <tr>
-                        <th>Product ID</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Warehouse IDs</th>
-                        <th>Image</th>
-                      </tr>
-                    </thead>
+                  <thead>
+  <tr>
+    <th>ID sản phẩm</th>
+    <th>Tên</th>
+    <th>Giá</th>
+    <th>ID kho</th>
+    <th>Hình ảnh</th>
+  </tr>
+</thead>
+
                     <tbody>
                       {group.items.map(item => (
                         <tr
@@ -364,7 +366,7 @@ const Cart = () => {
                     className="custom-checkout-modal-button"
                     disabled={selectedModalGroup === null || selectedModalGroup !== index}
                   >
-                    Checkout Đơn hàng {index + 1}
+                    Thanh Toán Đơn Hàng {index + 1}
                   </button>
                 </div>
               ))}

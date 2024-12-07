@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import Tooltip from '@material-ui/core/Tooltip';
+import OrderService from '../services/OrderService';
 
 const geoUrl = "/vn.json";
 
-const cityData = {
-  "Kiên Giang": 21,
-  "Đà Nẵng": 20,
-  "Hà Nội": 10,
-  "Gia lai": 10,
-  "Quảng Trị": 5
-};
+
 
 const MapChart = () => {
   const [geoData, setGeoData] = useState(null);
-
+  const [cityData, setCityData] = useState(null);
+  
+  
   useEffect(() => {
+    // Fetch city data from API
+    OrderService.getTopProvince().then(response => {
+      setCityData(response.data);
+      console.log("City data loaded:", response.data);
+    }).catch(error => console.error("Error loading city data:", error));
+
+    // Fetch geo data
     fetch(geoUrl)
       .then((response) => response.json())
       .then((data) => {
@@ -25,9 +29,10 @@ const MapChart = () => {
       .catch((error) => console.error("Error loading GeoJSON:", error));
   }, []);
 
-  const sortedCities = Object.entries(cityData)
-    .sort(([, countA], [, countB]) => countB - countA)
-    .slice(0, 5);
+  const sortedCities = cityData ? Object.entries(cityData)
+  .sort(([, countA], [, countB]) => countB - countA)
+  .slice(0, 5) : [];
+
 
   const colors = ["#B22222", "#CD5C5C", "#F08080", "#FA8072", "#FFDAB9"];
 
@@ -43,6 +48,10 @@ const MapChart = () => {
     });
     return matchedProvince;
   };
+
+  if (!cityData || !geoData) {
+    return <div>Loading...</div>;  // Show loading state until both data are fetched
+  }
 
   return (
     <div>
@@ -76,15 +85,27 @@ const MapChart = () => {
         maxWidth: "100vh",
         transform: "translate(180px, 90px)" // Di chuyển bảng top 5
       }}>
-        <h3 style={{ margin: 0, fontSize: "16px" }}>Top 5 Thành Phố mua hàng nhiều nhất</h3>
-        <ul style={{ listStyle: "none", padding: 0, margin: "5px 0 0 0" }}>
+                  <h3 style={{ 
+            margin: 0, 
+            fontSize: "15px", 
+            fontWeight: "700", 
+            color: "#3a7765", // Màu chữ cho tiêu đề
+            fontFamily: "'Roboto', sans-serif" 
+          }}>
+          Top 5 Thành Phố mua hàng nhiều nhất
+          </h3>
+          <ul style={{ 
+            listStyle: "none", 
+            padding: 0, 
+            margin: "5px 0 0 0", 
+            fontFamily: "'Roboto', sans-serif" 
+          }}>
           {sortedCities.map(([city, count], index) => (
             <li 
               key={city} 
               style={{ 
                 display: "flex", 
                 alignItems: "center", 
-                fontWeight: "bold", 
                 fontSize: "14px",
                 position: "relative",
                 paddingLeft: "40px" 

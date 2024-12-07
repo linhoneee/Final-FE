@@ -4,9 +4,9 @@ import './Coupons.css'; // Import the new CSS file
 
 const Coupons = ({ coupons, voucherCode, handleVoucherCodeChange, handleCouponSelect, handleApplyCoupon }) => (
   <div className="coupons-container">
-    <h3>Coupons</h3>
+    <h3>Mã Giảm Giá</h3>
     <select onChange={handleCouponSelect}>
-      <option value="">Select a coupon</option>
+      <option value="">Chọn Mã Giảm Giá</option>
       {coupons.map(coupon => (
         <option key={coupon.code} value={coupon.code}>
           {coupon.code} - {coupon.description}
@@ -15,14 +15,14 @@ const Coupons = ({ coupons, voucherCode, handleVoucherCodeChange, handleCouponSe
     </select>
     <div className="coupon-input-container">
       <TextField
-        label="Enter Voucher Code"
+        label="Điền Mã !!!"
         value={voucherCode}
         onChange={handleVoucherCodeChange}
         variant="outlined"
         className="coupon-input"
       />
     </div>
-    <button onClick={handleApplyCoupon}>Apply Coupon</button>
+    <button onClick={handleApplyCoupon}>Áp Dụng</button>
   </div>
 );
 

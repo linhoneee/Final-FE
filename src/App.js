@@ -4,7 +4,7 @@ import store from './store/store';
 import Navbar from './components/Navbar';
 import NavBarAdmin from './components/NavBarAdmin';
 import { Button } from '@material-ui/core';
-import React, { useEffect,useState } from 'react';
+import React, { useRef , useState } from 'react';
 import { useSelector } from 'react-redux';
 import "./App.css";
 import LoginUser from './components/User/LoginUser';
@@ -26,6 +26,7 @@ import AddProduct from './components/Product/AddProduct';
 import UpdateProduct from './components/Product/UpdateProduct';
 import ListProductByUser from './pages/ListProductByUser';
 import ProductDetails from './components/Product/ProductDetails';
+import { Navigate } from 'react-router-dom';
 
 
 import Cart from './pages/Cart';
@@ -37,8 +38,7 @@ import MessagesComponent from './components/Message/MessagesComponent';
 import MessageAdmin from './components/Message/MessagesAdmin';
 import ChatPage from './components/Message/ChatPage';
 
-import StripePaymentInfo from './components/Payment/StripePaymentInfo';
-import PaymentSuccess from './components/Payment/PaymentSuccess'; 
+
 import AddAddress from './components/Address/AddAddress';
 import AddressList from './components/Address/AddressList';
 import EditAddress from './components/Address/EditAddress';
@@ -72,6 +72,7 @@ function MainApp() {
 
   const [isMessageModalOpen, setMessageModalOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const draggableRef = useRef(null);
 
   const handleOpenMessageModal = () => {
     if (!isDragging) {
@@ -83,181 +84,143 @@ function MainApp() {
     setMessageModalOpen(false);
   };
 
-  // React.useEffect(() => {
-  //   var _mtm = window._mtm = window._mtm || [];
-  //   _mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
-  //   var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-  //   g.async=true; g.src='https://cdn.matomo.cloud/79fb1172120135ngrokfreeapp.matomo.cloud/container_mpwS9ZPS.js';
-  //   s.parentNode.insertBefore(g,s);
-  // }, []);
-
-
-    // Kiểm soát tab duy nhất
-    // useEffect(() => {
-    //     const tabId = 'unique-tab-id';
-    //     const existingTab = localStorage.getItem('activeTab');
-        
-    //     console.log("Checking for existing active tab...");
-    //     if (existingTab && existingTab !== tabId) {
-    //         alert("Trang web đã được mở ở tab khác. Chuyển hướng bạn về tab đầu tiên.");
-    //         console.log("Redirecting to existing tab");
-    //         window.location.href = '/'; // Chuyển hướng tab mới về trang chủ
-    //     } else {
-    //         console.log("Setting this tab as active tab with ID:", tabId);
-    //         localStorage.setItem('activeTab', tabId); // Lưu ID tab mới vào localStorage
-    //     }
-
-    //     const handleStorageChange = (event) => {
-    //         if (event.key === 'activeTab' && event.newValue !== tabId) {
-    //             alert("Tab khác đã được mở. Đóng tab này hoặc chuyển hướng.");
-    //             console.log("Closing this tab or redirecting");
-    //             window.location.href = '/';
-    //         }
-    //     };
-
-    //     window.addEventListener('storage', handleStorageChange);
-
-    //     return () => {
-    //         window.removeEventListener('storage', handleStorageChange);
-    //         if (localStorage.getItem('activeTab') === tabId) {
-    //             console.log("Removing activeTab ID on tab close:", tabId);
-    //             localStorage.removeItem('activeTab');
-    //         }
-    //     };
-    // }, []);
-
 
   return (
-      <Router>
-        <Navbar />
-        {/* Button mở MessagesComponent */}
-       {/* Kiểm tra nếu người dùng đã đăng nhập và có roles là 'USER' mới hiển thị Draggable và Button */}
+    <Router>
+      <Navbar />
+      {/* Button mở MessagesComponent */}
+      {/* Kiểm tra nếu người dùng đã đăng nhập và có roles là 'USER' mới hiển thị Draggable và Button */}
       {isLoggedIn && roles === 'USER' && (
         <>
-          <Draggable
-            onStart={() => setIsDragging(false)}
-            onDrag={() => setIsDragging(true)}
-            onStop={() => setTimeout(() => setIsDragging(false), 0)}
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleOpenMessageModal}
-              style={{
-                position: 'fixed',
-                bottom: '20px',
-                right: '300px',
-                borderRadius: '50%',
-                width: '60px',
-                height: '60px',
-                backgroundColor: '#215e24',
-                backgroundImage: 'url("https://cdn-icons-png.flaticon.com/512/6785/6785302.png")',
-                backgroundSize: '40px 40px',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                color: 'white',
-                zIndex: 1000,
-              }}
-            />
-          </Draggable>
+    <Draggable
+      nodeRef={draggableRef} // Sử dụng nodeRef ở đây
+      onStart={() => setIsDragging(false)}
+      onDrag={() => setIsDragging(true)}
+      onStop={() => setTimeout(() => setIsDragging(false), 0)}
+    >
+      <Button
+        ref={draggableRef} // Gắn ref vào Button
+        variant="contained"
+        color="primary"
+        onClick={handleOpenMessageModal}
+        style={{
+          position: 'fixed',
+          bottom: '20px',
+          right: '300px',
+          borderRadius: '50%',
+          width: '60px',
+          height: '60px',
+          backgroundColor: '#215e24',
+          backgroundImage: 'url("https://cdn-icons-png.flaticon.com/512/6785/6785302.png")',
+          backgroundSize: '40px 40px',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          color: 'white',
+          zIndex: 1000,
+        }}
+      />
+    </Draggable>
           <MessagesComponent open={isMessageModalOpen} onClose={handleCloseMessageModal} />
         </>
       )}
 
-        <div  style={{ display: 'flex'}}> {/* Sử dụng Flexbox để bố trí layout */}
-  {/* NavBarAdmin cố định bên trái */}
-  <NavBarAdmin />
-          <div style={{ flexGrow: 1, overflowY: 'auto' }}> {/* Phần này chứa các component router */}
-            <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+      <div style={{ display: 'flex' }}> {/* Sử dụng Flexbox để bố trí layout */}
+        {/* NavBarAdmin cố định bên trái */}
+        <NavBarAdmin />
+        <div style={{ flexGrow: 1, overflowY: 'auto' }}> {/* Phần này chứa các component router */}
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/dashboard" element={<Dashboard />} />
 
-          {/* Brand Routes */}
-          <Route path="/brands" element={<BrandList />} />
-          <Route path="/add-brand" element={<AddBrand />} />
-          <Route path="/edit-brand/:id" element={<EditBrand />} />
+            {/* Brand Routes */}
+            <Route path="/brands" element={<BrandList />} />
+            <Route path="/add-brand" element={<AddBrand />} />
+            <Route path="/edit-brand/:id" element={<EditBrand />} />
 
-          {/* Category Routes */}
-          <Route path="/categories" element={<CategoryList />} />
-          <Route path="/add-category" element={<AddCategory />} />
-          <Route path="/edit-category/:id" element={<EditCategory />} />
+            {/* Category Routes */}
+            <Route path="/categories" element={<CategoryList />} />
+            <Route path="/add-category" element={<AddCategory />} />
+            <Route path="/edit-category/:id" element={<EditCategory />} />
 
-          {/* User Routes */}
-          <Route path="/userList" element={<UserList />} />
-          <Route path="/addUser" element={<AddUser />} />
-          <Route path="/updateUser/:id" element={<UpdateUser />} />
-          <Route path="/login" element={<LoginUser />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path='/register' element={<RegisterUser />} />
-          {/* Product Routes */}
-          <Route path="/productsadmin" element={<ListProductByAdmin />} />
-          <Route path="/addproduct" element={<AddProduct />} />
-          <Route path="/updateproduct/:id" element={<UpdateProduct />} />
-          <Route path="/productaddcart" element={<ListProductByUser />} />
-          <Route path="/cart/:id" element={<Cart />} />
-          <Route path="/products/:id" element={<ProductDetails />} />
-
-
-          {/* Shipping Routes */}
-          <Route path="/shippinglist" element={<ShippingList />} />
-          <Route path="/addshipping" element={<AddShipping />} />
-          <Route path="/updateshipping/:id" element={<UpdateShipping />} />
-
-          {/* Checkout Routes */}
-          <Route path="/checkout/:id" element={<Checkout />} />
-
-          {/* Payment Routes */}
-          <Route path="/stripe" element={<StripePaymentInfo />} />
-          <Route path="/stripe/success" element={<PaymentSuccess />} />
-
-          {/* Message Routes */}
-          <Route path="/message1/:roomId" element={<MessagesComponent />} />
-          <Route path="/message/:roomId" element={<MessageAdmin />} />
-          <Route path="/chat/:roomId" element={<ChatPage />} />
+            {/* User Routes */}
+            <Route path="/userList" element={<UserList />} />
+            <Route path="/addUser" element={<AddUser />} />
+            <Route path="/updateUser/:id" element={<UpdateUser />} />
+            <Route 
+    path="/login" 
+    element={isLoggedIn ? <Navigate to="/" replace /> : <LoginUser />} 
+  />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route 
+    path="/register" 
+    element={isLoggedIn ? <Navigate to="/" replace /> : <RegisterUser />} 
+  />      
+            {/* Product Routes */}
+            <Route path="/productsadmin" element={<ListProductByAdmin />} />
+            <Route path="/addproduct" element={<AddProduct />} />
+            <Route path="/updateproduct/:id" element={<UpdateProduct />} />
+            <Route path="/productaddcart" element={<ListProductByUser />} />
+            <Route path="/cart/:id" element={<Cart />} />
+            <Route path="/products/:id" element={<ProductDetails />} />
 
 
-          {/* Address Routes */}
-          <Route path="/user/:userId/addresses" element={<AddressList />} />
-          <Route path="/user/:userId/add-address" element={<AddAddress />} />
-          <Route path="/user/:userId/edit-address/:id" element={<EditAddress />} />
+            {/* Shipping Routes */}
+            <Route path="/shippinglist" element={<ShippingList />} />
+            <Route path="/addshipping" element={<AddShipping />} />
+            <Route path="/updateshipping/:id" element={<UpdateShipping />} />
 
-          {/* Warehouse Routes */}
-          <Route path="/warehouses" element={<WarehouseList />} />
-          <Route path="/add-warehouse" element={<AddWarehouse />} />
-          <Route path="/edit-warehouse/:id" element={<EditWarehouse />} />
-          <Route path="/warehouse/:warehouseId/inventory" element={<WarehouseInventory />} />
-          <Route path="/warehouse/:warehouseId/addProduct" element={<AddProductWarehouse />} />
-         
-         {/* Payment Routes */}
-         <Route path="/success" element={<SuccessPage />} /> {/* Thêm route này */}
+            {/* Checkout Routes */}
+            <Route path="/checkout/:id" element={<Checkout />} />
 
 
-          {/* Discount and Promotion Routes */}
-          <Route path="/product-discounts" element={<ProductDiscountList />} />
-          <Route path="/add-product-discount" element={<AddProductDiscount />} />
-          <Route path="/edit-product-discount/:id" element={<EditProductDiscount />} />
-          <Route path="/customer-coupons" element={<CustomerCouponList />} />
-          <Route path="/add-customer-coupon" element={<AddCustomerCoupon />} />
-          <Route path="/edit-customer-coupon/:id" element={<EditCustomerCoupon />} />
+            {/* Message Routes */}
+            <Route path="/message1/:roomId" element={<MessagesComponent />} />
+            <Route path="/message/:roomId" element={<MessageAdmin />} />
+            <Route path="/chat/:roomId" element={<ChatPage />} />
 
 
-          {/* Order Routes */}
-          <Route path="/order/:userId" element={<OrderList/>} />
+            {/* Address Routes */}
+            <Route path="/user/:userId/addresses" element={<AddressList />} />
+            <Route path="/user/:userId/add-address" element={<AddAddress />} />
+            <Route path="/user/:userId/edit-address/:id" element={<EditAddress />} />
+
+            {/* Warehouse Routes */}
+            <Route path="/warehouses" element={<WarehouseList />} />
+            <Route path="/add-warehouse" element={<AddWarehouse />} />
+            <Route path="/edit-warehouse/:id" element={<EditWarehouse />} />
+            <Route path="/warehouse/:warehouseId/inventory" element={<WarehouseInventory />} />
+            <Route path="/warehouse/:warehouseId/addProduct" element={<AddProductWarehouse />} />
+
+            {/* Payment Routes */}
+            <Route path="/success" element={<SuccessPage />} /> {/* Thêm route này */}
 
 
-          <Route path="/reviews/responses" element={<ReviewResponsePage />} />
+            {/* Discount and Promotion Routes */}
+            <Route path="/product-discounts" element={<ProductDiscountList />} />
+            <Route path="/add-product-discount" element={<AddProductDiscount />} />
+            <Route path="/edit-product-discount/:id" element={<EditProductDiscount />} />
+            <Route path="/customer-coupons" element={<CustomerCouponList />} />
+            <Route path="/add-customer-coupon" element={<AddCustomerCoupon />} />
+            <Route path="/edit-customer-coupon/:id" element={<EditCustomerCoupon />} />
 
-          <Route path="/userDetails/:id" element={<UserDetails />} />
+
+            {/* Order Routes */}
+            <Route path="/order/:userId" element={<OrderList />} />
 
 
-        </Routes>
+            <Route path="/reviews/responses" element={<ReviewResponsePage />} />
+
+            <Route path="/userDetails/:id" element={<UserDetails />} />
+
+
+          </Routes>
         </div>
-  {/* WeatherDisplay cố định bên phải */}
-  <WeatherDisplay />
+        {/* WeatherDisplay cố định bên phải */}
+        <WeatherDisplay />
 
-        </div>
-              </Router>
+      </div>
+    </Router>
   );
 }
 function App() {

@@ -1,13 +1,15 @@
+/* Container for the customer coupon list */
 .customer-coupon-list-container {
-  max-width: 1200px; /* Tăng giới hạn chiều rộng cho màn hình lớn */
+  max-width: 1200px;
   margin: auto;
   padding: 20px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   border-radius: 12px;
   background: linear-gradient(145deg, #aae7bf, #ffffff);
-  overflow-x: auto; /* Thêm cuộn ngang nếu cần */
+  overflow-x: auto;
 }
 
+/* Title styling */
 .customer-coupon-list-title {
   text-align: center;
   color: #2e7d32;
@@ -17,6 +19,7 @@
   text-transform: uppercase;
 }
 
+/* Add Coupon button styling */
 .customer-coupon-list-add-btn {
   padding: 10px 20px;
   border-radius: 50px;
@@ -36,6 +39,7 @@
   transform: translateY(-2px);
 }
 
+/* Table styling */
 .customer-coupon-list-table {
   width: 100%;
   margin-top: 20px;
@@ -74,8 +78,9 @@
   transition: background-color 0.3s ease;
 }
 
+/* Action button styling */
 .customer-coupon-list-action-btn {
-  padding: 8px 14px; /* Giảm kích thước để nút gọn hơn */
+  padding: 8px 14px;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
@@ -93,6 +98,7 @@
   transform: translateY(-2px);
 }
 
+/* Delete button styling */
 .customer-coupon-list-delete-btn {
   background-color: #e57373;
   margin-top: 10px;
@@ -104,43 +110,22 @@
   box-shadow: 0 6px 16px rgba(211, 47, 47, 0.5);
 }
 
-/* Responsive adjustments for smaller screens */
-@media (max-width: 768px) {
-  .customer-coupon-list-title {
-    font-size: 1.8rem;
-  }
+/* Row states for expired, max usage reached */
+.expired,
+.max-usage-reached,
+.expired-max-usage {
+  background-color: #f8bbd0 !important; /* Light pink for expired or max usage reached */
+}
 
-  .customer-coupon-list-add-btn {
-    width: 100%; /* Nút thêm sẽ chiếm toàn bộ chiều rộng màn hình */
-    padding: 12px;
-    margin-bottom: 15px;
-  }
+/* Đảm bảo các class này có độ ưu tiên cao hơn */
+.expired {
+  background-color: #f8bbd0 !important; /* Đã hết hạn */
+}
 
-  .customer-coupon-list-table th,
-  .customer-coupon-list-table td {
-    padding: 10px;
-    font-size: 0.9rem;
-  }
+.max-usage-reached {
+  background-color: #f8bbd0 !important; /* Đạt số lần sử dụng tối đa */
+}
 
-  .customer-coupon-list-table,
-  .customer-coupon-list-table th,
-  .customer-coupon-list-table td {
-    display: block; /* Hiển thị dạng khối trên màn hình nhỏ */
-  }
-
-  .customer-coupon-list-table tr {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 10px;
-  }
-
-  .customer-coupon-list-table th {
-    background-color: #c8e6c9;
-    text-align: center;
-  }
-
-  .customer-coupon-list-action-btn {
-    width: 100%; /* Nút sẽ chiếm toàn bộ chiều rộng trong từng hàng */
-    margin: 5px 0;
-  }
+.expired-max-usage {
+  background-color: #f8bbd0 !important; /* Cả hai điều kiện hết hạn và hết số lần sử dụng */
 }

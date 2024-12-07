@@ -160,13 +160,13 @@ useEffect(() => {
         <div className="modal-overlay">
             <div className="modal-container">
                 <div className="modal-header">
-                    <h2>Shipping Coordinates & Route</h2>
+                    <h2>Tuyến Đường Vận Chuyển</h2>
                     <button className="close-button" onClick={handleClose}>
                         &times;
                     </button>
                 </div>
                 <div className="modal-body">
-                    <h5>Origin Location (Receiver)</h5>
+                    {/* <h5>Origin Location (Receiver)</h5>
                     <p><strong>Latitude:</strong> {originLatitude}</p>
                     <p><strong>Longitude:</strong> {originLongitude}</p>
     
@@ -177,7 +177,7 @@ useEffect(() => {
                     <h5>Current Shipment Location</h5>
                     <p><strong>Latitude:</strong> {currentLatitude}</p>
                     <p><strong>Longitude:</strong> {currentLongitude}</p>
-    
+     */}
                     <div className="map-container">
                         <MapContainer
                             center={[destinationLatitude, destinationLongitude]}
@@ -230,7 +230,7 @@ useEffect(() => {
                 </div>
                 <div className="modal-footer">
                     <button className="close-modal-button" onClick={handleClose}>
-                        Close
+                        Thoát
                     </button>
                 </div>
             </div>

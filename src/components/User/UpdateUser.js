@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import UserService from '../../services/UserService';
 import './UpdateUser.css';
+import showGeneralToast from '../toastUtils/showGeneralToast'; // Import toast function
 
 const UpdateUser = ({ user, onClose, onUpdate }) => {
   const [updatedUser, setUpdatedUser] = useState(user);
@@ -17,23 +18,38 @@ const UpdateUser = ({ user, onClose, onUpdate }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Gửi yêu cầu cập nhật người dùng
       await UserService.updateUser(updatedUser, updatedUser.id);
-      alert('User updated successfully!');
-      onUpdate(); // Refresh the user list after update
-      onClose(); // Close the modal
+      
+      // Hiển thị thông báo thành công
+      showGeneralToast("Người dùng đã được cập nhật thành công!", "success");
+      
+      // Refresh danh sách người dùng sau khi cập nhật
+      onUpdate();
+      
+      // Đóng modal
+      onClose();
     } catch (error) {
       console.error('Error updating user:', error);
-      alert('Failed to update user.');
+      
+      // Hiển thị thông báo lỗi
+      if (error.response && error.response.data) {
+        const { message } = error.response.data;
+        showGeneralToast(message, "error");
+      } else {
+        showGeneralToast("Có lỗi xảy ra khi cập nhật người dùng", "error");
+      }
     }
   };
+  
 
   return (
     <div className="update-user-modal-container">
       <div className="update-user-modal-content">
-        <h2 className="update-user-modal-header">Update User</h2>
+        <h2 className="update-user-modal-header">Cập nhật người dùng</h2>
         <form className="update-user-modal-form" onSubmit={handleSubmit}>
           <div className="update-user-modal-form-group">
-            <label className="update-user-modal-label">Username</label>
+            <label className="update-user-modal-label">Tên người dùng</label>
             <input
               type="text"
               className="update-user-modal-input"
@@ -55,7 +71,7 @@ const UpdateUser = ({ user, onClose, onUpdate }) => {
             />
           </div>
           <div className="update-user-modal-form-group">
-            <label className="update-user-modal-label">Phone Number</label>
+            <label className="update-user-modal-label">Số điện thoại</label>
             <input
               type="text"
               className="update-user-modal-input"
@@ -66,7 +82,7 @@ const UpdateUser = ({ user, onClose, onUpdate }) => {
             />
           </div>
           <div className="update-user-modal-form-group">
-            <label className="update-user-modal-label">Roles</label>
+            <label className="update-user-modal-label">Quyền</label>
             <select
               className="update-user-modal-input"
               name="roles"
@@ -74,26 +90,27 @@ const UpdateUser = ({ user, onClose, onUpdate }) => {
               onChange={handleChange}
               required
             >
-              <option value="USER">USER</option>
-              <option value="ADMIN">ADMIN</option>
+              <option value="USER">Người dùng</option>
+              <option value="ADMIN">Quản trị viên</option>
             </select>
           </div>
           <div className="update-user-modal-buttons">
             <button type="submit" className="update-user-modal-btn update-user-modal-btn-primary">
-              Save Changes
+              Lưu thay đổi
             </button>
             <button
               type="button"
               onClick={onClose}
               className="update-user-modal-btn update-user-modal-btn-secondary"
             >
-              Cancel
+              Hủy
             </button>
           </div>
         </form>
       </div>
     </div>
   );
+  
 };
 
 export default UpdateUser;

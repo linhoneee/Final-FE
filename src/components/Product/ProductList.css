@@ -165,3 +165,13 @@
     transform: scale(1);
   }
 }
+.search-input-admin {
+  width: 250px;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  outline: none;
+  transition: all 0.3s ease;
+  margin-left: 50px;
+}

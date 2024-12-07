@@ -74,12 +74,10 @@ const AddProductModal = ({ warehouseId, closeModal }) => {
 
     InventoryService.addProductToWarehouse(warehouseId, product)
       .then(() => {
-        alert('Product added to warehouse successfully!');
         closeModal(); 
       })
       .catch((error) => {
         console.error('Error adding product to warehouse:', error);
-        alert('Failed to add product to warehouse');
       });
   };
 
@@ -119,10 +117,10 @@ const AddProductModal = ({ warehouseId, closeModal }) => {
   return (
     <div className="add-product-modal-container">
       <div className="add-product-modal-content">
-        <h2 className="add-product-modal-header">Add Product to Warehouse</h2>
+        <h2 className="add-product-modal-header">Thêm Sản Phẩm Vào Kho</h2>
         <form className="add-product-modal-form">
           <label className="add-product-modal-label">
-            Select Product:
+            Chọn Sản Phẩm:
             <Select
               name="productId"
               value={options.find(option => option.value === newProduct.productId)}
@@ -135,9 +133,9 @@ const AddProductModal = ({ warehouseId, closeModal }) => {
           </label>
           {selectedProduct && (
             <div className="add-product-modal-selected-product">
-              <h3>Selected Product Details</h3>
-              <p><strong>Name:</strong> {selectedProduct.productName}</p>
-              <p><strong>Description:</strong> {selectedProduct.descriptionDetails}</p>
+              <h3>Chi Tiết Sản Phẩm Đã Chọn</h3>
+              <p><strong>Tên:</strong> {selectedProduct.productName}</p>
+              <p><strong>Mô Tả:</strong> {selectedProduct.descriptionDetails}</p>
               <img
                 src={selectedProduct.primaryImage}
                 alt={selectedProduct.productName}
@@ -146,18 +144,19 @@ const AddProductModal = ({ warehouseId, closeModal }) => {
             </div>
           )}
           <label className="add-product-modal-label">
-            Quantity:
+            Số Lượng:
             <input type="text" name="quantity" value={newProduct.quantity} onChange={handleInputChange} className="add-product-modal-input" />
           </label>
           {errors.quantity && <p className="add-product-modal-error">{errors.quantity}</p>}
           <div className="add-product-modal-buttons">
-            <button type="button" onClick={handleAddProduct} className="add-product-modal-button add-product-modal-button-primary">Add Product</button>
-            <button type="button" onClick={closeModal} className="add-product-modal-button add-product-modal-button-secondary">Cancel</button>
+            <button type="button" onClick={handleAddProduct} className="add-product-modal-button add-product-modal-button-primary">Thêm Sản Phẩm</button>
+            <button type="button" onClick={closeModal} className="add-product-modal-button add-product-modal-button-secondary">Hủy Bỏ</button>
           </div>
         </form>
       </div>
     </div>
   );
+  
 };
 
 export default AddProductModal;

@@ -3,7 +3,7 @@ import './PaymentMethod.css'; // Import the new CSS file
 
 const PaymentMethod = ({ paymentMethod, setPaymentMethod }) => (
   <div className="payment-method-container">
-    <h3>Payment Method</h3>
+    <h3>Phương Thức Thanh Toán</h3>
     <div className="payment-options">
       <label>
         <input

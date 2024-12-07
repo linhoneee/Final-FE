@@ -40,37 +40,35 @@ const Navbar = () => {
         {isLoggedIn ? (
           <>
             <li className="navbar-component-item navbar-component-welcome">
-              <Link to={`/userDetails/${userID}`}>Welcome, {username}!</Link>
+              <Link to={`/userDetails/${userID}`}>Xin chào, {username}!</Link>
             </li>
             <li className="navbar-component-item">
-              <Link to="/productaddcart">Products</Link>
+              <Link to="/productaddcart">Sản phẩm</Link>
             </li>
             <li className="navbar-component-item">
               <Link to={`/cart/${userID}`} className="cart-link">
-                Cart {cartItemCount > 0 && <span className="navbar-component-cart-count">{cartItemCount}</span>}
+                Giỏ hàng {cartItemCount > 0 && <span className="navbar-component-cart-count">{cartItemCount}</span>}
               </Link>
             </li>
             <li className="navbar-component-item">
-              <Link to={`/order/${userID}`}>Order History</Link>
+              <Link to={`/order/${userID}`}>Lịch sử đặt hàng</Link>
             </li>
             <li className="navbar-component-item">
-              <Link to={`/userDetails/${userID}`}>Account Details</Link>
+              <Link to={`/userDetails/${userID}`}>Thông tin tài khoản</Link>
             </li>           
             <li className="navbar-component-item">
-              <button className="navbar-component-logout-button" onClick={handleLogout}>Logout</button>
+              <button className="navbar-component-logout-button" onClick={handleLogout}>Đăng xuất</button>
             </li>
           </>
         ) : (
           <>
           <li className="navbar-component-item">
-            <Link to="/login">Login</Link>
-
+            <Link to="/login">Đăng nhập</Link>
           </li>
-                    <li className="navbar-component-item">
-            <Link to="/register">register</Link>
-        
-                  </li>
-                  </>
+          <li className="navbar-component-item">
+            <Link to="/register">Đăng ký</Link>
+          </li>
+          </>
         )}
       </ul>
     </nav>

@@ -11,11 +11,41 @@ const EditProductDiscount = ({ product, closeModal, setProductDiscounts, product
 
   useEffect(() => {
     ProductDiscountService.getProductDiscountById(product.id).then((response) => {
-      setNewPrice(response.data.newPrice);
-      setStartDate(new Date(response.data.startDate));
-      setEndDate(response.data.endDate ? new Date(response.data.endDate) : null);
+      console.log("discount", response);
+  
+      // Kiểm tra dữ liệu trả về
+      if (response.data && response.data.length > 0) {
+        const discount = response.data[0];  // Lấy discount đầu tiên nếu có
+  
+        // Cập nhật newPrice
+        setNewPrice(discount.newPrice);
+  
+        // Chuyển đổi startDate và endDate từ chuỗi thành đối tượng Date
+        const start = new Date(discount.startDate);
+        const end = discount.endDate ? new Date(discount.endDate) : null;
+  
+        // Kiểm tra và đảm bảo giá trị ngày hợp lệ
+        if (isNaN(start)) {
+          console.error("Invalid start date:", discount.startDate);
+          setStartDate(new Date());  // Nếu không hợp lệ, đặt ngày hiện tại
+        } else {
+          setStartDate(start);
+        }
+  
+        if (end && isNaN(end)) {
+          console.error("Invalid end date:", discount.endDate);
+          setEndDate(null);  // Nếu không hợp lệ, đặt null
+        } else {
+          setEndDate(end);
+        }
+      } else {
+        console.error("No discount data found");
+      }
+    }).catch((err) => {
+      console.error("Error fetching product discount:", err);
     });
   }, [product.id]);
+  
 
   const updateProductDiscount = (e) => {
     e.preventDefault();
@@ -37,38 +67,56 @@ const EditProductDiscount = ({ product, closeModal, setProductDiscounts, product
   return (
     <div className="edit-product-discount-container">
       <div className="edit-product-discount-form">
-      <h2 className="edit-product-discount-header">Edit Discount for {product.productName}</h2>
-      <form >
-        <div className="edit-product-discount-form-group">
-          <label className="edit-product-discount-label">New Price</label>
-          <input type="text" value={newPrice} onChange={(e) => setNewPrice(e.target.value)} className="edit-product-discount-input" />
-        </div>
-        <div className="edit-product-discount-form-group">
-          <label className="edit-product-discount-label">Start Date</label>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            minDate={new Date()}
-            className="edit-product-discount-input"
-          />
-        </div>
-        <div className="edit-product-discount-form-group">
-          <label className="edit-product-discount-label">End Date</label>
-          <DatePicker
-            selected={endDate}
-            onChange={(date) => setEndDate(date)}
-            minDate={new Date()}
-            className="edit-product-discount-input"
-          />
-        </div>
-        <div className="edit-product-discount-buttons">
-          <button type="button" onClick={updateProductDiscount} className="edit-product-discount-button edit-product-discount-button-primary">Update</button>
-          <button type="button" onClick={closeModal} className="edit-product-discount-button edit-product-discount-button-danger">Cancel</button>
-        </div>
-      </form>
-    </div>
+        <h2 className="edit-product-discount-header">Chỉnh sửa Giảm giá cho {product.productName}</h2>
+        <form>
+          <div className="edit-product-discount-form-group">
+            <label className="edit-product-discount-label">Giá Mới</label>
+            <input
+              type="text"
+              value={newPrice}
+              onChange={(e) => setNewPrice(e.target.value)}
+              className="edit-product-discount-input"
+            />
+          </div>
+          <div className="edit-product-discount-form-group">
+            <label className="edit-product-discount-label">Ngày Bắt Đầu</label>
+            <DatePicker
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              minDate={new Date()}
+              className="edit-product-discount-input"
+            />
+          </div>
+          <div className="edit-product-discount-form-group">
+            <label className="edit-product-discount-label">Ngày Kết Thúc</label>
+            <DatePicker
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+              minDate={new Date()}
+              className="edit-product-discount-input"
+            />
+          </div>
+          <div className="edit-product-discount-buttons">
+            <button
+              type="button"
+              onClick={updateProductDiscount}
+              className="edit-product-discount-button edit-product-discount-button-primary"
+            >
+              Cập Nhật
+            </button>
+            <button
+              type="button"
+              onClick={closeModal}
+              className="edit-product-discount-button edit-product-discount-button-danger"
+            >
+              Hủy
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
+  
 };
 
 export default EditProductDiscount;

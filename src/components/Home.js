@@ -32,22 +32,13 @@ const Home = () => {
                 userID,
             });
 
-            // Store data in localStorage
-            localStorage.setItem('token', token);
-            localStorage.setItem('username', username);
-            localStorage.setItem('email', email);
-            localStorage.setItem('roles', roles);
-            localStorage.setItem('userID', userID);
 
             // Dispatch login action
             dispatch(login(token, email, username, roles, userID));
 
             // Redirect to the main page
             navigate('/');
-        } else {
-            // Handle the case where the required parameters are missing
-            console.error('Missing required parameters in URL');
-        }
+        } 
     }, [dispatch, navigate]);
 
     return (

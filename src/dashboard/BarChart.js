@@ -75,8 +75,8 @@ const BarChar = () => {
                     <YAxis className="axis-text" />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="Tháng này" className="bar-this-period" />
-                    <Bar dataKey="Tháng trước" className="bar-last-period" />
+                    <Bar dataKey="Tháng này" fill="url(#gradientThisPeriod)" className="bar-this-period" />
+                    <Bar dataKey="Tháng trước" fill="url(#gradientLastPeriod)" className="bar-last-period" />
                 </BarChart>
             </ResponsiveContainer>
         </div>
@@ -93,8 +93,8 @@ const BarChar = () => {
                     <YAxis className="axis-text" />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="Năm nay" className="bar-this-period" />
-                    <Bar dataKey="Năm trước" className="bar-last-period" />
+                    <Bar dataKey="Năm nay" fill="url(#gradientThisPeriod)"  className="bar-this-period" />
+                    <Bar dataKey="Năm trước" fill="url(#gradientLastPeriod)" className="bar-last-period" />
                 </BarChart>
             </ResponsiveContainer>
         </div>

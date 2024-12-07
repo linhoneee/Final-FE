@@ -3,10 +3,10 @@ import React from 'react';
 const AddressFields = ({ address, handleChange, provinces, districts, wards, setAddress }) => {
   return (
     <>
-      <label>Receiver Name</label>
+      <label>Tên Người Nhận</label>
       <input type="text" name="receiverName" value={address.receiverName} onChange={handleChange} required />
 
-      <label>Province/City</label>
+      <label>Tỉnh/Thành Phố</label>
       <select 
         name="provinceCity" 
         value={address.provinceCity} 
@@ -23,7 +23,7 @@ const AddressFields = ({ address, handleChange, provinces, districts, wards, set
           }));
         }}
       >
-        <option value="">Select Province/City</option>
+        <option value="">Chọn tỉnh/thành phố</option>
         {provinces.map((province) => (
           <option key={province.province_id} value={province.province_id}>
             {province.province_name}
@@ -33,7 +33,7 @@ const AddressFields = ({ address, handleChange, provinces, districts, wards, set
 
       {address.provinceCity && (
         <div>
-          <label>District</label>
+          <label>Quận/huyện</label>
           <select 
             name="district" 
             value={address.district} 
@@ -48,7 +48,7 @@ const AddressFields = ({ address, handleChange, provinces, districts, wards, set
               }));
             }}
           >
-            <option value="">Select District</option>
+            <option value="">Chọn quận/huyện</option>
             {districts.map((district) => (
               <option key={district.district_id} value={district.district_id}>
                 {district.district_name}
@@ -60,7 +60,7 @@ const AddressFields = ({ address, handleChange, provinces, districts, wards, set
 
       {address.district && (
         <div>
-          <label>Ward</label>
+          <label>Phường/Xã</label>
           <select 
             name="ward" 
             value={address.ward} 
@@ -73,7 +73,7 @@ const AddressFields = ({ address, handleChange, provinces, districts, wards, set
               }));
             }}
           >
-            <option value="">Select Ward</option>
+            <option value="">Chọn phường/xã</option>
             {wards.map((ward) => (
               <option key={ward.ward_id} value={ward.ward_id}>
                 {ward.ward_name}
@@ -83,10 +83,10 @@ const AddressFields = ({ address, handleChange, provinces, districts, wards, set
         </div>
       )}
 
-      <label>Street</label>
+      <label>Đường</label>
       <input type="text" name="street" value={address.street} onChange={handleChange} required />
 
-      <label className="is-primary-label">Is Primary</label>
+      <label className="is-primary-label">Địa chỉ mặc định</label>
       <input className="is-primary-checkbox" type="checkbox" name="isPrimary" checked={address.isPrimary} onChange={handleChange} />
     </>
   );

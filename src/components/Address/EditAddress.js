@@ -33,6 +33,7 @@ const EditAddress = () => {
     latitude: 21.028511, // Default coordinates for Hanoi
     longitude: 105.804817 // Default coordinates for Hanoi
   });
+  const [isFirstLoad, setIsFirstLoad] = useState(true); // State to track first load
 
   const navigate = useNavigate();
 
@@ -94,11 +95,17 @@ const EditAddress = () => {
           }
         })
         .catch(error => console.error(error));
+
+      // Only call updateMap when address is fetched and it's the first load
+      if (isFirstLoad) {
+        updateMap(`${addr.ward}, ${addr.district}, ${addr.provinceCity}, Vietnam`);
+        setIsFirstLoad(false); // Set to false after first map update
+      }
     });
-  }, [id]);
+  }, [id, isFirstLoad]);
 
   useEffect(() => {
-    if (address.provinceCity) {
+    if (address.provinceCity && !isFirstLoad) {
       // Get the list of districts based on the selected province
       axios.get(`https://vapi.vnappmob.com/api/province/district/${address.provinceCity}`)
         .then(response => setDistricts(response.data.results))
@@ -113,7 +120,7 @@ const EditAddress = () => {
   }, [address.provinceCity, address.provinceCityName]);
 
   useEffect(() => {
-    if (address.district) {
+    if (address.district && !isFirstLoad) {
       // Get the list of wards based on the selected district
       axios.get(`https://vapi.vnappmob.com/api/province/ward/${address.district}`)
         .then(response => setWards(response.data.results))
@@ -127,7 +134,7 @@ const EditAddress = () => {
   }, [address.district, address.districtName, address.provinceCityName]);
 
   useEffect(() => {
-    if (address.ward) {
+    if (address.ward && !isFirstLoad) {
       // Update the map with the coordinates of the selected ward
       updateMap(`${address.wardName}, ${address.districtName}, ${address.provinceCityName}, Vietnam`);
     }

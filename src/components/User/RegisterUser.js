@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import UserService from '../../services/UserService';
 import './RegisterUser.css';
+import showGeneralToast from '../toastUtils/showGeneralToast'; // Import toast
 
 const RegisterUser = () => {
   const [user, setUser] = useState({
@@ -13,8 +14,7 @@ const RegisterUser = () => {
     roles: 'USER', // Mặc định vai trò là 'USER'
   });
 
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [error, setError] = useState(null); // State để lưu lỗi
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,12 +23,15 @@ const RegisterUser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSuccessMessage('');
-    setErrorMessage('');
 
     try {
+      // Gọi API để đăng ký người dùng
       await UserService.registerUser(user);
-      setSuccessMessage('Registration successful! Welcome to GreenHome!');
+  
+      // Hiển thị thông báo thành công
+      showGeneralToast('Đăng ký thành công! Chào mừng bạn đến với GreenHome!', 'success');
+      
+      // Reset form sau khi đăng ký thành công
       setUser({
         username: '',
         email: '',
@@ -40,21 +43,27 @@ const RegisterUser = () => {
       });
     } catch (error) {
       console.error('Error registering user:', error);
-      setErrorMessage('Failed to register. Please try again.');
+  
+      // Hiển thị thông báo lỗi
+      if (error.response && error.response.data) {
+        const { message } = error.response.data;
+        showGeneralToast(message, 'error');
+      } else {
+        showGeneralToast('Đã xảy ra lỗi khi đăng ký người dùng. Vui lòng thử lại.', 'error');
+      }
     }
   };
 
   return (
     <div className="register-user-page-container">
       <div className="register-user-page-content">
-        <h2 className="register-user-page-header">Join GreenHome Today</h2>
-        {successMessage && <p className="success-message">{successMessage}</p>}
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
+        <h2 className="register-user-page-header">Tham gia GreenHome Ngay Hôm Nay</h2>
+
         <form className="register-user-page-form" onSubmit={handleSubmit}>
           <div className="register-user-page-grid">
             <div className="register-user-page-column">
               <div className="register-user-page-form-group">
-                <label className="register-user-page-label">Username</label>
+                <label className="register-user-page-label">Tên người dùng</label>
                 <input
                   type="text"
                   className="register-user-page-input"
@@ -79,7 +88,7 @@ const RegisterUser = () => {
 
             <div className="register-user-page-column">
               <div className="register-user-page-form-group">
-                <label className="register-user-page-label">First Name</label>
+                <label className="register-user-page-label">Tên</label>
                 <input
                   type="text"
                   className="register-user-page-input"
@@ -90,7 +99,7 @@ const RegisterUser = () => {
                 />
               </div>
               <div className="register-user-page-form-group">
-                <label className="register-user-page-label">Last Name</label>
+                <label className="register-user-page-label">Họ</label>
                 <input
                   type="text"
                   className="register-user-page-input"
@@ -104,7 +113,7 @@ const RegisterUser = () => {
 
             <div className="register-user-page-column">
               <div className="register-user-page-form-group">
-                <label className="register-user-page-label">Password</label>
+                <label className="register-user-page-label">Mật khẩu</label>
                 <input
                   type="password"
                   className="register-user-page-input"
@@ -115,7 +124,7 @@ const RegisterUser = () => {
                 />
               </div>
               <div className="register-user-page-form-group">
-                <label className="register-user-page-label">Phone Number</label>
+                <label className="register-user-page-label">Số điện thoại</label>
                 <input
                   type="text"
                   className="register-user-page-input"
@@ -129,7 +138,7 @@ const RegisterUser = () => {
           </div>
           <div className="register-user-page-buttons">
             <button type="submit" className="register-user-page-btn register-user-page-btn-primary">
-              Register
+              Đăng ký
             </button>
           </div>
         </form>

@@ -41,13 +41,14 @@
 
 .update-product-input,
 .update-product-textarea {
-  width: 100%; /* Chiếm toàn bộ chiều rộng */
+  width: 95%; /* Chiếm toàn bộ chiều rộng */
   padding: 10px; /* Khoảng cách bên trong */
+  height: auto;
   border-radius: 10px; /* Bo góc */
   border: 1px solid #ddd; /* Đường viền */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
-  transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển đổi mượt mà */
-  font-size: 1em; /* Kích thước chữ */
+  font-family: 'Arial', sans-serif; /* Hoặc bạn có thể dùng font sans-serif khác nếu muốn */
+
 }
 
 .update-product-input:focus,

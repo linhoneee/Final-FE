@@ -1,15 +1,43 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ProductService from '../../services/ProductService';
+import BrandService from '../../services/BrandService'; // Thêm BrandService
+import CategoryService from '../../services/CategoryService'; // Thêm CategoryService
+import showGeneralToast from '../toastUtils/showGeneralToast'; // Import toast function
 import './AddProduct.css'; // Import CSS file
 
-const AddProduct = ({ onClose }) => {
+const AddProduct = ({ onClose, refreshProductList  }) => {
   const [productName, setProductName] = useState('');
   const [descriptionDetails, setDescriptionDetails] = useState('');
   const [price, setPrice] = useState('');
   const [weight, setWeight] = useState('');
   const [imageFiles, setImageFiles] = useState([]);
   const [imageUrls, setImageUrls] = useState([]);
+  const [brands, setBrands] = useState([]); // State cho danh sách thương hiệu
+  const [categories, setCategories] = useState([]); // State cho danh sách thể loại
+  const [selectedBrand, setSelectedBrand] = useState(''); // State cho thương hiệu đã chọn
+  const [selectedCategory, setSelectedCategory] = useState(''); // State cho thể loại đã chọn
   const fileInputRef = useRef(null);
+
+  // Lấy danh sách thương hiệu và thể loại khi component load
+  useEffect(() => {
+    BrandService.getAllBrands()
+      .then((response) => {
+        setBrands(response.data); // Cập nhật danh sách thương hiệu
+      })
+      .catch((err) => {
+        console.error('Error fetching brands', err);
+        showGeneralToast('Không thể tải danh sách thương hiệu', 'error');
+      });
+
+    CategoryService.getAllCategories()
+      .then((response) => {
+        setCategories(response.data); // Cập nhật danh sách thể loại
+      })
+      .catch((err) => {
+        console.error('Error fetching categories', err);
+        showGeneralToast('Không thể tải danh sách thể loại', 'error');
+      });
+  }, []);
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -27,7 +55,12 @@ const AddProduct = ({ onClose }) => {
 
   const saveProduct = (e) => {
     e.preventDefault();
-    const product = { productName, descriptionDetails, price, weight };
+    if (!selectedBrand || !selectedCategory) {
+      showGeneralToast('Vui lòng chọn thương hiệu và thể loại!', 'error');
+      return;
+    }
+
+    const product = { productName, descriptionDetails, price, weight, brandId: selectedBrand, categoryId: selectedCategory };
 
     ProductService.CreateProduct(product)
       .then((response) => {
@@ -44,23 +77,32 @@ const AddProduct = ({ onClose }) => {
             }
             setImageFiles([]);
             onClose(); // Close modal after save
+            showGeneralToast('Sản phẩm đã được thêm thành công!', 'success');
+            refreshProductList(); 
           })
           .catch((err) => {
-            console.error('There was an error uploading the images!', err);
+            console.error('Có lỗi xảy ra khi tải lên hình ảnh!', err);
+            showGeneralToast('Có lỗi xảy ra khi tải lên hình ảnh', 'error');
           });
       })
       .catch((err) => {
-        console.error('There was an error creating the product!', err);
+        console.error('Có lỗi xảy ra khi tạo sản phẩm!', err);
+        if (err.response && err.response.data) {
+          const { message } = err.response.data;
+          showGeneralToast(message, 'error');
+        } else {
+          showGeneralToast('Có lỗi xảy ra khi tạo sản phẩm', 'error');
+        }
       });
   };
 
   return (
     <div className="add-product-modal">
-      <div className="add-product-modal-content">
-        <h2 className="add-product-modal-title">Add Product</h2>
+      <div className="add-product-modal-content1">
+        <h2 className="add-product-modal-title">Thêm Sản Phẩm</h2>
         <form className="add-product-form" onSubmit={saveProduct}>
           <div className="add-product-form-group">
-            <label className="add-product-label">Product Name:</label>
+            <label className="add-product-label">Tên Sản Phẩm:</label>
             <input
               type="text"
               className="add-product-input"
@@ -69,7 +111,7 @@ const AddProduct = ({ onClose }) => {
             />
           </div>
           <div className="add-product-form-group">
-            <label className="add-product-label">Description:</label>
+            <label className="add-product-label">Mô Tả:</label>
             <textarea
               className="add-product-textarea"
               value={descriptionDetails}
@@ -77,7 +119,7 @@ const AddProduct = ({ onClose }) => {
             />
           </div>
           <div className="add-product-form-group">
-            <label className="add-product-label">Price:</label>
+            <label className="add-product-label">Giá:</label>
             <input
               type="number"
               className="add-product-input"
@@ -86,7 +128,7 @@ const AddProduct = ({ onClose }) => {
             />
           </div>
           <div className="add-product-form-group">
-            <label className="add-product-label">Weight:</label>
+            <label className="add-product-label">Cân Nặng:</label>
             <input
               type="number"
               className="add-product-input"
@@ -94,8 +136,39 @@ const AddProduct = ({ onClose }) => {
               onChange={(e) => setWeight(e.target.value)}
             />
           </div>
+  
+          {/* Dropdown cho thương hiệu */}
           <div className="add-product-form-group">
-            <label className="add-product-label">Images:</label>
+            <label className="add-product-label">Thương Hiệu:</label>
+            <select
+              value={selectedBrand}
+              onChange={(e) => setSelectedBrand(e.target.value)}
+              className="add-product-input"
+            >
+              <option value="">-- Chọn Thương Hiệu --</option>
+              {brands.map((brand) => (
+                <option key={brand.id} value={brand.id}>{brand.name}</option>
+              ))}
+            </select>
+          </div>
+  
+          {/* Dropdown cho thể loại */}
+          <div className="add-product-form-group">
+            <label className="add-product-label">Danh Mục:</label>
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="add-product-input"
+            >
+              <option value="">-- Chọn Danh Mục --</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>{category.name}</option>
+              ))}
+            </select>
+          </div>
+  
+          <div className="add-product-form-group">
+            <label className="add-product-label">Hình Ảnh:</label>
             <div className="add-product-images">
               {imageUrls.map((image, index) => (
                 <div key={index} className="add-product-image-container">
@@ -104,7 +177,7 @@ const AddProduct = ({ onClose }) => {
                 </div>
               ))}
             </div>
-            <label className="add-product-file-label" htmlFor="file-input">Choose Files</label>
+            <label className="add-product-file-label" htmlFor="file-input">Chọn Tập Tin</label>
             <input
               id="file-input"
               type="file"
@@ -114,8 +187,8 @@ const AddProduct = ({ onClose }) => {
               ref={fileInputRef}
             />
           </div>
-          <button type="submit" className="add-product-button add-product-button-primary">Save</button>
-          <button type="button" onClick={onClose} className="add-product-button add-product-button-danger">Cancel</button>
+          <button type="submit" className="add-product-button add-product-button-primary">Lưu</button>
+          <button type="button" onClick={onClose} className="add-product-button add-product-button-danger">Hủy</button>
         </form>
       </div>
     </div>

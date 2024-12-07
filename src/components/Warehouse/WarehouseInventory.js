@@ -71,20 +71,21 @@ const WarehouseInventory = ({ warehouseId }) => {
 
   return (
     <div>
-      <h3>Inventory Details for Warehouse ID: {warehouseId}</h3>
-      <table className="warehouse-inventory-table">
-        <thead>
-          <tr>
-            <th>Product ID</th>
-            <th>Quantity</th>
-            <th>Updated At</th>
-            <th>Product Name</th>
-            <th>Price</th>
-            {/* <th>Weight</th> */}
-            <th>Description Details</th>
-            <th>Images</th>
-          </tr>
-        </thead>
+<h3>Chi tiết Kho Hàng cho ID Kho: {warehouseId}</h3>
+<table className="warehouse-inventory-table">
+  <thead>
+    <tr>
+      <th>ID Sản phẩm</th>
+      <th>Số lượng</th>
+      <th>Ngày cập nhật</th>
+      <th>Tên sản phẩm</th>
+      <th>Giá</th>
+      {/* <th>Cân nặng</th> */}
+      <th>Chi tiết mô tả</th>
+      <th>Hình ảnh</th>
+    </tr>
+  </thead>
+
         <tbody>
           {inventory.map((item) => (
             <tr key={item.id}>
@@ -118,7 +119,7 @@ const WarehouseInventory = ({ warehouseId }) => {
                   </td>
                 </>
               ) : (
-                <td colSpan="5">No product details available</td>
+<td colSpan="5">Không có chi tiết sản phẩm</td>
               )}
             </tr>
           ))}

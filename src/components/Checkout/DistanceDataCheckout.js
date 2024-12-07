@@ -13,29 +13,28 @@ const carIcon = new L.Icon({
 
 const DistanceData = ({ distanceData, routeCoordinates }) => (
     <div className="distance-data-container">
-        <h3>Distance Data</h3>
         <div className="address-section">
             <div className="address-box">
-                <h4>Receiver Address</h4>
-                <p><strong>User ID:</strong> {distanceData.userId}</p>
-                <p><strong>Receiver Name:</strong> {distanceData.receiverName}</p>
-                <p><strong>Address:</strong> {distanceData.street}, {distanceData.ward}, {distanceData.district}, {distanceData.provinceCity}</p>
-                <p><strong>Latitude:</strong> {distanceData.originLatitude}</p>
-                <p><strong>Longitude:</strong> {distanceData.originLongitude}</p>
+                <h4>Địa Chỉ Người Nhận</h4>
+                {/* <p><strong>User ID:</strong> {distanceData.userId}</p> */}
+                <p><strong>Tên:</strong> {distanceData.receiverName}</p>
+                <p><strong>Địa Chỉ:</strong> {distanceData.street}, {distanceData.ward}, {distanceData.district}, {distanceData.provinceCity}</p>
+                {/* <p><strong>Latitude:</strong> {distanceData.originLatitude}</p>
+                <p><strong>Longitude:</strong> {distanceData.originLongitude}</p> */}
             </div>
             <div className="address-box">
-                <h4>Warehouse Address</h4>
-                <p><strong>Warehouse ID:</strong> {distanceData.warehouseId}</p>
-                <p><strong>Warehouse Name:</strong> {distanceData.warehouseName}</p>
-                <p><strong>Address:</strong> {distanceData.warehouseWard}, {distanceData.warehouseDistrict}, {distanceData.warehouseProvinceCity}</p>
-                <p><strong>Latitude:</strong> {distanceData.destinationLatitude}</p>
-                <p><strong>Longitude:</strong> {distanceData.destinationLongitude}</p>
+                <h4>Địa Chỉ Kho Hàng</h4>
+                {/* <p><strong>Warehouse ID:</strong> {distanceData.warehouseId}</p> */}
+                <p><strong> Tên:</strong> {distanceData.warehouseName}</p>
+                <p><strong>Địa Chỉ:</strong> {distanceData.warehouseWard}, {distanceData.warehouseDistrict}, {distanceData.warehouseProvinceCity}</p>
+                {/* <p><strong>Latitude:</strong> {distanceData.destinationLatitude}</p> */}
+                {/* <p><strong>Longitude:</strong> {distanceData.destinationLongitude}</p> */}
             </div>
         </div>
-        <p><strong>Distance:</strong> {distanceData.distance} km</p>
+        <p><strong>Khoảng Cách:</strong> {distanceData.distance} km</p>
         {routeCoordinates.length > 0 && (
             <>
-                <h4>Route</h4>
+                <h4>Bản Đồ Đường Trường Thực Tế</h4>
                 <MapContainer bounds={routeCoordinates} className="route-map">
                     <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

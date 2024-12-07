@@ -12,7 +12,7 @@ class ProductDiscountService {
   }
 
   getProductDiscountById(productDiscountId) {
-    return axios.get(`${BASE_URL}/${productDiscountId}`);
+    return axios.get(`${BASE_URL}/product/${productDiscountId}`);
   }
 
   updateProductDiscount(productDiscount, productDiscountId) {

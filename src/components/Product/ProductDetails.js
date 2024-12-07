@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ProductService from '../../services/ProductService';
+import CategoryService from '../../services/CategoryService'; // Import CategoryService
+import BrandService from '../../services/BrandService'; // Import BrandService
 import ReviewService from '../../services/ReviewService';
 import CartService from '../../services/CartService';
 import Modal from 'react-modal';
@@ -22,6 +24,8 @@ const ProductDetails = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [averageRating, setAverageRating] = useState(0); // State to store average rating
+  const [category, setCategory] = useState(null); // State to store category
+  const [brand, setBrand] = useState(null); // State to store brand
   const navigate = useNavigate();
   const userID = useSelector(state => state.auth.userID); // Get userID from Redux store
   const dispatch = useDispatch();
@@ -36,14 +40,16 @@ const ProductDetails = () => {
         setPrimaryImage(primaryImg);
         setLoading(false);
 
-              // Gọi hàm lưu vào localStorage
-              addToRecentlyViewed({
-                id: response.data.product.id,
-                name: response.data.product.productName,
-                price: response.data.product.price,
-                imageUrl: primaryImg ? primaryImg.url : ''
-              });
-      
+        // Call function to add product to recently viewed
+        addToRecentlyViewed({
+          id: response.data.product.id,
+          name: response.data.product.productName,
+          price: response.data.product.price,
+          imageUrl: primaryImg ? primaryImg.url : ''
+        });
+
+        // Fetch category and brand details
+        fetchCategoryAndBrand(response.data.product.categoryId, response.data.product.brandId);
       })
       .catch(error => {
         console.error('Error fetching product details:', error);
@@ -55,7 +61,6 @@ const ProductDetails = () => {
     ReviewService.getReviewsByProductId(id)
       .then(response => {
         setReviews(response.data);
-        console.log(response.data);
 
         // Calculate average rating for reviews without parentId
         const rootReviews = response.data.filter(review => review.review.parentId === null);
@@ -68,6 +73,28 @@ const ProductDetails = () => {
       });
   }, [id]);
 
+  // Fetch category and brand details
+  const fetchCategoryAndBrand = (categoryId, brandId) => {
+    // Fetch category details
+    CategoryService.getCategoryById(categoryId)
+      .then(response => {
+        setCategory(response.data); // Set the category state
+      })
+      .catch(error => {
+        console.error('Error fetching category:', error);
+      });
+  
+    // Fetch brand details
+    BrandService.getBrandById(brandId)
+      .then(response => {
+        console.log("Brand data: ", response.data);  // Debugging line
+        setBrand(response.data); // Set the brand state
+      })
+      .catch(error => {
+        console.error('Error fetching brand:', error);
+      });
+  };
+  
   const openModal = (image) => {
     setSelectedImage(image);
     setModalIsOpen(true);
@@ -103,17 +130,16 @@ const ProductDetails = () => {
     });
   };
   
-    // Hàm lưu thông tin vào localStorage
-    const addToRecentlyViewed = (product) => {
-      let viewedProducts = JSON.parse(localStorage.getItem('viewedProducts')) || [];
-      // Kiểm tra nếu sản phẩm đã có trong danh sách
-      if (!viewedProducts.some(item => item.id === product.id)) {
-        viewedProducts.push(product);
-        localStorage.setItem('viewedProducts', JSON.stringify(viewedProducts));
-      }
-    };
-  
-  
+  // Hàm lưu thông tin vào localStorage
+  const addToRecentlyViewed = (product) => {
+    let viewedProducts = JSON.parse(localStorage.getItem('viewedProducts')) || [];
+    // Kiểm tra nếu sản phẩm đã có trong danh sách
+    if (!viewedProducts.some(item => item.id === product.id)) {
+      viewedProducts.push(product);
+      localStorage.setItem('viewedProducts', JSON.stringify(viewedProducts));
+    }
+  };
+
   const addToCart = () => {
     const cartItem = {
       productId: product.id,
@@ -137,7 +163,6 @@ const ProductDetails = () => {
         alert('Failed to add product to cart');
       });
   };
-  
 
   const renderStars = (rating) => {
     return Array.from({ length: 5 }, (_, index) => (
@@ -173,8 +198,8 @@ const ProductDetails = () => {
             </div>
           )}
           <div className="comment">
-            <span><strong>Comment:</strong> {review.review.comment}</span>
-            <span className="date"><strong>Date:</strong> {new Date(review.review.createdAt).toLocaleString()}</span>
+            <span><strong>Đánh Giá:</strong> {review.review.comment}</span>
+            <span className="date"><strong>Ngày:</strong> {new Date(review.review.createdAt).toLocaleString()}</span>
           </div>
         </div>
         {review.responses.map(response => renderReviewItem(response, true))}
@@ -202,11 +227,16 @@ const ProductDetails = () => {
               <span className="average-rating-number">{averageRating.toFixed(1)} / 5</span>
               <div className="rating">
                 {renderStars(averageRating)} {/* Render average rating stars */}
-                              <button onClick={addToCart}>Add to Cart</button>
-
               </div>
             </div>
-            <span className="review-count">({product.numReviews} reviews)</span>
+            <span className="review-count">({product.numReviews} Đánh Giá)</span>
+          </div>
+
+
+
+          <div className="buttons-container">
+            <button onClick={addToCart}>Thêm Vào Giỏ Hàng</button>
+            <button onClick={() => navigate(-1)}>Quay Lại Trang Trước</button>
           </div>
           <div className="product-info">
             <div className="product-images-container">
@@ -227,31 +257,78 @@ const ProductDetails = () => {
                 ))}
               </div>
             </div>
+
             <div className="product-details">
-              <p><strong>Category:</strong> {product.categoryId}</p>
-              <p><strong>Description:</strong> {product.descriptionDetails}</p>
               <p className="price"><span>${product.price}</span> {product.originalPrice && <span className="original-price">${product.originalPrice}</span>}</p>
-              <p><strong>Weight:</strong> {product.weight} g</p>
-              <button onClick={addToCart}>Add to Cart</button>
-              <button onClick={() => navigate(-1)}>Back to Products</button>
+              <div className="product-info">
+  <div className="product-info-item">
+    <strong>Trọng Lượng:</strong> <span>{product.weight} g</span>
+  </div>
+
+  {/* Display category information */}
+  {category && (
+    <div className="product-info-item">
+      <strong>Thể Loại:</strong> <span>{category.name}</span>
+      <p>{category.description}</p>
+    </div>
+  )}
+
+  {/* Display brand information */}
+  {brand && (
+    <div className="product-info-item">
+      <strong>Thương Hiệu:</strong> <span>{brand.name}</span>
+      <p>{brand.description}</p>
+    </div>
+  )}
+</div>
+
+
             </div>
           </div>
 
-          {selectedImage && (
-            <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal-content">
-              <img src={`http://localhost:6001${selectedImage.url}`} alt="Selected" />
-              <button onClick={closeModal} className="modal-close-button">Close</button>
-            </Modal>
-          )}
-
           <div className="review-container">
-            <h3>Reviews</h3>
+            <h3>Đánh Giá</h3>
             {reviews.length > 0 ? (
               renderReviews(reviews)
             ) : (
-              <p>No reviews found.</p>
+              <p>Không Có Đánh Giá</p>
             )}
           </div>
+
+          {selectedImage && (
+    <Modal
+    isOpen={modalIsOpen}
+    onRequestClose={closeModal}
+    className="modal-content"
+    style={{
+      content: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '550px',
+        height: '550px',
+        margin: 'auto', // Căn giữa modal
+        padding: '0', // Loại bỏ khoảng padding mặc định
+        borderRadius: '8px', // Thêm border radius cho modal (tuỳ chọn)
+        top: '40px',
+        right:'110px',
+      },
+    }}
+  >
+    <img
+      src={`http://localhost:6001${selectedImage.url}`}
+      alt="Selected"
+      style={{
+        width: '100%', // Đảm bảo ảnh tự động co giãn theo kích thước modal
+        height: '100%', // Đảm bảo ảnh không vượt ra ngoài
+        objectFit: 'cover', // Giữ tỷ lệ và lấp đầy khung ảnh
+        borderRadius: '8px', // Thêm border-radius cho ảnh nếu muốn
+      }}
+    />
+
+  </Modal>
+  
+          )}
         </>
       )}
     </div>

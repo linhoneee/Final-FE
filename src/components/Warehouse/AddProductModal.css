@@ -1,5 +1,3 @@
-/* AddProductModal.css */
-
 .add-product-modal-container {
   position: fixed;
   top: 0;
@@ -19,8 +17,11 @@
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  max-width: 600px;
   width: 100%;
+  max-width: 600px;
+  height: auto; /* Modal tự động kéo dài chiều cao */
+  max-height: 90vh; /* Giới hạn chiều cao tối đa của modal, để tránh nó tràn ra ngoài cửa sổ */
+  overflow: visible; /* Loại bỏ cuộn, cho phép chiều cao thay đổi tự do */
   animation: fadeInScale 0.5s ease-out;
 }
 

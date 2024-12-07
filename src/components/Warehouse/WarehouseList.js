@@ -47,17 +47,18 @@ const WarehouseList = () => {
 
   return (
     <div className="warehouse-list-container">
-      <h2 className="warehouse-list-title">Warehouse List</h2>
-      <button onClick={() => navigate('/add-warehouse')} className="warehouse-list-add-btn">Add Warehouse</button>
+      <h2 className="warehouse-list-title">Danh Sách Kho Hàng</h2>
+      <button onClick={() => navigate('/add-warehouse')} className="warehouse-list-add-btn">Thêm Kho Hàng</button>
       <table className="warehouse-list-table">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Address</th> {/* Cột địa chỉ mới */}
-      <th>Actions</th>
-    </tr>
-  </thead>
+<thead>
+  <tr>
+    <th>ID</th>
+    <th>Tên</th>
+    <th>Địa chỉ</th> {/* Cột địa chỉ mới */}
+    <th>Hành động</th>
+  </tr>
+</thead>
+
   <tbody>
     {warehouses.map((warehouse) => (
       <React.Fragment key={warehouse.id}>
@@ -67,29 +68,30 @@ const WarehouseList = () => {
           <td>{`${warehouse.ward}, ${warehouse.district}, ${warehouse.provinceCity}`}</td> {/* Nối địa chỉ */}
           <td>
   <div className="warehouse-list-actions">
-    <button
-      onClick={() => navigate(`/edit-warehouse/${warehouse.id}`)}
-      className="warehouse-list-action-btn"
-    >
-      Edit
-    </button>
-    <button
-      onClick={() => deleteWarehouse(warehouse.id)}
-      className="warehouse-list-action-btn warehouse-list-delete-btn"
-    >
-      Delete
-    </button>
-    <button
-      onClick={() => toggleInventoryVisibility(warehouse.id)}
-      className="warehouse-list-action-btn"
-    >
-      {inventoryVisible[warehouse.id] ? 'Hide Inventory' : 'View Inventory'}
-    </button>
+  <button
+  onClick={() => navigate(`/edit-warehouse/${warehouse.id}`)}
+  className="warehouse-list-action-btn"
+>
+  Chỉnh sửa
+</button>
+<button
+  onClick={() => deleteWarehouse(warehouse.id)}
+  className="warehouse-list-action-btn warehouse-list-delete-btn"
+>
+  Xóa
+</button>
+<button
+  onClick={() => toggleInventoryVisibility(warehouse.id)}
+  className="warehouse-list-action-btn"
+>
+  {inventoryVisible[warehouse.id] ? 'Ẩn Kho' : 'Xem Kho'}
+</button>
+
     <button
       onClick={() => openAddProductModal(warehouse.id)}
       className="warehouse-list-action-btn"
     >
-      Add Product
+      Thêm Sản Phẩm
     </button>
   </div>
 </td>

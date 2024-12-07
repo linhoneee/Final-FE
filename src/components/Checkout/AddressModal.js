@@ -22,12 +22,12 @@ const AddressModal = ({ defaultAddress, addresses, onClose, onSelect, onChangeAd
 
 const DefaultAddress = ({ defaultAddress, onChangeAddress }) => (
   <div className="default-address">
-    <h4>Default Address</h4>
+    <h4>Địa Chỉ</h4>
     {defaultAddress ? (
       <>
         <p>{defaultAddress.receiverName}</p>
         <p>{defaultAddress.street}, {defaultAddress.ward}, {defaultAddress.district}, {defaultAddress.provinceCity}</p>
-        <button onClick={onChangeAddress}>Change Address</button>
+        <button onClick={onChangeAddress}>Đổi Địa Chỉ</button>
       </>
     ) : (
       <p>Loading default address...</p>

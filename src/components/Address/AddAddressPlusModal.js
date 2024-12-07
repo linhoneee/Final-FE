@@ -150,7 +150,7 @@ const AddAddressPlusModal = ({ userId, onClose, onSave }) => {
     <div className="add-address-plus-modal-overlay">
       <div className="add-address-plus-modal" ref={modalRef}>
         <div className="add-address-plus-modal-header">
-          <h2>Add Address Plus</h2>
+          <h2>Thêm Địa Chỉ</h2>
         </div>
         <div className="add-address-plus-modal-content">
           <div className="add-address-plus-modal-left">
@@ -163,8 +163,8 @@ const AddAddressPlusModal = ({ userId, onClose, onSave }) => {
                 wards={wards}
                 setAddress={setAddress}
               />
-              <button type="submit" className="btn">Add Address</button>
-              <button type="button" className="btn cancel-btn" onClick={onClose}>Cancel</button>
+              <button type="submit" className="btn">Thêm Địa Chỉ</button>
+              <button type="button" className="btn cancel-btn" onClick={onClose}>Thoát</button>
             </form>
           </div>
           <div className="add-address-plus-modal-right">
@@ -173,9 +173,9 @@ const AddAddressPlusModal = ({ userId, onClose, onSave }) => {
             </div>
             {address.latitude && address.longitude && (
               <div className="coordinates">
-                <h3>Coordinates</h3>
-                <p>Longitude: {address.longitude}</p>
-                <p>Latitude: {address.latitude}</p>
+                <h3>Vị Trí Địa Lý</h3>
+                <p>Kinh độ: {address.longitude}</p>
+                <p>Vĩ độ: {address.latitude}</p>
               </div>
             )}
           </div>

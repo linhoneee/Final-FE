@@ -49,58 +49,59 @@ const SuccessPage = () => {
         <div className="success-container">
             <div className="success-header">
                 <FaCheckCircle className="success-icon bounce" />
-                <h1>Payment Successful</h1>
-                <p>Your order has been processed successfully. Thank you for choosing us!</p>
+                <h1>Thanh toán thành công</h1>
+                <p>Đơn hàng của bạn đã được xử lý thành công. Cảm ơn bạn đã lựa chọn chúng tôi!</p>
             </div>
             <div className="success-details">
                 <div className="card">
                     <h2>
-                        <FaMoneyBillWave className="icon" /> Payment Information
+                        <FaMoneyBillWave className="icon" /> Thông tin thanh toán
                     </h2>
-                    <p><strong>Payment ID:</strong> {paymentId}</p>
-                    <p><strong>Payer ID:</strong> {payerId}</p>
+                    <p><strong>Mã thanh toán:</strong> {paymentId}</p>
+                    <p><strong>Mã người thanh toán:</strong> {payerId}</p>
                 </div>
                 <div className="card">
                     <h2>
-                        <FaShippingFast className="icon" /> Shipping Information
+                        <FaShippingFast className="icon" /> Thông tin vận chuyển
                     </h2>
-                    <p><strong>Shipping Method:</strong> {currentRequest.selectedShipping.name}</p>
+                    <p><strong>Phương thức vận chuyển:</strong> {currentRequest.selectedShipping.name}</p>
                     <div className="address-section">
                         <div>
-                            <h3>Sender's Address</h3>
+                            <h3>Địa chỉ người gửi</h3>
                             <p>{formatAddress(currentRequest.distanceData)}</p>
                         </div>
                         <div>
-                            <h3>Receiver's Address</h3>
+                            <h3>Địa chỉ người nhận</h3>
                             <p>{formatAddress(currentRequest.distanceData)}</p>
                         </div>
                     </div>
                 </div>
                 <div className="card">
                     <h2>
-                        <FaBoxOpen className="icon" /> Order Details
+                        <FaBoxOpen className="icon" /> Thông tin đơn hàng
                     </h2>
                     <ul className="item-list">
                         {currentRequest.items.map((item, index) => (
                             <li key={index} className="item">
                                 <img src={`http://localhost:6001${item.primaryImageUrl}`} alt={item.name} />
                                 <div>
-                                    <p><strong>Name:</strong> {item.name}</p>
-                                    <p><strong>Price:</strong> {item.price}</p>
-                                    <p><strong>Quantity:</strong> {item.quantity}</p>
+                                    <p><strong>Tên sản phẩm:</strong> {item.name}</p>
+                                    <p><strong>Giá:</strong> {item.price}</p>
+                                    <p><strong>Số lượng:</strong> {item.quantity}</p>
                                 </div>
                             </li>
                         ))}
                     </ul>
                 </div>
                 <div className="card total-section">
-                    <h3>Total Amount</h3>
-                    <p><strong>Total:</strong> ${currentRequest.total.toFixed(2)}</p>
+                    <h3>Tổng cộng</h3>
+                    <p><strong>Tổng tiền:</strong> ${currentRequest.total.toFixed(2)}</p>
                 </div>
             </div>
-            <button className="back-home-button" onClick={() => navigate('/')}>Go Back Home</button>
+            <button className="back-home-button" onClick={() => navigate('/')}>Quay lại trang chủ</button>
         </div>
     );
+    
 };
 
 export default SuccessPage;

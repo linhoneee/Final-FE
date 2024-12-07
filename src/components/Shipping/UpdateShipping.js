@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ShippingService from '../../services/ShippingService';
 import './UpdateShipping.css';
+import showGeneralToast from '../toastUtils/showGeneralToast'; // Import toast function
 
 const UpdateShipping = ({ shipping, closeModal, fetchShippings }) => {
   const [updatedShipping, setUpdatedShipping] = useState({
@@ -25,15 +26,31 @@ const UpdateShipping = ({ shipping, closeModal, fetchShippings }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
     ShippingService.updateShippingById(updatedShipping, shipping.id)
       .then(() => {
+        // Cập nhật lại danh sách shipping sau khi cập nhật thành công
         fetchShippings();
+        
+        // Đóng modal
         closeModal();
+        
+        // Hiển thị thông báo thành công
+        showGeneralToast("Shipping đã được cập nhật thành công!", "success");
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error updating shipping:', error);
+        
+        // Hiển thị thông báo lỗi nếu có
+        if (error.response && error.response.data) {
+          const { message } = error.response.data;
+          showGeneralToast(message, "error");
+        } else {
+          showGeneralToast("Có lỗi xảy ra khi cập nhật shipping", "error");
+        }
       });
   };
+  
 
   return (
     <div className="update-shipping-modal-container">
