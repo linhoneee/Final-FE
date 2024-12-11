@@ -13,21 +13,17 @@ const EditProductDiscount = ({ product, closeModal, setProductDiscounts, product
     ProductDiscountService.getProductDiscountById(product.id).then((response) => {
       console.log("discount", response);
   
-      // Kiểm tra dữ liệu trả về
       if (response.data && response.data.length > 0) {
-        const discount = response.data[0];  // Lấy discount đầu tiên nếu có
+        const discount = response.data[0];  
   
-        // Cập nhật newPrice
         setNewPrice(discount.newPrice);
   
-        // Chuyển đổi startDate và endDate từ chuỗi thành đối tượng Date
         const start = new Date(discount.startDate);
         const end = discount.endDate ? new Date(discount.endDate) : null;
   
-        // Kiểm tra và đảm bảo giá trị ngày hợp lệ
         if (isNaN(start)) {
           console.error("Invalid start date:", discount.startDate);
-          setStartDate(new Date());  // Nếu không hợp lệ, đặt ngày hiện tại
+          setStartDate(new Date());  // Nếu không hợp lệ, đặt ngày hôm nay
         } else {
           setStartDate(start);
         }

@@ -18,11 +18,10 @@ const AddProduct = ({ onClose, refreshProductList  }) => {
   const [selectedCategory, setSelectedCategory] = useState(''); // State cho thể loại đã chọn
   const fileInputRef = useRef(null);
 
-  // Lấy danh sách thương hiệu và thể loại khi component load
   useEffect(() => {
     BrandService.getAllBrands()
       .then((response) => {
-        setBrands(response.data); // Cập nhật danh sách thương hiệu
+        setBrands(response.data); 
       })
       .catch((err) => {
         console.error('Error fetching brands', err);
@@ -31,7 +30,7 @@ const AddProduct = ({ onClose, refreshProductList  }) => {
 
     CategoryService.getAllCategories()
       .then((response) => {
-        setCategories(response.data); // Cập nhật danh sách thể loại
+        setCategories(response.data); 
       })
       .catch((err) => {
         console.error('Error fetching categories', err);
@@ -40,14 +39,16 @@ const AddProduct = ({ onClose, refreshProductList  }) => {
   }, []);
 
   const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    setImageFiles([...imageFiles, ...files]);
-    const urls = files.map((file) => ({ url: URL.createObjectURL(file) }));
-    setImageUrls([...imageUrls, ...urls]);
+    const files = Array.from(e.target.files); // Chuyển đổi đối tượng FileList thành mảng
+    setImageFiles([...imageFiles, ...files]); // Cập nhật mảng imageFiles với các file đã chọn
+    const urls = files.map((file) => ({ url: URL.createObjectURL(file) })); // Tạo URL tạm thời cho mỗi file
+    setImageUrls([...imageUrls, ...urls]); // Cập nhật mảng imageUrls để hiển thị ảnh
   };
+  
 
   const handleRemoveImage = (index) => {
     const newImageUrls = imageUrls.filter((_, i) => i !== index);
+    //dấu gạch dưới _  để chỉ rằng tham số này không được nên chỉ cần quan tâm đến tham số thứ hai
     const newImageFiles = imageFiles.filter((_, i) => i !== index);
     setImageUrls(newImageUrls);
     setImageFiles(newImageFiles);

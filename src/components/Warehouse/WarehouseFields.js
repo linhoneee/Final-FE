@@ -4,10 +4,16 @@ import React from 'react';
 const WarehouseFields = ({ warehouse, handleChange, provinces, districts, wards, setWarehouse }) => {
   return (
     <>
-      <label>Name</label>
-      <input type="text" name="name" value={warehouse.name} onChange={handleChange} required />
+      <label>Tên kho</label>
+      <input 
+        type="text" 
+        name="name" 
+        value={warehouse.name} 
+        onChange={handleChange} 
+        required 
+      />
 
-      <label>Province/City</label>
+      <label>Tỉnh/Thành phố</label>
       <select 
         name="provinceCity" 
         value={warehouse.provinceCity} 
@@ -24,7 +30,7 @@ const WarehouseFields = ({ warehouse, handleChange, provinces, districts, wards,
           }));
         }}
       >
-        <option value="">Select Province/City</option>
+        <option value="">Chọn Tỉnh/Thành phố</option>
         {provinces.map((province) => (
           <option key={province.province_id} value={province.province_id}>
             {province.province_name}
@@ -34,7 +40,7 @@ const WarehouseFields = ({ warehouse, handleChange, provinces, districts, wards,
 
       {warehouse.provinceCity && (
         <div>
-          <label>District</label>
+          <label>Quận/Huyện</label>
           <select 
             name="district" 
             value={warehouse.district} 
@@ -49,7 +55,7 @@ const WarehouseFields = ({ warehouse, handleChange, provinces, districts, wards,
               }));
             }}
           >
-            <option value="">Select District</option>
+            <option value="">Chọn Quận/Huyện</option>
             {districts.map((district) => (
               <option key={district.district_id} value={district.district_id}>
                 {district.district_name}
@@ -61,7 +67,7 @@ const WarehouseFields = ({ warehouse, handleChange, provinces, districts, wards,
 
       {warehouse.district && (
         <div>
-          <label>Ward</label>
+          <label>Phường/Xã</label>
           <select 
             name="ward" 
             value={warehouse.ward} 
@@ -74,7 +80,7 @@ const WarehouseFields = ({ warehouse, handleChange, provinces, districts, wards,
               }));
             }}
           >
-            <option value="">Select Ward</option>
+            <option value="">Chọn Phường/Xã</option>
             {wards.map((ward) => (
               <option key={ward.ward_id} value={ward.ward_id}>
                 {ward.ward_name}

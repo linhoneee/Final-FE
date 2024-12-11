@@ -78,12 +78,10 @@ const MapChart = () => {
         top: "20px", 
         left: "20px", 
         backgroundColor: "white", 
-        padding: "5px", 
-        borderRadius: "4px", 
-        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", 
+    
         zIndex: 1,
         maxWidth: "100vh",
-        transform: "translate(180px, 90px)" // Di chuyển bảng top 5
+        transform: "translate(177px, 90px)" // Di chuyển bảng top 5
       }}>
                   <h3 style={{ 
             margin: 0, 
@@ -128,7 +126,7 @@ const MapChart = () => {
         </ul>
       </div>
     
-      <div style={{ width: "100%", height: "600%", transform: "translate(-65px, -44px)" }}>
+      <div style={{ width: "100%", height: "600%", transform: "translate(-60px, -44px)" }}>
         <ComposableMap
           projection="geoMercator"
           width={477} 

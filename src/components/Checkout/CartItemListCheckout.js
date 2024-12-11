@@ -23,7 +23,7 @@ const CartItemListCheckout = ({ selectedCartItems }) => {
               <p className="product-name">Tên: {item.name}</p>
               <p>Số Lượng: {item.quantity}</p>
               <p>Giá: ${item.price}</p>
-              {/* <p>Weight: {item.weight} g</p> */}
+              <p>Khối Lượng: {item.weight} g</p>
             </div>
           </li>
         ))}

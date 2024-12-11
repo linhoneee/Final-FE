@@ -92,15 +92,14 @@
   border-radius: 50%;
   cursor: pointer;
   z-index: 1;
-  transition: background 0.3s ease;
 }
 
 .scroll-button.left {
-  left: -30px; /* Move left button closer to the products */
+  left: 40px; /* Move left button closer to the products */
 }
 
 .scroll-button.right {
-  right: -30px; /* Move right button closer to the products */
+  right: 40px; /* Move right button closer to the products */
 }
 
 .scroll-button:disabled {

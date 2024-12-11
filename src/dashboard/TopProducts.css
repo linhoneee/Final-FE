@@ -22,6 +22,7 @@
     font-weight: 700;
     letter-spacing: 0.5px;
     text-transform: uppercase;
+    margin-top: 0px;
 }
 
 /* Product List */
@@ -95,3 +96,9 @@
     background-color: #3a7765;    /* Darker green on hover */
     border: 2px solid #edf7ed;    /* Maintains the padding on hover */
 }
+.product-name {
+    font-size: 14px;  /* Kích thước chữ nhỏ hơn */
+    color: #333;      /* Màu chữ có thể tùy chỉnh */
+    font-weight: normal;  /* Giảm độ đậm của chữ */
+  }
+  

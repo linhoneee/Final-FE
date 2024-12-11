@@ -18,7 +18,6 @@ const EditCustomerCoupon = ({ coupon, closeModal, fetchCustomerCoupons }) => {
   const updateCustomerCoupon = (e) => {
     e.preventDefault();
     
-    // Tạo đối tượng updatedCoupon từ các giá trị đã cập nhật
     const updatedCoupon = { 
       code, 
       description, 
@@ -30,22 +29,16 @@ const EditCustomerCoupon = ({ coupon, closeModal, fetchCustomerCoupons }) => {
       discountType 
     };
     
-    // Gọi API để cập nhật coupon
     CustomerCouponService.updateCustomerCoupon(updatedCoupon, coupon.id)
       .then(() => {
-        // Cập nhật lại danh sách customer coupons sau khi cập nhật thành công
         fetchCustomerCoupons();
         
-        // Đóng modal
         closeModal();
-        
-        // Hiển thị thông báo thành công
         showGeneralToast("Mã giảm giá đã được cập nhật thành công!", "success");
       })
       .catch((error) => {
         console.error('Error updating customer coupon:', error);
         
-        // Hiển thị thông báo lỗi nếu có
         if (error.response && error.response.data) {
           const { message } = error.response.data;
           showGeneralToast(message, "error");

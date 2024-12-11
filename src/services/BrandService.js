@@ -1,26 +1,34 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:6001/brands';
-
 class BrandService {
+  // Cấu hình axios instance với URL mặc định
+  axiosInstance = axios.create({
+    baseURL: 'http://localhost:6001', // URL mặc định
+  });
+
+  // Lấy tất cả các thương hiệu
   getAllBrands() {
-    return axios.get(BASE_URL);
+    return this.axiosInstance.get('/brands');
   }
 
+  // Tạo mới thương hiệu
   createBrand(brand) {
-    return axios.post(BASE_URL, brand);
+    return this.axiosInstance.post('/brands', brand);
   }
 
+  // Lấy thông tin thương hiệu theo ID
   getBrandById(brandId) {
-    return axios.get(`${BASE_URL}/${brandId}`);
+    return this.axiosInstance.get(`/brands/${brandId}`);
   }
 
+  // Cập nhật thông tin thương hiệu
   updateBrand(brand, brandId) {
-    return axios.put(`${BASE_URL}/${brandId}`, brand);
+    return this.axiosInstance.put(`/brands/${brandId}`, brand);
   }
 
+  // Xóa thương hiệu
   deleteBrand(brandId) {
-    return axios.delete(`${BASE_URL}/${brandId}`);
+    return this.axiosInstance.delete(`/brands/${brandId}`);
   }
 }
 

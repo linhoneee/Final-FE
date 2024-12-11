@@ -8,14 +8,14 @@ const TotalCost = ({ totalProductCost, shippingCost, discountResult, totalCost }
     {discountResult && discountResult.discountType === 'PRODUCT' && (
       <>
         <p className="cost-item">Số tiền giảm: <span>${discountResult.discountAmount.toFixed(2)}</span></p>
-        <p className="cost-item">Discounted Order Value: <span>${discountResult.discountedOrderValue.toFixed(2)}</span></p>
+        <p className="cost-item">Tiền hàng sau khi giảm: <span>${discountResult.discountedOrderValue.toFixed(2)}</span></p>
       </>
     )}
     <p className="cost-item">Tổng Tiền Vận Chuyển : <span>${shippingCost.toFixed(2)}</span></p>
     {discountResult && discountResult.discountType === 'SHIPPING' && (
       <>
-        <p className="cost-item">Discount Amount: <span>${discountResult.discountAmount.toFixed(2)}</span></p>
-        <p className="cost-item">Discounted Shipping Cost: <span>${discountResult.discountedShippingCost.toFixed(2)}</span></p>
+        <p className="cost-item">Số tiền giảm: <span>${discountResult.discountAmount.toFixed(2)}</span></p>
+        <p className="cost-item">Tiền vận chuyển sau giảm: <span>${discountResult.discountedShippingCost.toFixed(2)}</span></p>
       </>
     )}
     <p className="total-cost">Tổng: <span>${totalCost.toFixed(2)}</span></p>

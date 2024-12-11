@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ShippingService from '../../services/ShippingService';
 import './AddShipping.css';
-import showGeneralToast from '../toastUtils/showGeneralToast'; // Import toast function
+import showGeneralToast from '../toastUtils/showGeneralToast'; 
 
 const AddShipping = ({ closeModal, fetchShippings }) => {
   const [shipping, setShipping] = useState({
@@ -23,19 +23,13 @@ const AddShipping = ({ closeModal, fetchShippings }) => {
     
     ShippingService.createShipping(shipping)
       .then(() => {
-        // Cập nhật lại danh sách shipping sau khi thêm thành công
         fetchShippings();
-        
-        // Đóng modal sau khi tạo shipping thành công
         closeModal();
-        
-        // Hiển thị thông báo thành công
         showGeneralToast("Shipping đã được tạo thành công!", "success");
       })
       .catch((error) => {
         console.error('Error creating shipping:', error);
         
-        // Hiển thị thông báo lỗi nếu có
         if (error.response && error.response.data) {
           const { message } = error.response.data;
           showGeneralToast(message, "error");

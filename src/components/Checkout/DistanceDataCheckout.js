@@ -41,13 +41,14 @@ const DistanceData = ({ distanceData, routeCoordinates }) => (
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     />
                     <Polyline positions={routeCoordinates} color="blue" />
+                    {/* Polyline trong react-leaflet dùng để vẽ một đường nối các điểm trên bản đồ, chỉ cần truyền vào mảng tọa độ [vĩ độ, kinh độ] */}
                     <Marker position={[distanceData.destinationLatitude, distanceData.destinationLongitude]} icon={carIcon}>
-                        <Popup>Warehouse</Popup>
+                        <Popup>Kho Hàng</Popup>
                     </Marker>
                     <Marker position={[distanceData.originLatitude, distanceData.originLongitude]}>
-                        <Popup>Receiver</Popup>
+                        <Popup>Người Nhận</Popup>
                     </Marker>
-                    <FitBounds bounds={routeCoordinates} />
+                    <FitBounds bounds={routeCoordinates} />  {/* điều chỉnh phạm vi của bản đồ sao cho nó bao gồm tất cả các điểm trong routeCoordinates */}
                 </MapContainer>
             </>
         )}

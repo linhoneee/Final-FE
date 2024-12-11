@@ -6,27 +6,25 @@ import './AddBrand.css';
 const AddBrand = ({ onClose, onCategoryAdded }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [error, setError] = useState(''); // Lưu thông báo lỗi
+  const [error, setError] = useState(''); 
 
   const saveBrand = (e) => {
     e.preventDefault();
     
-    // Kiểm tra nếu cả hai trường không được điền
     if (!name || !description) {
       setError('Cả tên và mô tả thương hiệu đều là bắt buộc!');
-      return; // Dừng lại nếu có trường không hợp lệ
+      return; 
     }
 
     const brand = { name, description };
 
-    // Gọi API để thêm thương hiệu
     BrandService.createBrand(brand)
       .then((response) => {
-        const newBrand = response.data; // Giả sử API trả về brand đã được tạo với id
+        const newBrand = response.data; 
         showGeneralToast('Thương hiệu đã được thêm thành công!', 'success');
         onClose();
         if (onCategoryAdded) {
-          onCategoryAdded(newBrand);  // Truyền brand mới vào callback
+          onCategoryAdded(newBrand); 
         }
       })
       .catch((error) => {
@@ -40,7 +38,6 @@ const AddBrand = ({ onClose, onCategoryAdded }) => {
       <div className="brand-add-modal-content">
         <h2 className="brand-add-modal-title">Thêm thương hiệu</h2>
         
-        {/* Hiển thị lỗi nếu có */}
         {error && <div className="error-toast">{error}</div>}
 
         <form>

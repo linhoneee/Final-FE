@@ -67,7 +67,7 @@ const LoginUser = () => {
       }
     } else {
       console.error('Lỗi đăng nhập:', error);
-      alert('Đăng nhập thất bại');
+      showGeneralToast('Đăng nhập thất bại', error);
     }
   };
 

@@ -23,15 +23,14 @@ const ProductDetails = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [reviews, setReviews] = useState([]);
-  const [averageRating, setAverageRating] = useState(0); // State to store average rating
-  const [category, setCategory] = useState(null); // State to store category
-  const [brand, setBrand] = useState(null); // State to store brand
+  const [averageRating, setAverageRating] = useState(0);
+  const [category, setCategory] = useState(null); 
+  const [brand, setBrand] = useState(null);
   const navigate = useNavigate();
-  const userID = useSelector(state => state.auth.userID); // Get userID from Redux store
+  const userID = useSelector(state => state.auth.userID); 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Fetch product details
     ProductService.GetProductById(id)
       .then(response => {
         setProduct(response.data.product);
@@ -40,7 +39,6 @@ const ProductDetails = () => {
         setPrimaryImage(primaryImg);
         setLoading(false);
 
-        // Call function to add product to recently viewed
         addToRecentlyViewed({
           id: response.data.product.id,
           name: response.data.product.productName,
@@ -48,7 +46,6 @@ const ProductDetails = () => {
           imageUrl: primaryImg ? primaryImg.url : ''
         });
 
-        // Fetch category and brand details
         fetchCategoryAndBrand(response.data.product.categoryId, response.data.product.brandId);
       })
       .catch(error => {
@@ -57,12 +54,10 @@ const ProductDetails = () => {
         setLoading(false);
       });
 
-    // Fetch product reviews
     ReviewService.getReviewsByProductId(id)
       .then(response => {
         setReviews(response.data);
 
-        // Calculate average rating for reviews without parentId
         const rootReviews = response.data.filter(review => review.review.parentId === null);
         const totalRating = rootReviews.reduce((acc, review) => acc + review.review.rating, 0);
         const avgRating = rootReviews.length ? (totalRating / rootReviews.length) : 0;
@@ -73,28 +68,25 @@ const ProductDetails = () => {
       });
   }, [id]);
 
-  // Fetch category and brand details
   const fetchCategoryAndBrand = (categoryId, brandId) => {
-    // Fetch category details
     CategoryService.getCategoryById(categoryId)
       .then(response => {
-        setCategory(response.data); // Set the category state
+        setCategory(response.data); 
       })
       .catch(error => {
         console.error('Error fetching category:', error);
       });
-  
-    // Fetch brand details
+
     BrandService.getBrandById(brandId)
       .then(response => {
-        console.log("Brand data: ", response.data);  // Debugging line
-        setBrand(response.data); // Set the brand state
+        console.log("Brand data: ", response.data);  
+        setBrand(response.data); 
       })
       .catch(error => {
         console.error('Error fetching brand:', error);
       });
   };
-  
+
   const openModal = (image) => {
     setSelectedImage(image);
     setModalIsOpen(true);
@@ -111,10 +103,10 @@ const ProductDetails = () => {
       console.log("productImage not found");
       return;
     }
-  
+
     const clonedImage = productImage.cloneNode(true);
-    const imageRect = productImage.getBoundingClientRect();
-  
+    const imageRect = productImage.getBoundingClientRect(); //Lấy thông tin vị trí và kích thước của hình ảnh ban đầu
+
     // Đặt hình ảnh sao chép vào đúng vị trí của hình ảnh gốc
     clonedImage.style.position = 'absolute';
     clonedImage.style.top = `${imageRect.top}px`;
@@ -122,18 +114,16 @@ const ProductDetails = () => {
     clonedImage.style.width = `${imageRect.width}px`;
     clonedImage.style.height = `${imageRect.height}px`;
     clonedImage.classList.add('fly-to-cart');
-  
-    document.body.appendChild(clonedImage);
-  
+
+    document.body.appendChild(clonedImage); //thêm bản sao hình ảnh vào Dom
+
     clonedImage.addEventListener('animationend', () => {
       clonedImage.remove();
     });
   };
-  
-  // Hàm lưu thông tin vào localStorage
+
   const addToRecentlyViewed = (product) => {
     let viewedProducts = JSON.parse(localStorage.getItem('viewedProducts')) || [];
-    // Kiểm tra nếu sản phẩm đã có trong danh sách
     if (!viewedProducts.some(item => item.id === product.id)) {
       viewedProducts.push(product);
       localStorage.setItem('viewedProducts', JSON.stringify(viewedProducts));
@@ -150,12 +140,12 @@ const ProductDetails = () => {
       warehouseIds: product.warehouseIds,
       primaryImageUrl: primaryImage ? primaryImage.url : ''
     };
-  
+
     CartService.AddCart(userID, cartItem)
       .then(response => {
         console.log('Product added to cart:', response.data);
         triggerFlyToCartEffect();
-        dispatch(fetchCartItemCount(userID)); // Fetch updated cart item count after adding to cart
+        dispatch(fetchCartItemCount(userID)); 
 
       })
       .catch(error => {
@@ -174,17 +164,17 @@ const ProductDetails = () => {
     const reviewMap = {};
     const rootReviews = [];
 
-    // Create map and classify reviews/responses
     reviews.forEach(review => {
       reviewMap[review.review.id] = { ...review, responses: [] };
       if (review.review.parentId === null) {
         rootReviews.push(reviewMap[review.review.id]);
       } else if (reviewMap[review.review.parentId]) {
         reviewMap[review.review.parentId].responses.push(reviewMap[review.review.id]);
+        //Ta sẽ kiểm tra xem parentId này có tồn tại trong reviewMap không. Nếu có, tức là đánh giá gốc 
+        //đó đã được lưu trong reviewMap, ta sẽ thêm phản hồi này vào mảng responses của đánh giá gốc tương ứng.
       }
     });
 
-    // Render reviews and responses
     const renderReviewItem = (review, isResponse = false) => (
       <div key={review.review.id} className={`review ${isResponse ? 'response' : ''}`}>
         <div className="review-header">
@@ -240,9 +230,9 @@ const ProductDetails = () => {
           </div>
           <div className="product-info">
             <div className="product-images-container">
-              <img 
-                src={`http://localhost:6001${primaryImage?.url}`} 
-                alt="Primary" 
+              <img
+                src={`http://localhost:6001${primaryImage?.url}`}
+                alt="Primary"
                 className="product-main-image"
                 onClick={() => openModal(primaryImage)} // Add this line to handle click on primary image
               />
@@ -261,26 +251,26 @@ const ProductDetails = () => {
             <div className="product-details">
               <p className="price"><span>${product.price}</span> {product.originalPrice && <span className="original-price">${product.originalPrice}</span>}</p>
               <div className="product-info">
-  <div className="product-info-item">
-    <strong>Trọng Lượng:</strong> <span>{product.weight} g</span>
-  </div>
+                <div className="product-info-item">
+                  <strong>Trọng Lượng:</strong> <span>{product.weight} g</span>
+                </div>
 
-  {/* Display category information */}
-  {category && (
-    <div className="product-info-item">
-      <strong>Thể Loại:</strong> <span>{category.name}</span>
-      <p>{category.description}</p>
-    </div>
-  )}
+                {/* Display category information */}
+                {category && (
+                  <div className="product-info-item">
+                    <strong>Thể Loại:</strong> <span>{category.name}</span>
+                    <p>{category.description}</p>
+                  </div>
+                )}
 
-  {/* Display brand information */}
-  {brand && (
-    <div className="product-info-item">
-      <strong>Thương Hiệu:</strong> <span>{brand.name}</span>
-      <p>{brand.description}</p>
-    </div>
-  )}
-</div>
+                {/* Display brand information */}
+                {brand && (
+                  <div className="product-info-item">
+                    <strong>Thương Hiệu:</strong> <span>{brand.name}</span>
+                    <p>{brand.description}</p>
+                  </div>
+                )}
+              </div>
 
 
             </div>
@@ -296,38 +286,38 @@ const ProductDetails = () => {
           </div>
 
           {selectedImage && (
-    <Modal
-    isOpen={modalIsOpen}
-    onRequestClose={closeModal}
-    className="modal-content"
-    style={{
-      content: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '550px',
-        height: '550px',
-        margin: 'auto', // Căn giữa modal
-        padding: '0', // Loại bỏ khoảng padding mặc định
-        borderRadius: '8px', // Thêm border radius cho modal (tuỳ chọn)
-        top: '40px',
-        right:'110px',
-      },
-    }}
-  >
-    <img
-      src={`http://localhost:6001${selectedImage.url}`}
-      alt="Selected"
-      style={{
-        width: '100%', // Đảm bảo ảnh tự động co giãn theo kích thước modal
-        height: '100%', // Đảm bảo ảnh không vượt ra ngoài
-        objectFit: 'cover', // Giữ tỷ lệ và lấp đầy khung ảnh
-        borderRadius: '8px', // Thêm border-radius cho ảnh nếu muốn
-      }}
-    />
+            <Modal
+              isOpen={modalIsOpen}
+              onRequestClose={closeModal}
+              className="modal-content"
+              style={{
+                content: {
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '550px',
+                  height: '550px',
+                  margin: 'auto', // Căn giữa modal
+                  padding: '0', // Loại bỏ khoảng padding mặc định
+                  borderRadius: '8px', // Thêm border radius cho modal (tuỳ chọn)
+                  top: '40px',
+                  right: '110px',
+                },
+              }}
+            >
+              <img
+                src={`http://localhost:6001${selectedImage.url}`}
+                alt="Selected"
+                style={{
+                  width: '100%', // Đảm bảo ảnh tự động co giãn theo kích thước modal
+                  height: '100%', // Đảm bảo ảnh không vượt ra ngoài
+                  objectFit: 'cover', // Giữ tỷ lệ và lấp đầy khung ảnh
+                  borderRadius: '8px', // Thêm border-radius cho ảnh nếu muốn
+                }}
+              />
 
-  </Modal>
-  
+            </Modal>
+
           )}
         </>
       )}

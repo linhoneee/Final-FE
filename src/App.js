@@ -4,7 +4,7 @@ import store from './store/store';
 import Navbar from './components/Navbar';
 import NavBarAdmin from './components/NavBarAdmin';
 import { Button } from '@material-ui/core';
-import React, { useRef , useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import "./App.css";
 import LoginUser from './components/User/LoginUser';
@@ -92,34 +92,34 @@ function MainApp() {
       {/* Kiểm tra nếu người dùng đã đăng nhập và có roles là 'USER' mới hiển thị Draggable và Button */}
       {isLoggedIn && roles === 'USER' && (
         <>
-    <Draggable
-      nodeRef={draggableRef} // Sử dụng nodeRef ở đây
-      onStart={() => setIsDragging(false)}
-      onDrag={() => setIsDragging(true)}
-      onStop={() => setTimeout(() => setIsDragging(false), 0)}
-    >
-      <Button
-        ref={draggableRef} // Gắn ref vào Button
-        variant="contained"
-        color="primary"
-        onClick={handleOpenMessageModal}
-        style={{
-          position: 'fixed',
-          bottom: '20px',
-          right: '300px',
-          borderRadius: '50%',
-          width: '60px',
-          height: '60px',
-          backgroundColor: '#215e24',
-          backgroundImage: 'url("https://cdn-icons-png.flaticon.com/512/6785/6785302.png")',
-          backgroundSize: '40px 40px',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          color: 'white',
-          zIndex: 1000,
-        }}
-      />
-    </Draggable>
+          <Draggable
+            nodeRef={draggableRef} // Sử dụng nodeRef ở đây
+            onStart={() => setIsDragging(false)}
+            onDrag={() => setIsDragging(true)}
+            onStop={() => setTimeout(() => setIsDragging(false), 0)}
+          >
+            <Button
+              ref={draggableRef} // Gắn ref vào Button
+              variant="contained"
+              color="primary"
+              onClick={handleOpenMessageModal}
+              style={{
+                position: 'fixed',
+                bottom: '20px',
+                right: '300px',
+                borderRadius: '50%',
+                width: '60px',
+                height: '60px',
+                backgroundColor: '#215e24',
+                backgroundImage: 'url("https://cdn-icons-png.flaticon.com/512/6785/6785302.png")',
+                backgroundSize: '40px 40px',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                color: 'white',
+                zIndex: 1000,
+              }}
+            />
+          </Draggable>
           <MessagesComponent open={isMessageModalOpen} onClose={handleCloseMessageModal} />
         </>
       )}
@@ -146,16 +146,16 @@ function MainApp() {
             <Route path="/userList" element={<UserList />} />
             <Route path="/addUser" element={<AddUser />} />
             <Route path="/updateUser/:id" element={<UpdateUser />} />
-            <Route 
-    path="/login" 
-    element={isLoggedIn ? <Navigate to="/" replace /> : <LoginUser />} 
-  />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route
+              path="/login"
+              element={isLoggedIn ? <Navigate to="/" replace /> : <LoginUser />}
+            />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
-            <Route 
-    path="/register" 
-    element={isLoggedIn ? <Navigate to="/" replace /> : <RegisterUser />} 
-  />      
+            <Route
+              path="/register"
+              element={isLoggedIn ? <Navigate to="/" replace /> : <RegisterUser />}
+            />
             {/* Product Routes */}
             <Route path="/productsadmin" element={<ListProductByAdmin />} />
             <Route path="/addproduct" element={<AddProduct />} />

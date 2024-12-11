@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import UserService from '../../services/UserService';
 import './AddUser.css';
-import showGeneralToast from '../toastUtils/showGeneralToast'; // Import toast
-
+import showGeneralToast from '../toastUtils/showGeneralToast'; 
 const AddUser = ({ onClose, fetchUsers }) => {
   const [user, setUser] = useState({
     username: '',
@@ -13,7 +12,7 @@ const AddUser = ({ onClose, fetchUsers }) => {
     phoneNumber: '',
     roles: 'USER'
   });
-  const [error, setError] = useState(null); // State để lưu lỗi
+  const [error, setError] = useState(null); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,11 +25,10 @@ const AddUser = ({ onClose, fetchUsers }) => {
       await UserService.registerUser(user);
       showGeneralToast('Người dùng đã được đăng ký thành công!', 'success');
       onClose();
-      fetchUsers(); // Gọi lại fetchUsers để cập nhật danh sách người dùng
+      fetchUsers(); 
     } catch (error) {
       console.error('Error registering user:', error);
 
-      // Hiển thị thông báo lỗi nếu có
       if (error.response && error.response.data) {
         const { message } = error.response.data;
         showGeneralToast(message, 'error');

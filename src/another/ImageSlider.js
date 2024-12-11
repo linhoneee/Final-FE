@@ -5,15 +5,12 @@ const ImageSlider = () => {
     const slides = [
         {
             src: '/11.png',
-
         },
         {
             src: '/12.png',
-
         },
         {
             src: '/13.png',
-
         }
     ];
 

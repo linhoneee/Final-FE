@@ -1,4 +1,3 @@
-// src/components/Warehouse/EditWarehouse.js
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -6,6 +5,7 @@ import WarehouseService from '../../services/WarehouseService';
 import WarehouseFields from './WarehouseFields';
 import AddressMap from '../AddressMap';
 import L from 'leaflet'; 
+import './EditWarehouse.css';  // Import CSS
 
 // Fix the default icon issue for Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -170,9 +170,9 @@ const EditWarehouse = () => {
   };
 
   return (
-    <div>
-      <h2>Edit Warehouse</h2>
-      <form onSubmit={updateWarehouse}>
+    <div className="edit-warehouse-container">
+      <h2 className="edit-warehouse-title"> Chỉnh Sửa Kho Hàng</h2>
+      <form onSubmit={updateWarehouse} className="edit-warehouse-form">
         <WarehouseFields 
           warehouse={warehouse}
           handleChange={handleChange}
@@ -183,13 +183,14 @@ const EditWarehouse = () => {
         />
         <AddressMap address={warehouse} setAddress={setWarehouse} />
         {warehouse.latitude && warehouse.longitude && (
-          <div>
-            <h3>Coordinates</h3>
-            <p>Longitude: {warehouse.longitude}</p>
-            <p>Latitude: {warehouse.latitude}</p>
-          </div>
-        )}
-        <button type="submit">Update</button>
+  <div className="edit-warehouse-coordinates">
+    <h3>Tọa độ</h3>
+    <p>Kinh độ: {warehouse.longitude}</p>
+    <p>Vĩ độ: {warehouse.latitude}</p>
+  </div>
+)}
+
+        <button type="submit">Cập Nhật</button>
       </form>
     </div>
   );

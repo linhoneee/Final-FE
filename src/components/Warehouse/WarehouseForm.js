@@ -19,10 +19,11 @@ const WarehouseForm = ({ warehouse, handleChange, handleSubmit, provinces, distr
       
       {warehouse.latitude && warehouse.longitude && (
         <div>
-          <h3>Coordinates</h3>
-          <p>Longitude: {warehouse.longitude}</p>
-          <p>Latitude: {warehouse.latitude}</p>
-        </div>
+  <h3>Tọa độ</h3>
+  <p>Kinh độ: {warehouse.longitude}</p>
+  <p>Vĩ độ: {warehouse.latitude}</p>
+</div>
+
       )}
       
       <button type="submit">Save</button>

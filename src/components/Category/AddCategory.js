@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
 import CategoryService from '../../services/CategoryService';
 import './AddCategory.css';
-import showGeneralToast from '../toastUtils/showGeneralToast'; // Import toast
+import showGeneralToast from '../toastUtils/showGeneralToast'; 
 
 const AddCategory = ({ onClose, onCategoryAdded }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [error, setError] = useState(''); // Thêm state để lưu lỗi
+  const [error, setError] = useState('');
 
   const saveCategory = (e) => {
     e.preventDefault();
 
-    // Kiểm tra nếu người dùng chưa điền đầy đủ thông tin
     if (!name || !description) {
       setError('Cả tên và mô tả danh mục đều là bắt buộc!');
-      return; // Dừng lại nếu có trường chưa được điền
+      return; 
     }
 
     const category = { name, description };

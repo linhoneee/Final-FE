@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReviewService from "../../services/ReviewService";
 import "./ReviewModal.css";
-import showGeneralToast from '../toastUtils/showGeneralToast'; // Import toast function
+import showGeneralToast from '../toastUtils/showGeneralToast'; 
 
 const ReviewModal = ({ order, product, onClose, onSuccess }) => {
     const [rating, setRating] = useState(0);
@@ -9,22 +9,19 @@ const ReviewModal = ({ order, product, onClose, onSuccess }) => {
     const [error, setError] = useState(null);
 
     const handleSubmit = async () => {
-        // Kiểm tra nếu comment trống
         if (!comment) {
             setError("Bình luận là bắt buộc");
-            showGeneralToast("Bình luận là bắt buộc", "error");  // Thông báo lỗi
+            showGeneralToast("Bình luận là bắt buộc", "error");  
             return;
         }
     
-        // Kiểm tra nếu thiếu Product ID hoặc User ID
         if (!product.productId || !order.userId) {
             setError("Thiếu Product ID hoặc User ID");
-            showGeneralToast("Thiếu Product ID hoặc User ID", "error");  // Thông báo lỗi
+            showGeneralToast("Thiếu Product ID hoặc User ID", "error"); 
             return;
         }
     
         try {
-            // Thêm review
             await ReviewService.addReview({
                 productId: product.productId,
                 userId: order.userId,
@@ -33,16 +30,13 @@ const ReviewModal = ({ order, product, onClose, onSuccess }) => {
                 parentId: null,
             });
     
-            // Hiển thị thông báo thành công
             showGeneralToast('Đánh giá đã được gửi thành công!', 'success');
     
-            // Gọi onSuccess với order ID và product ID
             onSuccess(order.id, product.productId);
         } catch (err) {
             setError(err.message);
             
-            // Hiển thị thông báo lỗi nếu có
-            showGeneralToast("Gửi đánh giá thất bại. Vui lòng thử lại.", "error"); // Thông báo lỗi
+            showGeneralToast("Gửi đánh giá thất bại. Vui lòng thử lại.", "error"); 
         }
     };
     

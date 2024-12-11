@@ -55,22 +55,7 @@ const Footer = () => {
                 </div>
             </div>
 
-            <div className="footer-bottom">
-                <ul className="footer-bottom-links">
-                    <li><a href="#">Sơ đồ trang</a></li>
-                    <li><a href="#">Thông báo pháp lý</a></li>
-                    <li><a href="#">Chính sách bảo mật</a></li>
-                    <li><a href="#">Chính sách cookie</a></li>
-                    <li><a href="#">Quản lý cookie</a></li>
-                </ul>
-                <div className="footer-social">
-                    <a href="#" aria-label="Facebook">F</a>
-                    <a href="#" aria-label="TikTok">T</a>
-                    <a href="#" aria-label="YouTube">Y</a>
-                    <a href="#" aria-label="Instagram">I</a>
-                    <a href="#" aria-label="Twitter">W</a>
-                </div>
-            </div>
+          
         </footer>
     );
 };

@@ -16,20 +16,21 @@ const ListProductByUser = () => {
   const [inventory, setInventory] = useState([]);
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);  // Chỉ lưu 1 category
+  const [selectedBrand, setSelectedBrand] = useState(null);  // Chỉ lưu 1 brand  
   const [sortOrder, setSortOrder] = useState('asc');  // Giá trị mặc định 'asc' (tăng dần)
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);  // Trang hiện tại
+  const productsPerPage = 6;  // Số sản phẩm mỗi trang
   const userID = useSelector(state => state.auth.userID);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Gọi API để lấy danh sách sản phẩm với bộ lọc từ backend
     const fetchProducts = async () => {
       try {
-        const response = await ProductService.GetProductsByFilters(searchTerm, selectedBrands, selectedCategories, sortOrder);
+        const response = await ProductService.GetProductsByFilters(searchTerm, selectedBrand ? [selectedBrand] : [], selectedCategory ? [selectedCategory] : [], sortOrder);
         setProducts(response.data);
-        console.log("Dữ liệu lọc từ backend:", response.data);  // Log dữ liệu từ backend
+        console.log("Dữ liệu lọc từ backend:", response.data);  
       } catch (error) {
         console.error('Lỗi khi lấy danh sách sản phẩm:', error);
       }
@@ -37,30 +38,26 @@ const ListProductByUser = () => {
 
     fetchProducts();
 
-    // Lấy thông tin giảm giá sản phẩm
     ProductDiscountService.getAllProductDiscounts()
       .then(response => setProductDiscounts(response.data))
       .catch(error => console.error('Lỗi khi lấy danh sách giảm giá sản phẩm:', error));
 
-    // Lấy thông tin kho hàng
     InventoryService.getAllInventory()
       .then(response => setInventory(response.data))
       .catch(error => console.error('Lỗi khi lấy thông tin kho hàng:', error));
 
-    // Lấy danh mục
     CategoryService.getAllCategories()
       .then(response => setCategories(response.data))
       .catch(error => console.error('Lỗi khi lấy danh mục:', error));
 
-    // Lấy thương hiệu
     BrandService.getAllBrands()
       .then(response => setBrands(response.data))
       .catch(error => console.error('Lỗi khi lấy danh sách thương hiệu:', error));
 
-  }, [searchTerm, selectedCategories, selectedBrands, sortOrder]);  // Mỗi khi thay đổi bộ lọc, sẽ gọi lại API
+  }, [searchTerm, selectedCategory, selectedBrand, sortOrder]); 
 
   const handleSortChange = (event) => {
-    setSortOrder(event.target.value);  // Cập nhật giá trị sortOrder khi người dùng thay đổi
+    setSortOrder(event.target.value);  
   };
 
   const handleSearchChange = (event) => {
@@ -68,26 +65,22 @@ const ListProductByUser = () => {
   };
 
   const handleCategoryChange = (categoryId) => {
-    setSelectedCategories(prevSelected =>
-      prevSelected.includes(categoryId)
-        ? prevSelected.filter(id => id !== categoryId)
-        : [...prevSelected, categoryId]
-    );
+    setSelectedCategory(prevSelected => {
+      return prevSelected === categoryId ? null : categoryId;
+    });
   };
-
+  
   const handleBrandChange = (brandId) => {
-    setSelectedBrands(prevSelected =>
-      prevSelected.includes(brandId)
-        ? prevSelected.filter(id => id !== brandId)
-        : [...prevSelected, brandId]
-    );
+    setSelectedBrand(prevSelected => {
+      return prevSelected === brandId ? null : brandId;
+    });
   };
 
   const addToCart = (productId, name, quantity, price, warehouseIds, weight, primaryImageUrl) => {
     const discountedPrice = getDiscountedPrice(productId);
     const finalPrice = discountedPrice || price;
     const cartItem = { productId, name, quantity, price: finalPrice, warehouseIds, weight, primaryImageUrl };
-  
+
     CartService.AddCart(userID, cartItem)
       .then(response => {
         showGeneralToast('Sản phẩm đã được thêm vào giỏ hàng thành công!', 'success');
@@ -109,6 +102,20 @@ const ListProductByUser = () => {
     return totalQuantity > 0;
   };
 
+  // Tính toán các sản phẩm cần hiển thị trên trang hiện tại
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  // Chuyển trang
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Tính tổng số trang
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(products.length / productsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
   return (
     <div className="list-product-container">
       <h2 className="list-product-header">Sản phẩm</h2>
@@ -128,35 +135,37 @@ const ListProductByUser = () => {
       </div>
 
       <div className="main-content">
-        <div className="checkbox-filters">
-          <h4>Danh mục</h4>
-          {categories.map(category => (
-            <div key={category.id}>
-              <input
-                type="checkbox"
-                id={`category-${category.id}`}
-                checked={selectedCategories.includes(category.id)}
-                onChange={() => handleCategoryChange(category.id)}
-              />
-              <label htmlFor={`category-${category.id}`}>{category.name}</label>
-            </div>
-          ))}
-          <h4>Thương hiệu</h4>
-          {brands.map(brand => (
-            <div key={brand.id}>
-              <input
-                type="checkbox"
-                id={`brand-${brand.id}`}
-                checked={selectedBrands.includes(brand.id)}
-                onChange={() => handleBrandChange(brand.id)}
-              />
-              <label htmlFor={`brand-${brand.id}`}>{brand.name}</label>
-            </div>
-          ))}
+        <div className="filters-container">
+          <div className="checkbox-filters">
+            <h4>Danh mục</h4>
+            {categories.map(category => (
+              <div key={category.id}>
+                <input
+                  type="checkbox"
+                  id={`category-${category.id}`}
+                  checked={selectedCategory === category.id} 
+                  onChange={() => handleCategoryChange(category.id)}
+                />
+                <label htmlFor={`category-${category.id}`}>{category.name}</label>
+              </div>
+            ))}
+            <h4>Thương hiệu</h4>
+            {brands.map(brand => (
+              <div key={brand.id}>
+                <input
+                  type="checkbox"
+                  id={`brand-${brand.id}`}
+                  checked={selectedBrand === brand.id}  
+                  onChange={() => handleBrandChange(brand.id)}
+                />
+                <label htmlFor={`brand-${brand.id}`}>{brand.name}</label>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="products-grid">
-          {products.map(productDTOuser => {
+          {currentProducts.map(productDTOuser => {
             const inStock = checkStockForProduct(productDTOuser.product.id);
             return (
               <div
@@ -174,7 +183,8 @@ const ListProductByUser = () => {
                 <h3 className="product-name">{productDTOuser.product.productName}</h3>
                 {getDiscountedPrice(productDTOuser.product.id) ? (
                   <p className="product-price">
-                    Giá: <span className="original-price">${productDTOuser.product.price}</span> <span className="discounted-price">${getDiscountedPrice(productDTOuser.product.id)}</span>
+                    Giá: <span className="original-price">${productDTOuser.product.price}</span> 
+                    <span className="discounted-price">${getDiscountedPrice(productDTOuser.product.id)}</span>
                   </p>
                 ) : (
                   <p className="product-price">Giá: ${productDTOuser.product.price}</p>
@@ -201,6 +211,29 @@ const ListProductByUser = () => {
               </div>
             );
           })}
+        </div>
+
+        {/* Pagination */}
+        <div className="pagination11">
+          <button
+            onClick={() => paginate(currentPage > 1 ? currentPage - 1 : 1)}
+            className="page-arrow11"
+            disabled={currentPage === 1}
+          >
+            &#8592;
+          </button>
+
+          <span className="current-page11">
+            {currentPage} / {pageNumbers.length}
+          </span>
+
+          <button
+            onClick={() => paginate(currentPage < pageNumbers.length ? currentPage + 1 : pageNumbers.length)}
+            className="page-arrow11"
+            disabled={currentPage === pageNumbers.length}
+          >
+            &#8594;
+          </button>
         </div>
       </div>
     </div>

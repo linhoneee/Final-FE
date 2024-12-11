@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import UserService from '../../services/UserService';
 import './UpdateUser.css';
-import showGeneralToast from '../toastUtils/showGeneralToast'; // Import toast function
+import showGeneralToast from '../toastUtils/showGeneralToast'; 
 
 const UpdateUser = ({ user, onClose, onUpdate }) => {
   const [updatedUser, setUpdatedUser] = useState(user);
@@ -18,21 +18,16 @@ const UpdateUser = ({ user, onClose, onUpdate }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Gửi yêu cầu cập nhật người dùng
       await UserService.updateUser(updatedUser, updatedUser.id);
       
-      // Hiển thị thông báo thành công
       showGeneralToast("Người dùng đã được cập nhật thành công!", "success");
       
-      // Refresh danh sách người dùng sau khi cập nhật
       onUpdate();
       
-      // Đóng modal
       onClose();
     } catch (error) {
       console.error('Error updating user:', error);
       
-      // Hiển thị thông báo lỗi
       if (error.response && error.response.data) {
         const { message } = error.response.data;
         showGeneralToast(message, "error");

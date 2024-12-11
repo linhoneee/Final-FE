@@ -23,12 +23,9 @@ const ReportAnalysis = () => {
           console.log(response.data)
 
         })
-
-
         UserService.getTotalUser().then((response)=>{
           setDataUser(response.data);
           console.log(response.data)
-
         })
 
 
@@ -36,10 +33,8 @@ const ReportAnalysis = () => {
         console.error('Error fetching data:', error);
       }
     };
-
-    // Gọi hàm fetchData
     fetchData();
-  }, []); // Chạy lần đầu tiên khi component mount
+  }, []); 
 
   return (
     <div className="report-analysis">
@@ -47,12 +42,12 @@ const ReportAnalysis = () => {
         <div className="stat">
           <h3>Tổng doanh thu</h3>
           <p className="value">${data.totalSales?.toLocaleString() || 0}</p>
-          <p className="sub">{data.salesGrowthRate?.toFixed(2) || 0}% ↑ trong tháng trước</p>
+          <p className="sub">{data.salesGrowthRate?.toFixed(2) || 0}% ↑ so với tháng trước</p>
         </div>
         <div className="stat">
           <h3>Tổng số đơn hàng</h3>
           <p className="value">{data.totalOrders || 0}</p>
-          <p className="sub">{data.orderGrowthRate?.toFixed(2) || 0}% ↑ trong tháng trước</p>
+          <p className="sub">{data.orderGrowthRate?.toFixed(2) || 0}% ↑ so với tháng trước</p>
         </div>
         <div className="stat">
           <h3>Tổng số người dùng</h3>

@@ -8,6 +8,7 @@
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(10px);
     transition: all 0.3s ease-in-out;
+    height: 1350px;
 }
 
 /* Header styles for the list */
@@ -259,3 +260,48 @@
     border-color: #4CAF50;
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
 }
+/* Phân trang */
+.pagination11 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: white;
+    position: absolute; /* Hoặc fixed nếu muốn cố định ở một vị trí */
+    top: 96%;  /* Tùy chỉnh vị trí theo chiều dọc */
+    left: 50%; /* Tùy chỉnh vị trí theo chiều ngang */
+    transform: translate(-50%, -50%); /* Căn giữa phần tử */
+    z-index: 10;
+  }
+  
+  .page-arrow11 {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 5px;
+    margin: 0 10px;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  
+  .page-arrow11:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .page-arrow11:hover:not(:disabled) {
+    background-color: #45a049;
+    transform: scale(1.1);
+  }
+  
+  .current-page11 {
+    font-size: 18px;
+    margin: 0 10px;
+  }
+  
+  .page-arrow11:focus {
+    outline: none;
+  }
+  

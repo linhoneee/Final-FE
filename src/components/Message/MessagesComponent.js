@@ -45,15 +45,6 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
 
   const username = useSelector((state) => state.auth.username) || 'Unknown';
 
-  useEffect(() => {
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-      navigator.serviceWorker.register('/service-worker.js').then((registration) => {
-        console.log('Service Worker registered with scope:', registration.scope);
-      }).catch((error) => {
-        console.error('Service Worker registration failed:', error);
-      });
-    }
-  }, []);
 
   useEffect(() => {
     if (!roomId) {
@@ -61,30 +52,27 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
       return;
     }
 
-    let heartbeatInterval; // Khai báo biến heartbeatInterval
+    let heartbeatInterval;
 
     const socket = new SockJS('http://localhost:6010/ws');
     const client = new Client({
       webSocketFactory: () => socket,
       debug: console.log,
       onConnect: () => {
-        // Gửi heartbeat ngay lập tức khi kết nối thành công
         client.publish({
           destination: '/app/chat.heartbeat',
-          body: JSON.stringify(userID), // Gửi ID người dùng làm heartbeat
+          body: JSON.stringify(userID),
         });
-        console.log('Initial heartbeat sent for user:', userID); // Log xác nhận gửi heartbeat đầu tiên
+        console.log('Initial heartbeat sent for user:', userID);
 
-        // Thiết lập gửi heartbeat mỗi 30 giây sau đó
         heartbeatInterval = setInterval(() => {
           client.publish({
             destination: '/app/chat.heartbeat',
             body: JSON.stringify(userID),
           });
-          console.log('Heartbeat sent for user:', userID); // Log xác nhận gửi heartbeat tiếp theo
+          console.log('Heartbeat sent for user:', userID);
         }, 30000);
 
-        // Đăng ký để nhận tin nhắn mới trong phòng chat
         client.subscribe(`/topic/room/${roomId}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
           const isDuplicate = messages.some((msg) => msg.id === receivedMessage.id);
@@ -94,17 +82,6 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
               setMessages((prevMessages) => [...prevMessages, receivedMessage]);
             } else if (document.visibilityState === 'visible') {
               showCustomToast(receivedMessage.username, receivedMessage.text, receivedMessage.createdAt);
-              setMessages((prevMessages) => [...prevMessages, receivedMessage]);
-            } else {
-              if (Notification.permission === 'granted') {
-                console.log(receivedMessage)
-                navigator.serviceWorker.ready.then((registration) => {
-                  registration.showNotification(`Tin nhắn mới từ ${receivedMessage.username}`, {
-                    body: receivedMessage.text,
-                    icon: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
-                  });
-                });
-              }
               setMessages((prevMessages) => [...prevMessages, receivedMessage]);
             }
           }
@@ -124,7 +101,6 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
       });
 
     return () => {
-      // Cleanup: Ngừng gửi heartbeat và ngắt kết nối WebSocket khi component bị huỷ
       if (heartbeatInterval) {
         clearInterval(heartbeatInterval); // Dọn dẹp heartbeatInterval
       }
@@ -145,13 +121,13 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
-      setFile(selectedFile); // Lưu trữ thông tin media đã chọn
+      setFile(selectedFile);
     }
   };
 
   const handleClearMedia = () => {
-    setFile(null); // Xóa media đã chọn
-    if (fileInputRef.current) fileInputRef.current.value = ''; // Reset input file
+    setFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
 
@@ -159,11 +135,11 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
     setOpenRecordingModal(true);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorderRef.current = new MediaRecorder(stream);
+      mediaRecorderRef.current = new MediaRecorder(stream); // Tạo đối tượng MediaRecorder với stream âm thanh
       mediaRecorderRef.current.start();
 
       mediaRecorderRef.current.ondataavailable = (e) => {
-        setRecordingBlob(e.data);
+        setRecordingBlob(e.data); // Lưu dữ liệu ghi âm (blob) khi có dữ liệu
       };
 
       setIsRecording(true);
@@ -176,17 +152,19 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
 
   useEffect(() => {
     let timer;
+    // Nếu đang ghi âm, bắt đầu bộ đếm thời gian
     if (isRecording) {
       timer = setInterval(() => setRecordingTime((prev) => prev + 1), 1000);
     } else {
-      clearInterval(timer);
+      clearInterval(timer); // Nếu không ghi âm, dừng bộ đếm thời gian
     }
     return () => clearInterval(timer);
   }, [isRecording]);
+
   const [finalRecordingTime, setFinalRecordingTime] = useState(null);
 
   const handleStopRecording = () => {
-    mediaRecorderRef.current.stop();
+    mediaRecorderRef.current.stop(); // Dừng ghi âm
     setIsRecording(false);
     setFinalRecordingTime(recordingTime); // Lưu thời gian ghi âm cuối cùng
   };
@@ -207,13 +185,14 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
 
       try {
         const response = await MessageService.sendMedia(formData);
-        setMessages((prevMessages) => [...prevMessages, response.data]);
       } catch (error) {
         console.error('Error sending recorded audio:', error);
       } finally {
         setRecordingBlob(null);
         setOpenRecordingModal(false);
         setIsSending(false);
+        setRecordingTime(0);
+        setFinalRecordingTime(null);
       }
     } else if (file) {
       const formData = new FormData();
@@ -273,7 +252,7 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
             <Typography variant="body2" className="admin-status">Trực tuyến • Sẵn sàng hỗ trợ bạn</Typography>
           </div>
         </div>
-      </DialogTitle>      
+      </DialogTitle>
       <DialogContent>
         <List className="custom-messages-list">
           {messages.map((msg, index) => (
@@ -360,7 +339,7 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
           <IconButton onClick={handleCloseRecordingModal} style={{ position: 'absolute', right: '8px', top: '8px' }}>
             <CloseIcon />
           </IconButton>
-          Ghi âm
+          Ghi âm 
         </DialogTitle>
         <DialogContent>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
@@ -383,7 +362,7 @@ const MessagesComponent = ({ open, onClose, initialMessages }) => {
               <audio controls src={URL.createObjectURL(recordingBlob)} style={{ marginTop: '10px', width: '100%' }} />
               <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
                 <IconButton onClick={handleSend} color="primary" className="send-audio-button">
-                  <SendIcon fontSize="large" /> Gửi
+                {isSending ? <CircularProgress size={24} style={{ marginRight: '4px' }} /> : <SendIcon fontSize="large" />} Gửi
                 </IconButton>
               </div>
             </>

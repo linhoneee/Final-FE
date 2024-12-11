@@ -43,8 +43,7 @@ const MessageAdmin = ({ roomId, initialMessages = [] }) => {
 
   const username = useSelector((state) => state.auth.username) || 'Unknown';
   const userID = String(useSelector((state) => state.auth.userID));
-  const [recordingTime, setRecordingTime] = useState(0); 
-  const [finalRecordingTime, setFinalRecordingTime] = useState(null);
+
 
   const fetchRoomUser = useCallback(async () => {
     if (!roomId) return;
@@ -58,7 +57,6 @@ const MessageAdmin = ({ roomId, initialMessages = [] }) => {
 
   const initializeWebSocketAndMessages = useCallback(() => {
     if (!roomId) return;
-
     const socket = new SockJS('http://localhost:6010/ws');
     const client = new Client({
       webSocketFactory: () => socket,
@@ -127,28 +125,43 @@ const MessageAdmin = ({ roomId, initialMessages = [] }) => {
 
   const handleStartRecording = async () => {
     setOpenRecordingModal(true);
-    setRecordingTime(0);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorderRef.current = new MediaRecorder(stream);
+      mediaRecorderRef.current = new MediaRecorder(stream); // Tạo đối tượng MediaRecorder với stream âm thanh
       mediaRecorderRef.current.start();
-      mediaRecorderRef.current.ondataavailable = (e) => setRecordingBlob(e.data);
+
+      mediaRecorderRef.current.ondataavailable = (e) => {
+        setRecordingBlob(e.data); // Lưu dữ liệu ghi âm (blob) khi có dữ liệu
+      };
+
       setIsRecording(true);
-  
-      const timer = setInterval(() => setRecordingTime((prev) => prev + 1), 1000);
-      mediaRecorderRef.current.onstop = () => clearInterval(timer);
     } catch (error) {
-      console.error('Error accessing microphone:', error);
+      console.error("Error accessing microphone:", error);
     }
   };
-  
+
+  const [recordingTime, setRecordingTime] = useState(0);
+
+  useEffect(() => {
+    let timer;
+    // Nếu đang ghi âm, bắt đầu bộ đếm thời gian
+    if (isRecording) {
+      timer = setInterval(() => setRecordingTime((prev) => prev + 1), 1000);
+    } else {
+      clearInterval(timer); // Nếu không ghi âm, dừng bộ đếm thời gian
+    }
+    return () => clearInterval(timer);
+  }, [isRecording]);
+
+  const [finalRecordingTime, setFinalRecordingTime] = useState(null);
+
   const handleStopRecording = () => {
-    if (mediaRecorderRef.current) {
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-      setFinalRecordingTime(recordingTime);
-    }
+    mediaRecorderRef.current.stop(); // Dừng ghi âm
+    setIsRecording(false);
+    setFinalRecordingTime(recordingTime); // Lưu thời gian ghi âm cuối cùng
   };
+
+
   const handleCloseRecordingModal = () => {
     setOpenRecordingModal(false);
     setRecordingBlob(null);
@@ -160,40 +173,63 @@ const MessageAdmin = ({ roomId, initialMessages = [] }) => {
 
   const handleSendMessage = async () => {
     if (isSending) return;
+
     setIsSending(true);
 
-    if (recordingBlob || file) {
+    if (recordingBlob) {
       const formData = new FormData();
-      formData.append('file', recordingBlob || file, recordingBlob ? 'recording.mp3' : file.name);
-      formData.append('type', recordingBlob ? 'audio' : file.type.startsWith('image/') ? 'image' : file.type.startsWith('video/') ? 'video' : 'auto');
+      formData.append('file', recordingBlob, 'recording.mp3');
+      formData.append('type', 'auto');
       formData.append('roomId', roomId);
       formData.append('senderId', userID);
       formData.append('username', username);
-      formData.append('role', 'ADMIN');
+      formData.append('role', 'USER');
 
       try {
         const response = await MessageService.sendMedia(formData);
-        // setMessages((prevMessages) => [...prevMessages, response.data]);
+      } catch (error) {
+        console.error('Error sending recorded audio:', error);
+      } finally {
+        setRecordingBlob(null);
+        setOpenRecordingModal(false);
+        setIsSending(false);
+        setRecordingTime(0);
+        setFinalRecordingTime(null);
+      }
+    } else if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('type', file.type.startsWith('image/') ? 'image' : file.type.startsWith('video/') ? 'video' : 'auto');
+      formData.append('roomId', roomId);
+      formData.append('senderId', userID);
+      formData.append('username', username);
+      formData.append('role', 'USER');
+
+      try {
+        const response = await MessageService.sendMedia(formData);
+        console.log("response message:", response);
+
       } catch (error) {
         console.error('Error sending media:', error);
       } finally {
-        handleClearMedia();
-        setOpenRecordingModal(false);
+        setFile(null);
+        if (fileInputRef.current) fileInputRef.current.value = ''; // Clear the file input
         setIsSending(false);
       }
     } else if (message.trim()) {
       const chatMessage = {
         text: message,
         username: username,
-        role: 'ADMIN',
+        role: 'USER',
         userId: userID,
         roomId: roomId,
         unRead: true,
       };
+      console.log("send message:", chatMessage);
 
       stompClient.current.publish({
         destination: '/app/chat.sendMessage',
-        body: JSON.stringify(chatMessage),
+        body: JSON.stringify(chatMessage)
       });
 
       setMessage('');
@@ -346,7 +382,7 @@ const MessageAdmin = ({ roomId, initialMessages = [] }) => {
           <IconButton onClick={() => setOpenRecordingModal(false)} style={{ position: 'absolute', right: '8px', top: '8px' }}>
             <CloseIcon />
           </IconButton>
-          Ghi âm tin nhắn
+          Ghi âm 
         </DialogTitle>
         <DialogContent>
           <div className="recording-controls">
@@ -363,7 +399,7 @@ const MessageAdmin = ({ roomId, initialMessages = [] }) => {
                 <audio controls src={URL.createObjectURL(recordingBlob)} style={{ marginTop: '10px', width: '100%' }} />
                 <div className="send-audio-container">
                   <IconButton onClick={handleSendMessage} color="primary" className="send-audio-button">
-                    {isSending ? <CircularProgress size={24} /> : <SendIcon fontSize="large" />} Gửi
+                  {isSending ? <CircularProgress size={24} style={{ marginRight: '4px' }} /> : <SendIcon fontSize="large" />} Gửi
                   </IconButton>
                 </div>
               </>

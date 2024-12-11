@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import CategoryService from '../../services/CategoryService';
 import './EditCategory.css';
-import showGeneralToast from '../toastUtils/showGeneralToast'; // Import toast
+import showGeneralToast from '../toastUtils/showGeneralToast'; 
 
 const EditCategory = ({ category, onClose, onCategoryUpdated }) => {
   const [name, setName] = useState(category?.name || '');
   const [description, setDescription] = useState(category?.description || '');
-  const [error, setError] = useState(''); // Thêm state để lưu thông báo lỗi
-
-  // Cập nhật lại state khi có thay đổi từ prop 'category'
+  const [error, setError] = useState(''); 
   useEffect(() => {
     if (category) {
       setName(category.name);
@@ -16,28 +14,25 @@ const EditCategory = ({ category, onClose, onCategoryUpdated }) => {
     }
   }, [category]);
 
-  // Hàm xử lý khi cập nhật danh mục
   const updateCategory = (e) => {
     e.preventDefault();
 
-    // Kiểm tra tính hợp lệ của các trường
     if (!name || !description) {
       setError('Cả tên và mô tả danh mục đều là bắt buộc!');
-      return; // Dừng lại nếu có trường nào trống
+      return; 
     }
 
     const updatedCategory = { id: category.id, name, description };
 
-    // Gửi yêu cầu cập nhật danh mục
     CategoryService.updateCategory(updatedCategory, category.id)
       .then(() => {
-        onCategoryUpdated(updatedCategory); // Cập nhật danh mục trong danh sách
-        onClose(); // Đóng modal
-        showGeneralToast("Danh mục đã được cập nhật thành công!", "success"); // Thông báo thành công
+        onCategoryUpdated(updatedCategory); 
+        onClose(); 
+        showGeneralToast("Danh mục đã được cập nhật thành công!", "success");
       })
       .catch((error) => {
         console.error('Error updating category:', error);
-        showGeneralToast("Có lỗi xảy ra khi cập nhật danh mục", "error"); // Thông báo lỗi
+        showGeneralToast("Có lỗi xảy ra khi cập nhật danh mục", "error"); 
       });
   };
 
@@ -46,7 +41,6 @@ const EditCategory = ({ category, onClose, onCategoryUpdated }) => {
       <div className="edit-category-modal-content">
         <h2 className="edit-category-modal-title">Chỉnh sửa danh mục</h2>
 
-        {/* Hiển thị thông báo lỗi nếu có */}
         {error && <div className="error-toast">{error}</div>}
 
         <form>

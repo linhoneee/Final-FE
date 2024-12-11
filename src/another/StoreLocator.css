@@ -75,7 +75,7 @@
 .map-section {
     flex: 1;
     min-width: 350px;
-    height: 450px;
+    height: 400px !important;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 10px 20px rgba(34, 139, 34, 0.15);

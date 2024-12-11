@@ -1,5 +1,4 @@
 import axios from "axios";
-import axiosInstance from './axiosInstance';
 
 const URL = "http://localhost:6004/cart";
 
@@ -11,7 +10,7 @@ class CartService {
   }
 
   FindCartByUserId(userId) {
-    return axiosInstance.get(`${URL}/${userId}`);
+    return axios.get(`${URL}/${userId}`);
   }
 
   DecreaseCart(userId, cart) {

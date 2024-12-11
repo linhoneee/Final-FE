@@ -8,42 +8,40 @@ const ForgotPassword = ({ open, handleClose, handleOpenResetPassword, initialEma
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Sử dụng email ban đầu (initialEmail) mà không cần người dùng nhập lại
   useEffect(() => {
     if (initialEmail) {
-      setEmail(initialEmail); // Set email ban đầu từ props
+      setEmail(initialEmail); 
     }
   }, [initialEmail]);
 
-  // Hàm gửi OTP
+ 
   const sendOtp = async (emailToSend) => {
-    setLoading(true); // Hiển thị vòng tròn tải
+    setLoading(true);
     try {
       const response = await UserService.checkEmailExists(emailToSend);
       if (!response.data.exists) {
-        showGeneralToast('Email không tồn tại trong hệ thống', 'error'); // Thông báo lỗi
+        showGeneralToast('Email không tồn tại trong hệ thống', 'error'); 
         setLoading(false);
         return;
       }
   
       await UserService.sendOtp(emailToSend);
-      showGeneralToast('OTP đã được gửi tới email của bạn', 'success'); // Thông báo thành công
-      handleClose(); // Đóng modal sau khi gửi OTP
-      handleOpenResetPassword(emailToSend); // Mở modal Reset Password
+      showGeneralToast('OTP đã được gửi tới email của bạn', 'success'); 
+      handleClose(); 
+      handleOpenResetPassword(emailToSend);
     } catch (error) {
-      showGeneralToast('Gửi OTP thất bại', 'error'); // Thông báo lỗi
+      showGeneralToast('Gửi OTP thất bại', 'error'); 
       console.error('Lỗi gửi OTP:', error);
     } finally {
-      setLoading(false); // Tắt vòng tròn tải dù thành công hay thất bại
+      setLoading(false); 
     }
   };
   
 
-  // Hàm xử lý submit form khi người dùng nhấn nút gửi OTP
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!loading) {
-      sendOtp(email); // Gửi OTP khi người dùng nhấn nút gửi
+      sendOtp(email); 
     }
   };
 
@@ -58,15 +56,15 @@ const ForgotPassword = ({ open, handleClose, handleOpenResetPassword, initialEma
             fullWidth
             margin="normal"
             value={email}
-            onChange={(e) => setEmail(e.target.value)} // Cập nhật giá trị email khi người dùng thay đổi
-            disabled={!!initialEmail} // Vô hiệu hóa trường nhập nếu có initialEmail
+            onChange={(e) => setEmail(e.target.value)} 
+            disabled={!!initialEmail} // !! để chuyển đổi giá trị thành true hoặc false, giúp kiểm tra điều kiện
           />
           <Button
             type="submit"
             variant="contained"
             color="primary"
             className="modalButton"
-            disabled={loading} // Vô hiệu hóa nút khi đang tải
+            disabled={loading} 
           >
             {loading ? <CircularProgress size={24} className="loading-spinner" /> : 'Gửi OTP'}
           </Button>

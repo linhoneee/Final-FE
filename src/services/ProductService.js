@@ -51,17 +51,19 @@ class ProductService {
     return axios.put(`${API_URL}/${productId}/images/${imageId}/primary`);
   }
 
-  GetProductsByFilters(searchTerm, brandId, categoryId, sortOrder) {
+  GetProductsByFilters(searchTerm, brandId, categoryId, sortOrder, currentPage, pageSize) {
     return axios.get(`${API_URL}/search`, {
       params: {
         searchTerm: searchTerm || '',      // Nếu không có searchTerm, gửi chuỗi rỗng
         brandId: brandId || '',            // Nếu không có brandId, gửi chuỗi rỗng
         categoryId: categoryId || '',      // Nếu không có categoryId, gửi chuỗi rỗng
-        sortOrder: sortOrder || ''         // Nếu không có sortOrder, gửi chuỗi rỗng
+        sortOrder: sortOrder || '',        // Nếu không có sortOrder, gửi chuỗi rỗng
+        page: currentPage || 0,            // Trang hiện tại
+        size: pageSize || 6                // Số sản phẩm mỗi trang
       }
     });
   }
-
+  
   
 }
 

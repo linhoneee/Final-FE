@@ -60,14 +60,11 @@ const Checkout = () => {
   }, []);
 
   useEffect(() => {
-    console.log('useEffect is called'); // Kiểm tra xem useEffect có được gọi không
+    console.log('useEffect is called');
     const fetchInitialData = async () => {
       try {
-
-  
-        // Các API tiếp theo sẽ vẫn được gọi
         const addressesResponse = await AddressService.getAddressesByUserId(id);
-        console.log("Addresses Response: ", addressesResponse); // Kiểm tra response từ API
+        console.log("Addresses Response: ", addressesResponse);
         if (addressesResponse.status === 404) {
           console.log("No addresses found, setting addresses to null.");
           setAddresses(null);
@@ -75,52 +72,46 @@ const Checkout = () => {
           console.log("Addresses found:", addressesResponse.data);
           setAddresses(addressesResponse.data);
         }
-  
-        // Gọi API lấy loại vận chuyển
+
         const shippingTypesResponse = await ShippingService.getAllShipping();
         console.log("Shipping types found:", shippingTypesResponse.data);
         setShippingTypes(shippingTypesResponse.data);
-  
-        // Gọi API lấy mã giảm giá
+
         const couponsResponse = await CustomerCouponService.getAllCustomerCoupons();
         console.log("Coupons found:", couponsResponse.data);
         setCoupons(couponsResponse.data);
-  
-        // Nếu có loại vận chuyển, set mặc định loại vận chuyển
+
         if (shippingTypesResponse.data.length > 0) {
           const defaultShipping = shippingTypesResponse.data.reduce((prev, curr) => (prev.id < curr.id ? prev : curr));
           console.log("Default shipping:", defaultShipping);
           setSelectedShipping(defaultShipping);
         }
-  
-        // Đặt trạng thái loading là false khi dữ liệu đã được tải
+
         setLoading(false);
         console.log("Loading state set to false");
 
-                // Gọi API getPrimaryAddress
-                const primaryAddressResponse = await AddressService.getPrimaryAddress(id);
-                console.log("Primary Address Response: ", primaryAddressResponse); // Kiểm tra response từ API
-                if (primaryAddressResponse.status === 404) {
-                  console.log("Primary address not found, setting defaultAddress to null.");
-                  setDefaultAddress(null); // Nếu lỗi 404, set null
-                } else if (primaryAddressResponse.data) {
-                  console.log("Primary address found:", primaryAddressResponse.data);
-                  setDefaultAddress(primaryAddressResponse.data);
-                } else {
-                  console.log("No primary address, setting defaultAddress to null.");
-                  setDefaultAddress(null);
-                }
-  
+        const primaryAddressResponse = await AddressService.getPrimaryAddress(id);
+        console.log("Primary Address Response: ", primaryAddressResponse);
+        if (primaryAddressResponse.status === 404) {
+          console.log("Primary address not found, setting defaultAddress to null.");
+          setDefaultAddress(null);
+        } else if (primaryAddressResponse.data) {
+          console.log("Primary address found:", primaryAddressResponse.data);
+          setDefaultAddress(primaryAddressResponse.data);
+        } else {
+          console.log("No primary address, setting defaultAddress to null.");
+          setDefaultAddress(null);
+        }
+
       } catch (error) {
-        // Bắt lỗi và log thông tin chi tiết
         console.error("Error in fetchInitialData:", error);
         handleError(error);
       }
     };
-  
+
     fetchInitialData();
   }, [id]);
-  
+
 
   useEffect(() => {
     if (selectedCartItems.length > 0 && defaultAddress) {
@@ -199,50 +190,39 @@ const Checkout = () => {
   const handleAddressChange = (newAddress) => {
     setDefaultAddress(newAddress);
     setDistanceData(null);
-    calculateDistance(newAddress, warehouseIds);  
+    calculateDistance(newAddress, warehouseIds);
     setIsModalOpen(false);
   };
 
   const handleApplyCoupon = () => {
-// Nếu selectedCoupon tồn tại (không phải là null hoặc undefined):
-// couponCode sẽ được set bằng selectedCoupon.code.
-// Ví dụ: Nếu selectedCoupon = { code: "FREESHIP" }, thì couponCode = "FREESHIP".
-// sửa lại thành const couponCode = voucherCode.trim() || selectedCoupon?.code || '';
 
+    const couponCode = voucherCode.trim() || (selectedCoupon ? selectedCoupon.code : '');
 
-const couponCode = voucherCode.trim() || (selectedCoupon ? selectedCoupon.code : '');
+    if (couponCode) {
+      CustomerCouponService.applyCoupon(couponCode, totalProductCost, shippingCost)
+        .then(response => {
+          setDiscountResult(response.data);
+          const { discountedOrderValue, discountedShippingCost } = response.data;
+          setTotalCost(discountedOrderValue + discountedShippingCost);
 
-if (couponCode) {
-  // Áp dụng coupon
-  CustomerCouponService.applyCoupon(couponCode, totalProductCost, shippingCost)
-    .then(response => {
-      // Cập nhật kết quả giảm giá
-      setDiscountResult(response.data);
-      const { discountedOrderValue, discountedShippingCost } = response.data;
-      setTotalCost(discountedOrderValue + discountedShippingCost);
+          setSelectedCoupon(null);
+          setVoucherCode('');
 
-      // Reset lại selectedCoupon và voucherCode
-      setSelectedCoupon(null);
-      setVoucherCode('');
+          showGeneralToast("Mã giảm giá đã được áp dụng thành công!", "success");
+        })
+        .catch((error) => {
+          console.error('Error applying coupon:', error);
 
-      // Hiển thị thông báo thành công
-      showGeneralToast("Mã giảm giá đã được áp dụng thành công!", "success");
-    })
-    .catch((error) => {
-      console.error('Error applying coupon:', error);
-
-      // Kiểm tra lỗi và hiển thị thông báo lỗi nếu có
-      if (error.response && error.response.data) {
-        const { message } = error.response.data;
-        showGeneralToast(message, "error"); // Hiển thị thông báo lỗi từ server
-      } else {
-        showGeneralToast("Có lỗi xảy ra khi áp dụng mã giảm giá", "error"); // Thông báo lỗi chung
-      }
-    });
-} else {
-  // Nếu không có coupon code hợp lệ
-  showGeneralToast("Vui lòng nhập mã giảm giá hợp lệ", "error");
-}
+          if (error.response && error.response.data) {
+            const { message } = error.response.data;
+            showGeneralToast(message, "error");
+          } else {
+            showGeneralToast("Có lỗi xảy ra khi áp dụng mã giảm giá", "error");
+          }
+        });
+    } else {
+      showGeneralToast("Vui lòng nhập mã giảm giá hợp lệ", "error");
+    }
   };
 
   const handleVoucherCodeChange = (e) => {
@@ -272,11 +252,11 @@ Phí Giao Hàng = (Giá mỗi Km * Quãng đường) + (Giá mỗi Kg * Tổng t
       <h2 className="checkout-header">Thanh Toán</h2>
       {!defaultAddress ? (
         <div style={{ color: 'red', fontWeight: 'bold' }}>
-          Bạn chưa có địa chỉ, yêu cầu tạo địa chỉ mới  
-          <button 
-          className="checkout-button" 
-          onClick={() => setIsAddAddressModalOpen(true)} 
-          style={{ marginLeft: '10px' }}
+          Bạn chưa có địa chỉ, yêu cầu tạo địa chỉ mới
+          <button
+            className="checkout-button"
+            onClick={() => setIsAddAddressModalOpen(true)}
+            style={{ marginLeft: '10px' }}
           >
             Tạo địa chỉ mới
           </button>

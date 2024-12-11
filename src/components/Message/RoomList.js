@@ -97,6 +97,7 @@ const RoomList = ({ onRoomSelect }) => {
               return dateB - dateA;
             });
           });
+          fetchOnlineUsers();
         });
       }
     });

@@ -83,10 +83,9 @@ const CustomerCouponList = () => {
         <tbody>
   {customerCoupons.map((coupon) => {
     const currentDate = new Date();
-    const isExpired = new Date(coupon.endDate) < currentDate; // Kiểm tra hết hạn
+    const isExpired = new Date(coupon.endDate) < currentDate; 
     const isMaxUsageReached = coupon.currentUsage >= coupon.maxUsage; // Kiểm tra đã đạt số lần sử dụng tối đa
 
-    // Xác định class cho màu nền
     let rowClass = '';
     if (isExpired && isMaxUsageReached) {
       rowClass = 'expired-max-usage';
@@ -96,7 +95,6 @@ const CustomerCouponList = () => {
       rowClass = 'max-usage-reached';
     }
 
-    // Xác định thông báo cần hiển thị
     let statusMessage = '';
     if (isExpired && isMaxUsageReached) {
       statusMessage = 'Đã hết hạn sử dụng và đạt số lần sử dụng tối đa.';
@@ -129,7 +127,6 @@ const CustomerCouponList = () => {
           >
             Xóa
           </button>
-          {/* Hiển thị dòng chữ đỏ nếu có vấn đề */}
           {statusMessage && (
             <div colSpan="9" style={{ color: 'red', fontWeight: 'bold', marginTop: '8px', fontSize: '0.9rem' }}>
               {statusMessage}
@@ -142,25 +139,20 @@ const CustomerCouponList = () => {
 </tbody>
 
       </table>
-
-      {/* Modal for Adding Customer Coupon */}
       <Modal
         isOpen={showAddModal}
         onRequestClose={closeAddModal}
         className="modal-content"
-        overlayClassName="modal-overlay"
-      >
+        overlayClassName="modal-overlay">
         <AddCustomerCoupon closeModal={closeAddModal} fetchCustomerCoupons={fetchCustomerCoupons} />
       </Modal>
 
-      {/* Modal for Editing Customer Coupon */}
       {showEditModal && currentCoupon && (
         <Modal
           isOpen={showEditModal}
           onRequestClose={closeEditModal}
           className="modal-content"
-          overlayClassName="modal-overlay"
-        >
+          overlayClassName="modal-overlay">
           <EditCustomerCoupon
             coupon={currentCoupon}
             closeModal={closeEditModal}

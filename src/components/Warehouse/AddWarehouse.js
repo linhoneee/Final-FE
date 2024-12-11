@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import WarehouseService from '../../services/WarehouseService';
 import WarehouseForm from './WarehouseForm';
 import L from 'leaflet';
+import './AddWarehouse.css';
 
 // Fix the default icon issue for Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -69,7 +70,7 @@ const AddWarehouse = () => {
   }, [warehouse.ward, warehouse.wardName, warehouse.districtName, warehouse.provinceCityName]);
 
   const updateMap = (addressString) => {
-    axios.get(`https://nominatim.openstreetmap.org/search`, {
+    axios.get('https://nominatim.openstreetmap.org/search', {
       params: {
         q: addressString,
         format: 'json',
@@ -116,8 +117,8 @@ const AddWarehouse = () => {
   };
 
   return (
-    <div>
-      <h2>Add Warehouse</h2>
+    <div className="add-warehouse-container">
+      <h2 className="add-warehouse-title">Thêm Kho Hàng</h2>
       <WarehouseForm 
         warehouse={warehouse}
         handleChange={handleChange}
@@ -126,7 +127,11 @@ const AddWarehouse = () => {
         districts={districts}
         wards={wards}
         setWarehouse={setWarehouse}
+        className="add-warehouse-form"
       />
+      <div className="add-warehouse-map-container">
+        {/* Bản đồ sẽ được render ở đây */}
+      </div>
     </div>
   );
 };

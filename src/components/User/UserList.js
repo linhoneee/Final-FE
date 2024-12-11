@@ -3,7 +3,7 @@ import UserService from '../../services/UserService';
 import './UserList.css';
 import AddUser from './AddUser';
 import UpdateUser from './UpdateUser';
-import showGeneralToast from '../toastUtils/showGeneralToast'; // Import toast function
+import showGeneralToast from '../toastUtils/showGeneralToast'; 
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -30,12 +30,10 @@ const UserList = () => {
         await UserService.deleteUser(id);
         fetchUsers();
   
-        // Hiển thị thông báo thành công
         showGeneralToast("Người dùng đã được xóa thành công!", "success");
       } catch (error) {
         console.error('Failed to delete user:', error);
   
-        // Hiển thị thông báo lỗi nếu có
         if (error.response && error.response.data) {
           const { message } = error.response.data;
           showGeneralToast(message, "error");
@@ -50,12 +48,10 @@ const UserList = () => {
       await UserService.blockUser(id);
       fetchUsers();
   
-      // Hiển thị thông báo thành công khi block hoặc unblock
       showGeneralToast("Chặn hoặc bỏ chặn thành công!", "success");
     } catch (error) {
       console.error('Failed to block/unblock user:', error);
   
-      // Hiển thị thông báo lỗi nếu có
       if (error.response && error.response.data) {
         const { message } = error.response.data;
         showGeneralToast(message, "error");

@@ -5,6 +5,7 @@ import AddressList from '../Address/AddressList'; // Import AddressList
 import './UserDetails.css'; // Import the combined CSS file
 import ForgotPassword from './ForgotPassword';
 import ResetPassword from './ResetPassword';
+import showGeneralToast from '../toastUtils/showGeneralToast'; // Import toast
 
 const UserDetails = () => {
   const { id } = useParams();
@@ -37,7 +38,6 @@ const UserDetails = () => {
       if (picture) {
         await UserService.updateUserPicture(id, picture);
       }
-      navigate('/users'); 
     } catch (error) {
       console.error('Failed to update user details:', error);
     }
@@ -63,10 +63,10 @@ const UserDetails = () => {
       try {
         await UserService.updateUserPicture(id, selectedFile); // Gọi API ngay khi chọn ảnh
         fetchUserDetails(); // Làm mới thông tin người dùng
-        alert('Picture updated successfully!');
+        showGeneralToast('Chỉnh sửa ảnh thành công!', 'success');
       } catch (error) {
         console.error('Failed to update picture:', error);
-        alert('Failed to update picture.');
+        showGeneralToast('Đã xảy ra lỗi khi chỉnh sửa ảnh!', 'error');
       }
     }
   };

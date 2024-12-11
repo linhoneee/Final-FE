@@ -18,7 +18,6 @@ const AddCustomerCoupon = ({ closeModal, fetchCustomerCoupons }) => {
   const saveCustomerCoupon = (e) => {
     e.preventDefault();
     
-    // Tạo đối tượng customerCoupon
     const customerCoupon = { 
       code, 
       description, 
@@ -30,22 +29,16 @@ const AddCustomerCoupon = ({ closeModal, fetchCustomerCoupons }) => {
       discountType 
     };
   
-    // Gọi API để tạo coupon
     CustomerCouponService.createCustomerCoupon(customerCoupon)
       .then(() => {
-        // Cập nhật lại danh sách coupon sau khi tạo thành công
         fetchCustomerCoupons();
         
-        // Đóng modal
         closeModal();
-        
-        // Hiển thị thông báo thành công
         showGeneralToast("Mã giảm giá đã được tạo thành công!", "success");
       })
       .catch((error) => {
         console.error('Error saving customer coupon:', error);
         
-        // Hiển thị thông báo lỗi nếu có
         if (error.response && error.response.data) {
           const { message } = error.response.data;
           showGeneralToast(message, "error");

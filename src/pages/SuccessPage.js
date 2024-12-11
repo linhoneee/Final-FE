@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import './SuccessPage.css';
 import { FaCheckCircle, FaShippingFast, FaMoneyBillWave, FaBoxOpen } from 'react-icons/fa';
 
@@ -16,35 +15,27 @@ const SuccessPage = () => {
 
     useEffect(() => {
         if (currentRequestJson) {
-            setCurrentRequest(JSON.parse(decodeURIComponent(currentRequestJson)));
-        }
+            const requestData = JSON.parse(decodeURIComponent(currentRequestJson));
 
-        const fetchPaymentDetails = async () => {
-            try {
-                await axios.get(`http://localhost:8009/payment/details`, {
-                    params: {
-                        paymentId: paymentId,
-                        payerId: payerId,
-                    },
-                });
-            } catch (error) {
-                console.error('Error fetching payment details', error);
-            }
-        };
+            // Nối địa chỉ người gửi và người nhận
+            const senderAddress = `${requestData.distanceData.warehouseWard}, ${requestData.distanceData.warehouseDistrict}, ${requestData.distanceData.warehouseProvinceCity
+            }`;
+            const receiverAddress = `${requestData.distanceData.street}, ${requestData.distanceData.ward}, ${requestData.distanceData.district}, ${requestData.distanceData.provinceCity}`;
+            
+            // Thêm vào currentRequest
+            requestData.senderAddress = senderAddress;
+            requestData.receiverAddress = receiverAddress;
 
-        if (paymentId && payerId) {
-            fetchPaymentDetails();
+            setCurrentRequest(requestData);
         }
     }, [paymentId, payerId, currentRequestJson]);
 
     if (!currentRequest) {
         return <div className="loading">Loading...</div>;
     }
-
-    const formatAddress = ({ street, ward, district, provinceCity }) => {
-        return `${street}, ${ward}, ${district}, ${provinceCity}`;
-    };
-
+    if (currentRequest) {
+        console.log(currentRequest);
+    }
     return (
         <div className="success-container">
             <div className="success-header">
@@ -68,13 +59,14 @@ const SuccessPage = () => {
                     <div className="address-section">
                         <div>
                             <h3>Địa chỉ người gửi</h3>
-                            <p>{formatAddress(currentRequest.distanceData)}</p>
+                            <p>{currentRequest.senderAddress}</p>
                         </div>
                         <div>
                             <h3>Địa chỉ người nhận</h3>
-                            <p>{formatAddress(currentRequest.distanceData)}</p>
+                            <p>{currentRequest.receiverAddress}</p>
                         </div>
                     </div>
+                    <h2>Khoảng cách: {currentRequest.distanceData.distance} Km </h2>
                 </div>
                 <div className="card">
                     <h2>
@@ -101,7 +93,6 @@ const SuccessPage = () => {
             <button className="back-home-button" onClick={() => navigate('/')}>Quay lại trang chủ</button>
         </div>
     );
-    
 };
 
 export default SuccessPage;

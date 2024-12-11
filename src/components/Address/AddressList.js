@@ -11,18 +11,14 @@ const AddressList = () => {
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
   const navigate = useNavigate();
   const userID = useSelector(state => state.auth.userID); // Lấy userID từ Redux store
-  const [loading, setLoading] = useState(false);
 
   const fetchAddresses = useCallback(() => {
-    setLoading(true);
     AddressService.getAddressesByUserId(userID)
       .then((response) => {
-              // Sắp xếp danh sách địa chỉ, đưa địa chỉ mặc định lên đầu
         const sortedAddresses = response.data.sort((a, b) => b.isPrimary - a.isPrimary);
         setAddresses(sortedAddresses);
       })
       .catch((error) => console.error('Error fetching addresses:', error))
-      .finally(() => setLoading(false));
   }, [userID]);
   
 
@@ -61,10 +57,6 @@ const AddressList = () => {
       });
   };
   
-
-  const handleError = (error) => {
-    console.error('Error:', error);
-  };
 
   const handleShowModal = () => {
     setShowModal(true); // Open the modal when the new button is clicked

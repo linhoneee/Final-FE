@@ -10,7 +10,6 @@ const BrandList = () => {
   const [showAddModal, setShowAddModal] = useState(false); // Điều khiển modal thêm thương hiệu
   const [showEditModal, setShowEditModal] = useState(false); // Điều khiển modal chỉnh sửa thương hiệu
   const [brandToEdit, setBrandToEdit] = useState(null); // Thương hiệu cần chỉnh sửa
-  const [error, setError] = useState(null); // State để lưu lỗi
 
   // Fetch danh sách thương hiệu từ API khi component mount
   useEffect(() => {
@@ -27,32 +26,27 @@ const BrandList = () => {
         // Cập nhật lại danh sách sau khi xóa
         setBrands(brands.filter((brand) => brand.id !== id));
         showGeneralToast("Thương hiệu đã được xóa thành công!", "success");
-        setError(null);  // Xóa thông báo lỗi nếu thành công
       }).catch((error) => {
         console.error("Error deleting brand:", error);
 
         // Hiển thị lỗi nếu có
         if (error.response && error.response.data) {
           const { message } = error.response.data;
-          setError(message);
           showGeneralToast(message, "error");
         } else {
-          setError("Có lỗi xảy ra khi xóa thương hiệu");
           showGeneralToast("Có lỗi xảy ra khi xóa thương hiệu", "error");
         }
       });
     }
   };
 
-  // Mở modal chỉnh sửa và truyền dữ liệu thương hiệu
   const handleEditClick = (brand) => {
     setBrandToEdit(brand);
     setShowEditModal(true);
   };
 
-  // Thêm thương hiệu mới
   const handleCategoryAdded = (newBrand) => {
-    setBrands((prevBrands) => [...prevBrands, newBrand]);  // Thêm brand mới vào danh sách
+    setBrands((prevBrands) => [...prevBrands, newBrand]);  
   };
 
   return (
@@ -97,10 +91,8 @@ const BrandList = () => {
         </tbody>
       </table>
 
-      {/* Modal thêm thương hiệu */}
       {showAddModal && <AddBrand onClose={() => setShowAddModal(false)} onCategoryAdded={handleCategoryAdded} />}
 
-      {/* Modal chỉnh sửa thương hiệu */}
       {showEditModal && (
         <EditBrand 
           brand={brandToEdit} 

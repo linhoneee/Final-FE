@@ -5,6 +5,7 @@ import AddressService from '../../services/AddressService';
 import AddressFields from '../AddressFields';
 import AddressMap from '../AddressMap';
 import L from 'leaflet'; 
+import './EditAddress.css';
 
 // Fix the default icon issue for Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -187,30 +188,29 @@ const EditAddress = () => {
     }));
   };
 
-  return (
-    <div>
-      <h2>Edit Address</h2>
-      <form onSubmit={updateAddress}>
-        <AddressFields 
-          address={address}
-          handleChange={handleChange}
-          provinces={provinces}
-          districts={districts}
-          wards={wards}
-          setAddress={setAddress}
-        />
-        <AddressMap address={address} setAddress={setAddress} />
-        {address.latitude && address.longitude && (
-          <div>
-            <h3>Coordinates</h3>
-            <p>Longitude: {address.longitude}</p>
-            <p>Latitude: {address.latitude}</p>
-          </div>
-        )}
-        <button type="submit">Update</button>
-      </form>
-    </div>
-  );
+<div className="edit-address-container">
+  <h2>Chỉnh sửa địa chỉ</h2>
+  <form onSubmit={updateAddress}>
+    <AddressFields 
+      address={address}
+      handleChange={handleChange}
+      provinces={provinces}
+      districts={districts}
+      wards={wards}
+      setAddress={setAddress}
+    />
+    <AddressMap address={address} setAddress={setAddress} />
+    {address.latitude && address.longitude && (
+      <div className="edit-address-coordinates">
+        <h3>Tọa độ</h3>
+        <p>Kinh độ: {address.longitude}</p>
+        <p>Vĩ độ: {address.latitude}</p>
+      </div>
+    )}
+    <button type="submit">Cập nhật</button>
+  </form>
+</div>
+
 };
 
 export default EditAddress;

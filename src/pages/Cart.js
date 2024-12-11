@@ -68,7 +68,7 @@ const Cart = () => {
       price: item.price,
       weight: item.weight,
       warehouseIds: item.warehouseIds,
-      primaryImageUrl: item.primaryImageUrl // Add primaryImageUrl to cart item
+      primaryImageUrl: item.primaryImageUrl
     };
 
     CartService.AddCart(id, cart)
@@ -200,7 +200,7 @@ const Cart = () => {
       .filter(item => item.productId === productId)
       .map(item => item.warehouseId);
   };
-  
+
   const groupItemsByIndividualWarehouse = (selectedCartItems, inventory) => {
     let warehouseGroups = {};
 
@@ -219,19 +219,20 @@ const Cart = () => {
     });
     return Object.values(warehouseGroups);
   };
-  
+
   const handleCheckout = () => {
     const selectedCartItems = cartItems.filter(item => selectedItems.includes(item.productId));
-    
+
     const warehouseGroups = groupItemsByIndividualWarehouse(selectedCartItems, inventory);
-    
+
     console.log("Final Warehouse Groups:", warehouseGroups);
-  
+
     const allInOneGroup = warehouseGroups.length === 1 || warehouseGroups.some(group => group.items.length === selectedCartItems.length);
-  
+
     if (allInOneGroup) {
-      console.log("All items in one group - proceeding to checkout:");
       const selectedGroup = warehouseGroups.find(group => group.items.length === selectedCartItems.length) || warehouseGroups[0];
+      console.log("All items in one group - proceeding to checkout:",selectedGroup);
+
       navigate(`/checkout/${id}`, { state: { selectedCartItems: selectedGroup.items, warehouseIds: selectedGroup.warehouseIds } });
     } else if (warehouseGroups.length > 1) {
       console.log("Multiple groups - showing modal:");
@@ -244,7 +245,7 @@ const Cart = () => {
       navigate(`/checkout/${id}`, { state: { selectedCartItems: warehouseGroups[0].items, warehouseIds: warehouseGroups[0].warehouseIds } });
     }
   };
-  
+
   const handleModalCheckout = () => {
     if (selectedModalGroup !== null) {
       const selectedGroup = modalContent[selectedModalGroup];
@@ -254,62 +255,62 @@ const Cart = () => {
     }
     setShowModal(false);
   };
-  
+
   return (
     <div className="cart-container">
       <h2 className="cart-header">Giỏ Hàng Của Bạn</h2>
       <div className="cart-items">
         {cartItems.length > 0 ? (
- <>
- <div className="select-all">
-   <input
-     type="checkbox"
-     checked={selectedItems.length === cartItems.filter(item => item.inStock).length}
-     onChange={handleSelectAllItems}
-     className="cart-checkbox"
-   /> 
-   <p>Chọn tất cả</p>
- </div>
- {cartItems.map(item => (
-   <div key={item.productId} className={`cart-item ${item.inStock ? '' : 'out-of-stock'}`}>
-     <input
-       type="checkbox"
-       checked={selectedItems.includes(item.productId)}
-       onChange={() => handleSelectItem(item.productId)}
-       disabled={!item.inStock}
-       className="cart-checkbox"
-     />
-     <img src={`http://localhost:6001${item.primaryImageUrl}`} alt="Primary" className="product-image" />
-     <div className="product-info">
-       <h3 onClick={() => handleProductClick(item.productId)} className="product-link">
-         Tên: {item.name}
-       </h3>
-       <p>ID sản phẩm: {item.productId}</p>
-       <p>Giá: ${item.price}</p>
-       <p>Cân nặng: {item.weight} g</p>
-       <p>Kho: {item.warehouse}</p>
-       {!item.inStock && (
-         <p style={{ color: 'red', fontWeight: 'bold' }}>Sản phẩm đã hết hàng</p>
-       )}
-     </div>
-     <div className="quantity-control">
-       <button onClick={() => handleDecreaseItem(item.productId)} className="quantity-button" disabled={!item.inStock}>-</button>
-       <input
-         type="number"
-         value={item.quantity}
-         onChange={(e) => handleQuantityChange(item.productId, e.target.value)}
-         min="1"
-         className="quantity-input"
-         disabled={!item.inStock}
-       />
-       <button onClick={() => handleAddItem(item.productId)} className="quantity-button" disabled={!item.inStock}>+</button>
-     </div>
-     <button onClick={() => handleRemoveItem(item.productId)} className="remove-button">Xóa</button>
-   </div>
- ))}
- <h3 className="total">Tổng cộng: ${total}</h3>
- <button onClick={handleCheckout} className="checkout-button" disabled={selectedItems.length === 0}>Tiến hành thanh toán</button>
-</>
+          <>
+            <div className="select-all">
+              <input
+                type="checkbox"
+                checked={selectedItems.length === cartItems.filter(item => item.inStock).length}
+                onChange={handleSelectAllItems}
+                className="cart-checkbox"
+              />
+              <p>Chọn tất cả</p>
+            </div>
+            {cartItems.map(item => (
+              <div key={item.productId} className={`cart-item ${item.inStock ? '' : 'out-of-stock'}`}>
+                <input
+                  type="checkbox"
+                  checked={selectedItems.includes(item.productId)}
+                  onChange={() => handleSelectItem(item.productId)}
+                  disabled={!item.inStock}
+                  className="cart-checkbox"
+                />
+                <img src={`http://localhost:6001${item.primaryImageUrl}`} alt="Primary" className="product-image" />
+                <div className="product-info">
+                  <h3 onClick={() => handleProductClick(item.productId)} className="product-link">
+                    Tên: {item.name}
+                  </h3>
+                  <p>ID sản phẩm: {item.productId}</p>
+                  <p>Giá: ${item.price}</p>
+                  <p>Cân nặng: {item.weight} g</p>
+                  <p>Kho: {item.warehouse}</p>
+                  {!item.inStock && (
+                    <p style={{ color: 'red', fontWeight: 'bold' }}>Sản phẩm đã hết hàng</p>
+                  )}
+                </div>
+                <div className="quantity-control">
+                  <button onClick={() => handleDecreaseItem(item.productId)} className="quantity-button" disabled={!item.inStock}>-</button>
+                  <input
+                    type="number"
+                    value={item.quantity}
+                    onChange={(e) => handleQuantityChange(item.productId, e.target.value)}
+                    min="1"
+                    className="quantity-input"
+                    disabled={!item.inStock}
+                  />
+                  <button onClick={() => handleAddItem(item.productId)} className="quantity-button" disabled={!item.inStock}>+</button>
+                </div>
+                <button onClick={() => handleRemoveItem(item.productId)} className="remove-button">Xóa</button>
+              </div>
+            ))}
+            <h3 className="total">Tổng cộng: ${total}</h3>
+            <button onClick={handleCheckout} className="checkout-button" disabled={selectedItems.length === 0}>Tiến hành thanh toán</button>
+          </>
 
         ) : (
           <p className="empty-cart">Giỏ hàng trống.</p>
@@ -331,15 +332,15 @@ const Cart = () => {
                 <div key={index} className="custom-modal-group">
                   <h3>Đơn hàng {index + 1}</h3>
                   <table className="custom-modal-table">
-                  <thead>
-  <tr>
-    <th>ID sản phẩm</th>
-    <th>Tên</th>
-    <th>Giá</th>
-    <th>ID kho</th>
-    <th>Hình ảnh</th>
-  </tr>
-</thead>
+                    <thead>
+                      <tr>
+                        <th>ID sản phẩm</th>
+                        <th>Tên</th>
+                        <th>Giá</th>
+                        <th>ID kho</th>
+                        <th>Hình ảnh</th>
+                      </tr>
+                    </thead>
 
                     <tbody>
                       {group.items.map(item => (

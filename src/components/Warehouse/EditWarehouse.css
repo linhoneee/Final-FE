@@ -1,0 +1,152 @@
+/* src/components/Warehouse/EditWarehouse.css */
+
+/* General container for the Edit Warehouse page */
+.edit-warehouse-container {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #e8f5e9 30%, #f1f9f4 90%); /* Soft green gradient */
+    padding: 50px 40px;
+    border-radius: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    transition: all 0.3s ease;
+  }
+  
+  .edit-warehouse-container:hover {
+    box-shadow: 0 8px 35px rgba(0, 0, 0, 0.15); /* Deeper shadow on hover */
+  }
+  
+  /* Title for the page */
+  .edit-warehouse-title {
+    color: #388e3c; /* Dark Green */
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 35px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2); /* Subtle title shadow */
+  }
+  
+  /* Form container */
+  .edit-warehouse-form {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    margin-bottom: 40px;
+  }
+  
+  /* Form label style */
+  .edit-warehouse-form label {
+    color: #2c6e49; /* Darker Green */
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    text-align: left; /* Align labels to the left */
+  }
+  
+  /* Style for the submit button */
+  .edit-warehouse-form button {
+    background-color: #4caf50; /* Vibrant Green */
+    color: white;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Button shadow */
+  }
+  
+  .edit-warehouse-form button:hover {
+    background-color: #388e3c; /* Darker Green on hover */
+    transform: translateY(-4px); /* Lift effect */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Prominent shadow on hover */
+  }
+  
+  .edit-warehouse-form button:active {
+    transform: translateY(1px); /* Slight press effect */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style for input, select, and textarea fields */
+  .edit-warehouse-form input,
+  .edit-warehouse-form select,
+  .edit-warehouse-form textarea {
+    padding: 14px 18px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    background-color: #fff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+  }
+  
+  .edit-warehouse-form input:focus,
+  .edit-warehouse-form select:focus,
+  .edit-warehouse-form textarea:focus {
+    border-color: #4caf50; /* Green border on focus */
+    outline: none;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.3); /* Green glow effect */
+  }
+  
+  /* Container for the map display */
+  .edit-warehouse-map-container {
+    margin-top: 40px;
+    padding: 25px;
+    border-radius: 15px;
+    background-color: #e8f5e9; /* Light soft green */
+    border: 1px solid #4caf50; /* Green border */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* Light shadow for the map container */
+  }
+  
+  /* Coordinates display section */
+  .edit-warehouse-coordinates {
+    background-color: #e1f5e1; /* Very light green */
+    padding: 18px;
+    border-radius: 12px;
+    border: 2px solid #4caf50;
+    margin-top: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  }
+  
+  .edit-warehouse-coordinates h3 {
+    color: #388e3c; /* Dark Green */
+    font-size: 1.4rem;
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+  
+  .edit-warehouse-coordinates p {
+    color: #555;
+    font-size: 1.15rem;
+    margin: 8px 0;
+    line-height: 1.7;
+  }
+  
+  /* Optional responsive design for mobile screens */
+  @media (max-width: 768px) {
+    .edit-warehouse-container {
+      padding: 25px;
+    }
+  
+    .edit-warehouse-title {
+      font-size: 2rem;
+    }
+  
+    .edit-warehouse-form {
+      gap: 20px;
+    }
+  
+    .edit-warehouse-form button {
+      padding: 12px 20px;
+      font-size: 1.1rem;
+    }
+  
+    .edit-warehouse-form input,
+    .edit-warehouse-form select,
+    .edit-warehouse-form textarea {
+      padding: 12px 16px;
+    }
+  }
+  

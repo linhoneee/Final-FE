@@ -10,8 +10,8 @@ import AddProduct from "./AddProduct";
 import showGeneralToast from '../toastUtils/showGeneralToast'; // Import toast function
 
 const ProductList = () => {
-  const [products, setProducts] = useState([]);  // To store the full product list
-  const [filteredProducts, setFilteredProducts] = useState([]);  // To store the filtered product list based on search query
+  const [products, setProducts] = useState([]);  
+  const [filteredProducts, setFilteredProducts] = useState([]);  
   const [images, setImages] = useState([]);
   const [productDiscounts, setProductDiscounts] = useState([]);
   const [inventory, setInventory] = useState([]);
@@ -22,24 +22,23 @@ const ProductList = () => {
   const [showImageModal, setShowImageModal] = useState(false);
   const navigate = useNavigate();
   const [showAddProductModal, setShowAddProductModal] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");  // New state for the search query
+  const [searchQuery, setSearchQuery] = useState("");  
 
   useEffect(() => {
     fetchData();
   }, []);
 
   useEffect(() => {
-    // Filter products based on searchQuery
     const filtered = products.filter((product) =>
       product.productName.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredProducts(filtered);
-  }, [searchQuery, products]);  // Re-run the filtering whenever products or searchQuery change
+  }, [searchQuery, products]); 
 
   const fetchData = () => {
     ProductService.GetAllProduct().then((response) => {
       setProducts(response.data);
-      setFilteredProducts(response.data);  // Initialize filtered products
+      setFilteredProducts(response.data);  
       console.log("Products:", response.data);
     }).catch(err => {
       console.error("Error fetching products:", err);
@@ -72,11 +71,9 @@ const ProductList = () => {
     if (confirmDelete) {
       ProductService.DeleteProduct(id)
         .then(() => {
-          // Cập nhật lại danh sách sản phẩm và hình ảnh sau khi xóa
           setProducts(products.filter((product) => product.id !== id));
           setImages(images.filter((image) => image.productId !== id));
   
-          // Hiển thị thông báo thành công
           showGeneralToast("Sản phẩm đã được xóa thành công!", "success");
         })
         .catch((err) => {
@@ -146,16 +143,13 @@ const ProductList = () => {
       if (confirmDelete) {
         ProductDiscountService.deleteProductDiscount(discount.id)
           .then(() => {
-            // Cập nhật lại danh sách sản phẩm giảm giá sau khi xóa
             setProductDiscounts(productDiscounts.filter(d => d.id !== discount.id));
   
-            // Hiển thị thông báo thành công
             showGeneralToast("Giảm giá đã được xóa thành công!", "success");
           })
           .catch((err) => {
             console.error("Error deleting product discount:", err);
   
-            // Hiển thị thông báo lỗi nếu có
             if (err.response && err.response.data) {
               const { message } = err.response.data;
               showGeneralToast(message, "error");
@@ -174,7 +168,7 @@ const ProductList = () => {
   };
 
   const refreshProductList = () => {
-    fetchData(); // Gọi lại API để lấy danh sách sản phẩm mới
+    fetchData(); 
   };
 
   return (
@@ -184,12 +178,11 @@ const ProductList = () => {
 
       <button onClick={() => setShowAddProductModal(true)} className="category-list-btn category-list-btn-primary">Thêm sản phẩm</button>
 
-      {/* Tìm kiếm sản phẩm */}
       <input
         type="text"
         placeholder="Tìm kiếm sản phẩm theo tên..."
         value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}  // Cập nhật trạng thái searchQuery
+        onChange={(e) => setSearchQuery(e.target.value)}  
         className="search-input-admin"
       />
 
